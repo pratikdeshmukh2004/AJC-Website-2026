@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/*
+  AJC design tokens — Tailwind v4 CSS-first theme.
+  Palette and type scale are derived from the Figma design
+  (editorial / luxury: terracotta, warm cream, charcoal, elegant serif display).
+
+  Tokens declared under @theme become real Tailwind utilities, e.g.
+  `bg-brand`, `text-cream`, `font-display`, `max-w-container`.
+*/
+@theme {
+  /* ---- Brand & neutrals ---- */
+  --color-brand: #7b2d20; /* deep terracotta / maroon — primary brand */
+  --color-brand-dark: #5a1f16; /* darker maroon for hovers / depth */
+  --color-brand-light: #a8513f; /* lighter terracotta accent */
+
+  --color-cream: #f3ece1; /* warm paper background */
+  --color-cream-dark: #e7ddcc; /* slightly deeper cream for sections */
+  --color-sand: #d9cbb3; /* muted sand accent */
+
+  --color-ink: #1c1917; /* near-black body text */
+  --color-ink-soft: #4b443f; /* secondary text */
+  --color-ink-muted: #8a817a; /* captions / meta */
+
+  --color-gold: #c6a15b; /* subtle metallic accent */
+
+  /* Semantic aliases */
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-ink);
+
+  /* ---- Typography ---- */
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fluid display sizes (clamp for responsive editorial headings) */
+  --text-display: clamp(2.75rem, 1.5rem + 5vw, 6rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.01em;
+
+  --text-headline: clamp(1.75rem, 1rem + 3vw, 3.25rem);
+  --text-headline--line-height: 1.1;
+
+  /* ---- Layout ---- */
+  --spacing-section: 6rem; /* vertical rhythm between sections */
+  --container-container: 90rem; /* max content width (1440px) */
+
+  /* ---- Radius & shadow ---- */
+  --radius-card: 0.25rem;
+  --shadow-soft: 0 24px 60px -24px rgb(28 25 23 / 0.35);
+
+  /* ---- Easing ---- */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- Base layer ---- */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---- Reusable composition utilities ---- */
+@layer components {
+  .container-px {
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-px {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Small-caps editorial label used for section eyebrows */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+}
