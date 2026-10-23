@@ -2,43 +2,60 @@
 
 /*
   AJC design tokens — Tailwind v4 CSS-first theme.
-  Palette and type scale are derived from the Figma design
-  (editorial / luxury: terracotta, warm cream, charcoal, elegant serif display).
+  Matches the official "AJC Website Design Materials" system:
+    Colours  #FDFBF4 (cream), #7D7062 (taupe-brown), #9B9484 (sage-grey)
+    Fonts    Heading / Sub-heading: Cormorant Garamond
+             Body: Helvetica Regular
 
   Tokens declared under @theme become real Tailwind utilities, e.g.
-  `bg-brand`, `text-cream`, `font-display`, `max-w-container`.
+  `bg-cream`, `text-taupe`, `font-display`, `max-w-container`.
 */
 @theme {
-  /* ---- Brand & neutrals ---- */
-  --color-brand: #7b2d20; /* deep terracotta / maroon — primary brand */
-  --color-brand-dark: #5a1f16; /* darker maroon for hovers / depth */
-  --color-brand-light: #a8513f; /* lighter terracotta accent */
+  /* ---- Official palette ---- */
+  --color-cream: #fdfbf4; /* off-white paper — background */
+  --color-taupe: #7d7062; /* warm taupe-brown — primary / headings / dark */
+  --color-sage: #9b9484; /* muted sage-grey — secondary / muted */
 
-  --color-cream: #f3ece1; /* warm paper background */
-  --color-cream-dark: #e7ddcc; /* slightly deeper cream for sections */
-  --color-sand: #d9cbb3; /* muted sand accent */
+  /* Derived tints for hovers / depth (kept in-family) */
+  --color-taupe-dark: #5f554a; /* darker taupe for hover / emphasis */
+  --color-cream-dark: #f2eee2; /* faintly deeper cream for sections */
 
-  --color-ink: #1c1917; /* near-black body text */
-  --color-ink-soft: #4b443f; /* secondary text */
-  --color-ink-muted: #8a817a; /* captions / meta */
+  /* ---- Aliases kept for existing component class names ----
+     Everything maps back onto the three official colours so the whole
+     UI stays consistent. */
+  --color-brand: var(--color-taupe);
+  --color-brand-dark: var(--color-taupe-dark);
+  --color-brand-light: var(--color-sage);
 
-  --color-gold: #c6a15b; /* subtle metallic accent */
+  --color-ink: var(--color-taupe); /* primary text = taupe */
+  --color-ink-soft: var(--color-taupe); /* secondary text */
+  --color-ink-muted: var(--color-sage); /* captions / meta = sage */
+
+  --color-sand: var(--color-sage);
+  --color-brown: var(--color-taupe); /* menu nav links */
+  --color-brown-dark: var(--color-taupe-dark); /* active link / quote */
 
   /* Semantic aliases */
   --color-background: var(--color-cream);
-  --color-foreground: var(--color-ink);
+  --color-foreground: var(--color-taupe);
 
-  /* ---- Typography ---- */
+  /* ---- Typography ----
+     Heading & sub-heading: Cormorant Garamond. Body: Helvetica. */
   --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  /* Fluid display sizes (clamp for responsive editorial headings) */
-  --text-display: clamp(2.75rem, 1.5rem + 5vw, 6rem);
+  /* Fluid display sizes. Design spec: heading 97pt, sub-heading 80pt,
+     body 20pt. Expressed fluid so they scale down on small screens but
+     reach the spec sizes on large viewports. */
+  --text-display: clamp(2.75rem, 1rem + 7vw, 97pt); /* heading — 97pt */
   --text-display--line-height: 1.02;
   --text-display--letter-spacing: -0.01em;
 
-  --text-headline: clamp(1.75rem, 1rem + 3vw, 3.25rem);
-  --text-headline--line-height: 1.1;
+  --text-headline: clamp(2.25rem, 1rem + 5vw, 80pt); /* sub-heading — 80pt */
+  --text-headline--line-height: 1.05;
+
+  --text-body: 20pt; /* body — 20pt */
+  --text-body--line-height: 1.5;
 
   /* ---- Layout ---- */
   --spacing-section: 6rem; /* vertical rhythm between sections */
@@ -122,5 +139,55 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-ink-muted);
+  }
+}
+
+/* ---- Hero video scrubber (custom range input) ---- */
+@layer components {
+  .player-range {
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  /* Track: white played portion up to --pct, translucent remainder */
+  .player-range::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(
+      to right,
+      #ffffff 0%,
+      #ffffff var(--pct, 0%),
+      rgb(255 255 255 / 0.35) var(--pct, 0%),
+      rgb(255 255 255 / 0.35) 100%
+    );
+  }
+  .player-range::-moz-range-track {
+    height: 3px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.35);
+  }
+  .player-range::-moz-range-progress {
+    height: 3px;
+    border-radius: 999px;
+    background: #ffffff;
+  }
+
+  /* No visible playhead — just the line. Thumb stays functional for seeking
+     but is rendered invisible (width kept small for a clean hit target). */
+  .player-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    width: 1px;
+    background: transparent;
+    border: none;
+  }
+  .player-range::-moz-range-thumb {
+    height: 3px;
+    width: 1px;
+    background: transparent;
+    border: none;
   }
 }

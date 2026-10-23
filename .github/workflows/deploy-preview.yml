@@ -1,0 +1,48 @@
+name: Deploy preview (GitHub Pages)
+
+# Preview site at the /preview subpath:
+#   https://<user>.github.io/AJC-Website-2026/preview/
+# Runs on pushes to develop (including PR merges).
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: write # needed to push to the gh-pages branch
+
+# Share the concurrency group with production so the two never write
+# gh-pages at the same time.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (static export)
+        env:
+          # Served from /preview -> repo subpath + /preview.
+          NEXT_PUBLIC_BASE_PATH: /AJC-Website-2026/preview
+        run: npm run build
+
+      - name: Publish to gh-pages (/preview)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          publish_branch: gh-pages
+          # Put this build under /preview and leave the root (production) intact.
+          destination_dir: preview
+          keep_files: true
+          commit_message: "deploy: preview ${{ github.sha }}"

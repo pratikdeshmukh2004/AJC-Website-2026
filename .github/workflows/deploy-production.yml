@@ -1,0 +1,46 @@
+name: Deploy production (GitHub Pages)
+
+# Production site at the Pages root:
+#   https://<user>.github.io/AJC-Website-2026/
+# Runs on pushes to master/main (including PR merges).
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # needed to push to the gh-pages branch
+
+# Avoid races with the preview deploy clobbering gh-pages.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (static export)
+        env:
+          # Served from the Pages root -> repo subpath only.
+          NEXT_PUBLIC_BASE_PATH: /AJC-Website-2026
+        run: npm run build
+
+      - name: Publish to gh-pages (root)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          publish_branch: gh-pages
+          # Keep the /preview folder (owned by the develop workflow) intact.
+          keep_files: true
+          commit_message: "deploy: production ${{ github.sha }}"

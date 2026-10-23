@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { cormorant, inter } from "@/config/fonts";
+import { cormorant } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -27,14 +25,15 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout — owns <html>/<body>, fonts, and global metadata only.
+ * Shared chrome (Header/Footer) lives in the (site) route group so the
+ * full-bleed home hero can opt out of it.
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={siteConfig.locale} className={`${cormorant.variable} ${inter.variable}`}>
-      <body className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+    <html lang={siteConfig.locale} className={cormorant.variable}>
+      <body className="min-h-screen">{children}</body>
     </html>
   );
 }
