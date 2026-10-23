@@ -1,0 +1,28 @@
+1:"$Sreact.fragment"
+2:"/AJC-Website-2026/preview/_next/static/chunks/0umf92h1sb77c.js"
+3:I[39756,["$2"],"default"]
+4:I[37457,["$2"],"default"]
+5:"/AJC-Website-2026/preview/_next/static/chunks/2n5qeheznvl4u.js"
+6:I[22016,["$2","$5"],""]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+11:"ViewportBoundary"
+12:I[97367,["$2"],"$11"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/22brfornvx1tr.css","style"]
+8:X
+b:X
+b:C
+c:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","section",null,{"className":"flex min-h-[60vh] items-center py-section","children":["$","div",null,{"className":"container-px mx-auto w-full max-w-container text-center","children":[["$","p",null,{"className":"eyebrow mb-4","children":"404"}],["$","h1",null,{"className":"text-display text-ink","children":"Page not found."}],["$","p",null,{"className":"mx-auto mt-6 max-w-md text-lg text-ink-soft","children":"The page you're looking for doesn't exist or has moved."}],["$","div",null,{"className":"mt-10 flex justify-center","children":["$","$L6",null,{"href":"/","className":"inline-flex items-center justify-center gap-2 rounded-card px-6 py-3 text-sm font-medium tracking-wide transition-colors duration-300 ease-editorial bg-brand text-cream hover:bg-brand-dark","children":"Back home"}]}]]}]}],[["$","script","script-0",{"src":"/AJC-Website-2026/preview/_next/static/chunks/2n5qeheznvl4u.js","async":true}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":"$@10","v":null,"s":"$8"}}]]
+9:[["children",{"s":"/_not-found","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}],"p":"$@a","v":"$b","s":"$8"},"c":"$Qc"}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/AJC-Website-2026/preview/_next/static/chunks/22brfornvx1tr.css","precedence":"next"}],["$","script","script-0",{"src":"/AJC-Website-2026/preview/_next/static/chunks/0umf92h1sb77c.js","async":true}]],["$","html",null,{"lang":"en","className":"OjGqCq_variable","children":["$","body",null,{"className":"min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[["$","section",null,{"className":"flex min-h-[60vh] items-center py-section","children":["$","div",null,{"className":"container-px mx-auto w-full max-w-container text-center","children":[["$","p",null,{"className":"eyebrow mb-4","children":"404"}],["$","h1",null,{"className":"text-display text-ink","children":"Page not found."}],["$","p",null,{"className":"mx-auto mt-6 max-w-md text-lg text-ink-soft","children":"The page you're looking for doesn't exist or has moved."}],["$","div",null,{"className":"mt-10 flex justify-center","children":["$","$L6",null,{"href":"/","className":"inline-flex items-center justify-center gap-2 rounded-card px-6 py-3 text-sm font-medium tracking-wide transition-colors duration-300 ease-editorial bg-brand text-cream hover:bg-brand-dark","children":"Back home"}]}]]}]}],[]]}]}]}]]}],"p":"$@7","v":null,"s":"$8"},"c":"$Q9"},"h":{"r":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L12",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"AJC — Creative Studio"}],["$","meta","1",{"name":"description","content":"AJC is a creative studio crafting brand identities and experiences rooted in culture, heritage, and considered design."}],["$","meta","2",{"property":"og:title","content":"AJC — Creative Studio"}],["$","meta","3",{"property":"og:description","content":"AJC is a creative studio crafting brand identities and experiences rooted in culture, heritage, and considered design."}],["$","meta","4",{"property":"og:url","content":"https://ajc.example.com/"}],["$","meta","5",{"property":"og:site_name","content":"AJC"}],["$","meta","6",{"property":"og:locale","content":"en_US"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"AJC — Creative Studio"}],["$","meta","10",{"name":"twitter:description","content":"AJC is a creative studio crafting brand identities and experiences rooted in culture, heritage, and considered design."}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@15","v":null,"s":"$8"}},"a":"$@16","u":"$@17","b":"FN2svg9gZruz08vMFBKaG"}
+f:null
+8:300
+17:true
+8:C
+16:0
+a:"$undefined"
+7:"$undefined"
+15:"$undefined"
+10:"$undefined"

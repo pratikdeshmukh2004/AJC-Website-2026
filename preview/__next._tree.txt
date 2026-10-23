@@ -1,0 +1,4 @@
+:HL["/AJC-Website-2026/preview/_next/static/chunks/22brfornvx1tr.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+1:[["children",{"s":"__PAGE__","h":160}]]
+0:{"b":"FN2svg9gZruz08vMFBKaG","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
