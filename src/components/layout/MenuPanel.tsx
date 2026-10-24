@@ -73,7 +73,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
 
         {/* Quote */}
         <div className="px-8 md:px-12">
-          <blockquote className="max-w-md font-display text-xl leading-snug text-brown-dark md:text-2xl">
+          <blockquote className="max-w-md font-cormorant text-xl leading-snug text-brown-dark md:text-2xl">
             &ldquo;{siteConfig.menuQuote.text}&rdquo;
           </blockquote>
           <p className="mt-4 text-[11px] tracking-[0.18em] text-ink-muted uppercase">
@@ -98,7 +98,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                     onClick={onClose}
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "inline-flex items-center gap-2 font-display text-2xl transition-colors md:text-[1.75rem]",
+                      "inline-flex items-center gap-2 font-cormorant text-2xl transition-colors md:text-[1.75rem]",
                       isActive
                         ? "text-brown-dark"
                         : "text-brown hover:text-brown-dark",
@@ -108,7 +108,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                     {showArrow ? (
                       <span
                         className={cn(
-                          "font-sans text-lg",
+                          "font-helvetica text-lg",
                           isActive ? "text-brown-dark" : "text-brown",
                         )}
                       >

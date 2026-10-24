@@ -17,13 +17,13 @@ export function HeroHeader() {
     <>
       <header className="pointer-events-none absolute inset-x-0 top-0 z-30">
         <div className="mx-auto flex w-full max-w-container items-center justify-between px-6 py-8 md:px-12 md:py-10">
-          <span className="font-display text-lg tracking-[0.25em] text-white md:text-xl">
+          <span className="font-cormorant text-lg tracking-[0.25em] text-white md:text-xl">
             APEKSHA JAIN
           </span>
 
           <Link
             href="/"
-            className="pointer-events-auto font-display text-xl tracking-[0.2em] text-white md:text-2xl"
+            className="pointer-events-auto font-cormorant text-xl tracking-[0.2em] text-white md:text-2xl"
             aria-label={`${siteConfig.name} — home`}
           >
             {siteConfig.name}
