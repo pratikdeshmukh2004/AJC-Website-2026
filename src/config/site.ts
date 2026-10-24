@@ -15,7 +15,7 @@ export const siteConfig = {
   nav: [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/about" },
-    { label: "Our Work", href: "/work" },
+    { label: "Our Work", href: "/our-work" },
     { label: "Philosophy", href: "/philosophy" },
     { label: "AJC Hospitality", href: "/hospitality" },
     { label: "Contact Us", href: "/contact" },
