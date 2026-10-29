@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import type { Ref } from "react";
 import { cn, formatTime } from "@/lib/utils";
 import {
   FullscreenIcon,
@@ -17,10 +25,17 @@ import {
  * video; light icons; scrubber with a rounded timecode tooltip riding the
  * playhead; play/pause left; mute + picture-in-picture + fullscreen right).
  *
- * Per the design comments the film autoplays WITH audio on load. Browsers block
- * audible autoplay until a user gesture, so we attempt it and fall back to muted
- * playback (the mute button then lets the viewer unmute).
+ * Playback is started by the landing gate, not on mount: the gate calls
+ * `start(withAudio)` from its button click handler. Because that runs inside a
+ * user gesture, browsers allow the film to play with sound.
  */
+
+const noopSubscribe = () => () => {};
+
+export type VideoPlayerHandle = {
+  /** Start the film from the beginning, with or without sound. */
+  start: (withAudio: boolean) => void;
+};
 
 type PipVideo = HTMLVideoElement & {
   requestPictureInPicture?: () => Promise<PictureInPictureWindow>;
@@ -35,10 +50,12 @@ export function VideoPlayer({
   src,
   poster,
   className,
+  ref,
 }: {
   src: string;
   poster?: string;
   className?: string;
+  ref?: Ref<VideoPlayerHandle>;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -49,52 +66,39 @@ export function VideoPlayer({
   const [muted, setMuted] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [pipSupported, setPipSupported] = useState(false);
+  // PiP support is a static browser capability. Read it hydration-safely:
+  // false during prerender, the real value on the client.
+  const pipSupported = useSyncExternalStore(
+    noopSubscribe,
+    () => Boolean((document as PipDocument).pictureInPictureEnabled),
+    () => false,
+  );
   // Controls are hidden by default; shown on cursor movement, then auto-hidden.
   const [controlsVisible, setControlsVisible] = useState(false);
 
-  // Attempt audible autoplay on mount. Browsers block audible autoplay until a
-  // user gesture, so if it's blocked we play muted and then unmute on the first
-  // interaction (pointer move, scroll, click, touch, or key) — which the viewer
-  // almost always does on arrival, so sound comes on effectively immediately.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    setPipSupported(Boolean((document as PipDocument).pictureInPictureEnabled));
-
-    video.muted = false;
-    video.volume = 1;
-
-    let cleanupUnmute: (() => void) | undefined;
-
-    const armUnmuteOnInteraction = () => {
-      video.muted = true;
-      setMuted(true);
-      void video.play().catch(() => {
-        /* leave paused; controls remain available */
-      });
-
-      const unmute = () => {
-        const v = videoRef.current;
-        if (!v) return;
-        v.muted = false;
-        if (v.volume === 0) v.volume = 1;
-        setMuted(false);
-        void v.play().catch(() => {});
-        cleanupUnmute?.();
-      };
-
-      const events = ["pointerdown", "pointermove", "keydown", "touchstart", "wheel"] as const;
-      const opts: AddEventListenerOptions = { once: true, passive: true };
-      events.forEach((evt) => window.addEventListener(evt, unmute, opts));
-      cleanupUnmute = () => events.forEach((evt) => window.removeEventListener(evt, unmute));
-    };
-
-    video.play().catch(() => armUnmuteOnInteraction());
-
-    return () => cleanupUnmute?.();
-  }, []);
+  // Called by the landing gate from inside its click handler (a user gesture),
+  // so audible playback is permitted.
+  useImperativeHandle(
+    ref,
+    () => ({
+      start(withAudio: boolean) {
+        const video = videoRef.current;
+        if (!video) return;
+        video.currentTime = 0;
+        video.volume = 1;
+        video.muted = !withAudio;
+        setMuted(!withAudio);
+        video.play().catch(() => {
+          // Very rare: the browser still refused audible playback. Fall back to
+          // muted so the film plays; the mute button can turn sound on.
+          video.muted = true;
+          setMuted(true);
+          void video.play().catch(() => {});
+        });
+      },
+    }),
+    [],
+  );
 
   // Reveal controls, then schedule auto-hide after a period of inactivity.
   const revealControls = useCallback(() => {
