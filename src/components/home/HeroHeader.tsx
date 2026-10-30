@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AjcLogo, ApekshaJainWordmark } from "@/components/brand";
 import { siteConfig } from "@/config/site";
 import { MenuPanel } from "@/components/layout/MenuPanel";
 
@@ -10,24 +11,36 @@ import { MenuPanel } from "@/components/layout/MenuPanel";
  * Stays in position over the film (per design comments). The "Menu" button
  * opens the slide-in {@link MenuPanel}.
  */
-export function HeroHeader() {
+export function HeroHeader({
+  menuOnly = false,
+}: {
+  /** Show only the menu toggle (no "Apeksha Jain" / "AJC" logos), e.g. on About. */
+  menuOnly?: boolean;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
       <header className="pointer-events-none absolute inset-x-0 top-0 z-30">
-        <div className="mx-auto flex w-full max-w-container items-center justify-between px-6 py-8 md:px-12 md:py-10">
-          <span className="font-display text-lg tracking-[0.25em] text-white md:text-xl">
-            APEKSHA JAIN
-          </span>
+        <div
+          className={`max-w-container mx-auto flex w-full items-center px-6 py-8 md:px-12 md:py-10 ${
+            menuOnly ? "justify-end" : "justify-between"
+          }`}
+        >
+          {menuOnly ? null : (
+            <>
+              {/* Brand marks take the text colour — change `text-white` to recolour. */}
+              <ApekshaJainWordmark title="Apeksha Jain" className="h-4 text-white md:h-5" />
 
-          <Link
-            href="/"
-            className="pointer-events-auto font-display text-xl tracking-[0.2em] text-white md:text-2xl"
-            aria-label={`${siteConfig.name} — home`}
-          >
-            {siteConfig.name}
-          </Link>
+              <Link
+                href="/"
+                className="pointer-events-auto flex text-white"
+                aria-label={`${siteConfig.name} — home`}
+              >
+                <AjcLogo className="h-6 md:h-7" />
+              </Link>
+            </>
+          )}
 
           {/* Two-dot menu toggle (hollow + filled circle), per the design */}
           <button

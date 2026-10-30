@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { cormorant } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
+import { RouteTransitionListener } from "@/components/layout/RouteTransitionListener";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -26,14 +26,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout — owns <html>/<body>, fonts, and global metadata only.
+ * Root layout — owns <html>/<body> and global metadata only. Fonts are
+ * self-hosted via @font-face in globals.css (files in /public/fonts).
  * Shared chrome (Header/Footer) lives in the (site) route group so the
  * full-bleed home hero can opt out of it.
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={siteConfig.locale} className={cormorant.variable}>
-      <body className="min-h-screen">{children}</body>
+    // data-scroll-behavior: we use `scroll-behavior: smooth` globally; this tells
+    // Next to make its own route-change scroll resets instant instead of smooth.
+    <html lang={siteConfig.locale} data-scroll-behavior="smooth">
+      <body className="min-h-screen">
+        <RouteTransitionListener />
+        {children}
+      </body>
     </html>
   );
 }

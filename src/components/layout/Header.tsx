@@ -9,7 +9,7 @@ export function Header() {
       <Container className="flex h-16 items-center justify-between">
         <Link
           href="/"
-          className="font-display text-2xl tracking-wide text-ink"
+          className="font-cormorant text-2xl tracking-wide text-ink"
           aria-label={`${siteConfig.name} — home`}
         >
           {siteConfig.name}

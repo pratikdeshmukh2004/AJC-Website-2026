@@ -10,7 +10,7 @@ export function Footer() {
     <footer className="mt-section border-t border-ink/10 bg-cream-dark">
       <Container className="grid gap-10 py-16 md:grid-cols-3">
         <div>
-          <p className="font-display text-3xl text-ink">{siteConfig.name}</p>
+          <p className="font-cormorant text-3xl text-ink">{siteConfig.name}</p>
           <p className="mt-3 max-w-xs text-sm text-ink-soft">{siteConfig.description}</p>
         </div>
 
