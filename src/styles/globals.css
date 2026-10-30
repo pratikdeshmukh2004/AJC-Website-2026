@@ -9,14 +9,16 @@
 */
 @font-face {
   font-family: "Cormorant Garamond";
-  src: url("/fonts/CormorantGaramond-Regular.woff2") format("woff2");
+  /* Relative path so the bundler emits the file under /_next/static/media
+     with the basePath applied (absolute "/fonts/..." 404s on GitHub Pages). */
+  src: url("../../public/fonts/CormorantGaramond-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Helvetica Neue AJC";
-  src: url("/fonts/HelveticaNeue-Bold.woff2") format("woff2");
+  src: url("../../public/fonts/HelveticaNeue-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

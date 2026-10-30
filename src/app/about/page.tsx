@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { BandDots } from "@/components/home/BandDots";
+import { assetPath } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "AJC is a creative consultancy shaped by stories, spaces, cultures, and the subtle art of observation.",
 };
 
-const IMG = "/images/about";
+// String srcs are not basePath-prefixed by next/image, so prefix them here
+// (required on GitHub Pages, which serves the site under a subpath).
+const IMG = assetPath("/images/about");
 
 /*
   Layout: pixel-faithful absolutely-positioned canvas (Figma frame
