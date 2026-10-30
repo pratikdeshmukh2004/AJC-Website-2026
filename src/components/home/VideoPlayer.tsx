@@ -10,14 +10,7 @@ import {
 } from "react";
 import type { Ref } from "react";
 import { cn, formatTime } from "@/lib/utils";
-import {
-  FullscreenIcon,
-  MuteIcon,
-  PauseIcon,
-  PlayIcon,
-  PipIcon,
-  VolumeIcon,
-} from "./player-icons";
+import { FullscreenIcon, MuteIcon, PauseIcon, PlayIcon, PipIcon, VolumeIcon } from "./player-icons";
 
 /**
  * Hero video player for the AJC brand film with a CUSTOM control bar styled to
@@ -113,9 +106,12 @@ export function VideoPlayer({
   }, []);
 
   // Clear the pending hide timer on unmount.
-  useEffect(() => () => {
-    if (hideTimer.current) clearTimeout(hideTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (hideTimer.current) clearTimeout(hideTimer.current);
+    },
+    [],
+  );
 
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
@@ -168,7 +164,7 @@ export function VideoPlayer({
       onMouseLeave={hideControls}
       onTouchStart={revealControls}
       className={cn(
-        "group relative h-full w-full overflow-hidden bg-cream",
+        "group relative h-full w-full overflow-hidden bg-white",
         controlsVisible ? "cursor-default" : "cursor-none",
         className,
       )}
@@ -215,11 +211,11 @@ export function VideoPlayer({
           {/* Scrubber; tooltip shows on hover only */}
           <div className="group/scrub relative flex-1">
             <div
-              className="pointer-events-none absolute -top-3 -translate-x-1/2 -translate-y-full rounded-[4px] bg-white px-1.5 py-0.5 text-[10px] font-medium text-ink/80 opacity-0 shadow-sm transition-opacity tabular-nums group-hover/scrub:opacity-100"
+              className="text-ink/80 pointer-events-none absolute -top-3 -translate-x-1/2 -translate-y-full rounded-[4px] bg-white px-1.5 py-0.5 text-[10px] font-medium tabular-nums opacity-0 shadow-sm transition-opacity group-hover/scrub:opacity-100"
               style={{ left: `${progress}%` }}
             >
               {formatTime(current)}
-              <span className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-white" />
+              <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-white" />
             </div>
 
             <input

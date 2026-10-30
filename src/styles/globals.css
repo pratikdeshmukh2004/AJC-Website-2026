@@ -217,3 +217,36 @@
     border: none;
   }
 }
+
+/* ---- Page transition: Home slides up, next page rises from below ----
+   Driven by slideToRoute() in src/lib/page-transition.ts. */
+html[data-page-transition="slide-up"]::view-transition-old(root),
+html[data-page-transition="slide-up"]::view-transition-new(root) {
+  animation-duration: 600ms;
+  animation-timing-function: var(--ease-editorial);
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
+}
+html[data-page-transition="slide-up"]::view-transition-old(root) {
+  animation-name: ajc-slide-out-up;
+}
+html[data-page-transition="slide-up"]::view-transition-new(root) {
+  animation-name: ajc-slide-in-up;
+}
+
+@keyframes ajc-slide-out-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes ajc-slide-in-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

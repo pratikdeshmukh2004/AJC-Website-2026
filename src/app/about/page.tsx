@@ -87,8 +87,11 @@ const tw = {
   page: "@container mx-auto w-full max-w-[1920px] bg-[#f8f7f2] [--u:calc(100cqw/1920)]",
   // Top slice: Figma y 0..2397 (hero → body copy). Tops unchanged.
   canvasTop: "relative w-full h-[calc(2397*var(--u))]",
-  // Bottom slice: Figma y 3477..14619 ⇒ height (14619-3477).
-  canvasBottom: "relative w-full h-[calc((14619-3477)*var(--u))]",
+  // Bottom slice: Figma y 3477 .. end of content. The last content is the
+  // Rajasthan image / divider / final dot ending at Figma y ≈13372; the Figma
+  // frame runs to 14619 but that remainder is empty, so it's trimmed. A 160u
+  // margin keeps the last region off the bottom edge.
+  canvasBottom: "relative w-full h-[calc((13372+160-3477)*var(--u))]",
   abs: "absolute",
   imgFit: "overflow-hidden [&_img]:h-full [&_img]:w-full [&_img]:object-cover",
 
@@ -170,7 +173,7 @@ export default function AboutPage() {
   return (
     <div className={`relative ${tw.page}`}>
       {/* Overlay chrome (APEKSHA JAIN · AJC · menu), same as the home hero */}
-      <HeroHeader />
+      <HeroHeader menuOnly />
 
       {/* ---- Top slice: Figma y 0..2397 (tops unchanged) ---- */}
       <div className={tw.canvasTop}>

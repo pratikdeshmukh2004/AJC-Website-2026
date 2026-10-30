@@ -34,6 +34,9 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
     <div
       className={cn("fixed inset-0 z-40", open ? "pointer-events-auto" : "pointer-events-none")}
       aria-hidden={!open}
+      // Closed panel stays mounted (for the slide animation) but must not be
+      // focusable or announced.
+      inert={!open}
     >
       {/* Click-away backdrop (transparent — video stays visible) */}
       <button

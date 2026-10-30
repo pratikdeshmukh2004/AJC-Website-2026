@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { slideToRoute } from "@/lib/page-transition";
 import { Hero } from "./Hero";
 import { LandingGate } from "./LandingGate";
 import { getEntryChoice, setEntryChoice } from "./entry-session";
@@ -45,6 +47,80 @@ export function HomeExperience() {
   }, []);
 
   const onExited = useCallback(() => setStage("entered"), []);
+
+  // Scrolling down on Home (wheel, swipe up, ↓ / PageDown / Space) slides to
+  // About. Only active once the visitor is past the gate.
+  const router = useRouter();
+  const navigatingRef = useRef(false);
+  useEffect(() => {
+    if (stage !== "entered") return;
+    router.prefetch("/about");
+
+    const go = () => {
+      if (navigatingRef.current) return;
+      // Don't hijack scroll while the menu is open (it locks body scroll) or
+      // the film is fullscreen.
+      if (document.body.style.overflow === "hidden" || document.fullscreenElement) return;
+      navigatingRef.current = true;
+      slideToRoute(router, "/about");
+    };
+
+    // Only a deliberate scroll should navigate. Delta is accumulated across one
+    // continuous gesture and must pass WHEEL_INTENT_PX (roughly 4 mouse-wheel
+    // notches, or a firm trackpad swipe). A pause of WHEEL_GESTURE_GAP_MS ends
+    // the gesture and resets the count, so light/single scrolls do nothing.
+    const WHEEL_INTENT_PX = 400;
+    const WHEEL_GESTURE_GAP_MS = 250;
+    let wheelSum = 0;
+    let wheelReset: ReturnType<typeof setTimeout> | undefined;
+    const onWheel = (e: WheelEvent) => {
+      clearTimeout(wheelReset);
+      wheelReset = setTimeout(() => (wheelSum = 0), WHEEL_GESTURE_GAP_MS);
+      if (e.deltaY <= 0) {
+        wheelSum = 0; // scrolling up cancels the intent
+        return;
+      }
+      // Normalise line/page delta modes (Firefox) to pixels.
+      const px =
+        e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
+      wheelSum += px;
+      if (wheelSum > WHEEL_INTENT_PX) go();
+    };
+
+    let touchStartY: number | null = null;
+    const onTouchStart = (e: TouchEvent) => {
+      const onControl = (e.target as HTMLElement | null)?.closest("input");
+      touchStartY = onControl ? null : (e.touches[0]?.clientY ?? null);
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      const endY = e.changedTouches[0]?.clientY;
+      // A clear swipe up (~15% of the screen), not a small drag.
+      const minSwipe = Math.max(120, innerHeight * 0.15);
+      if (touchStartY !== null && endY !== undefined && touchStartY - endY > minSwipe) go();
+      touchStartY = null;
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowDown" && e.key !== "PageDown" && e.key !== " ") return;
+      // Leave keys alone when a control has focus (Space activates buttons).
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("button, a, input, textarea, select, [contenteditable]")) return;
+      e.preventDefault();
+      go();
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      clearTimeout(wheelReset);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [stage, router]);
 
   return (
     <>

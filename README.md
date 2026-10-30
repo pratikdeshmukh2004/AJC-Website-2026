@@ -20,14 +20,14 @@ npm run dev     # http://localhost:3000
 
 ## Scripts
 
-| Script              | What it does                                  |
-| ------------------- | --------------------------------------------- |
-| `npm run dev`       | Start the dev server                          |
-| `npm run build`     | Production build → static site in `out/`      |
-| `npm run start`     | Serve the production build                    |
-| `npm run lint`      | ESLint                                         |
-| `npm run typecheck` | TypeScript check (no emit)                    |
-| `npm run format`    | Prettier write                                 |
+| Script              | What it does                             |
+| ------------------- | ---------------------------------------- |
+| `npm run dev`       | Start the dev server                     |
+| `npm run build`     | Production build → static site in `out/` |
+| `npm run start`     | Serve the production build               |
+| `npm run lint`      | ESLint                                   |
+| `npm run typecheck` | TypeScript check (no emit)               |
+| `npm run format`    | Prettier write                           |
 
 ## Project structure
 
@@ -40,6 +40,7 @@ src/
 │   ├── robots.ts         # robots.txt (static)
 │   └── sitemap.ts        # sitemap.xml (static)
 ├── components/
+│   ├── brand/            # Logo + wordmark as colourable inline SVG components
 │   ├── layout/           # Header, Footer
 │   └── ui/               # Container, Button, SectionHeading
 ├── config/
@@ -51,7 +52,28 @@ src/
     └── globals.css       # Tailwind import + design tokens (@theme)
 
 public/
-└── images/               # Static imagery (see images/README.md)
+├── fonts/                # Self-hosted woff2 fonts
+├── images/               # Static imagery, one folder per section
+│   ├── home/             # Home posters
+│   └── about/            # About page imagery
+└── videos/               # Home films (hero.mp4, landing-home.mp4)
+```
+
+## Media
+
+`next/image` optimization is disabled for static export, so images are served
+as-is. Export them web-optimized from Figma (SVG / JPG / WebP, kept lean).
+
+`hero.mp4` is the brand film behind the home hero, compressed for web
+(1080p H.264, CRF 28, faststart). To re-encode from a new master and
+regenerate its poster frame:
+
+```bash
+ffmpeg -i master.mp4 -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p \
+  -c:a aac -b:a 96k -movflags +faststart public/videos/hero.mp4
+
+ffmpeg -ss 45 -i public/videos/hero.mp4 -frames:v 1 -q:v 3 -vf "scale=1920:-2" \
+  public/images/home/hero-poster.jpg
 ```
 
 ## Theme

@@ -16,7 +16,8 @@ test("renders the key headings and copy", async ({ page }) => {
   await expect(page.getByText("AJC is a creative consultancy")).toBeVisible();
   await expect(page.getByText("worlds within worlds")).toBeVisible();
   await expect(page.getByText("What We Do")).toBeVisible();
-  await expect(page.getByText("Our Work", { exact: true })).toBeVisible();
+  // The section heading (a <p>), not the "Our Work" link in the menu panel.
+  await expect(page.locator("p").filter({ hasText: /^Our Work$/ })).toBeVisible();
   await expect(page.getByRole("img", { name: /pine forest/ })).toBeVisible();
 });
 
@@ -35,7 +36,7 @@ test("shows all seven Our Work regions in order", async ({ page }) => {
   }
 });
 
-test("loads the self-hosted fonts from /fonts", async ({ page }) => {
+test("loads the self-hosted fonts", async ({ page }) => {
   const fonts = await page.evaluate(async () => {
     await document.fonts.ready;
     return [...document.fonts].map((f) => `${f.family}|${f.weight}|${f.status}`);
@@ -43,18 +44,22 @@ test("loads the self-hosted fonts from /fonts", async ({ page }) => {
   expect(fonts).toContain("Cormorant Garamond|400|loaded");
   expect(fonts).toContain("Helvetica Neue AJC|700|loaded");
 
-  // No failed font requests.
+  // The self-hosted woff2 files were actually requested from our own origin.
+  // (The bundler serves them from /_next/static/media/<name>.<hash>.woff2 so
+  // they also resolve under the GitHub Pages basePath.)
   const fontRequests = await page.evaluate(() =>
     performance
       .getEntriesByType("resource")
       .map((e) => (e as PerformanceResourceTiming).name)
-      .filter((n) => n.includes("/fonts/")),
+      .filter((n) => n.startsWith(location.origin) && n.endsWith(".woff2")),
   );
-  expect(fontRequests.some((u) => u.includes(".woff2"))).toBeTruthy();
+  expect(fontRequests.some((u) => u.includes("CormorantGaramond-Regular"))).toBeTruthy();
+  expect(fontRequests.some((u) => u.includes("HelveticaNeue-Bold"))).toBeTruthy();
 });
 
 test("headings use Cormorant, body uses Helvetica, text color is #8B7F73", async ({ page }) => {
-  const heading = page.getByText("Our Work", { exact: true });
+  // The section heading (a <p>), not the "Our Work" link in the menu panel.
+  const heading = page.locator("p").filter({ hasText: /^Our Work$/ });
   await expect(heading).toHaveCSS("font-family", /Cormorant Garamond/);
   await expect(heading).toHaveCSS("color", RGB);
 
