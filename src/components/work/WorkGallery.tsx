@@ -22,12 +22,11 @@ export function WorkGallery() {
   }, [active]);
 
   return (
-    <Container className="pt-10 pb-16 md:pt-16 md:pb-24">
-      {/* Filter row — centered, mirrors the design's category nav */}
-      <nav
-        aria-label="Filter projects by category"
-        className="mb-16 flex justify-center md:mb-24"
-      >
+    <Container className="pt-24 pb-16 md:pt-44 md:pb-24">
+      {/* Filter row — centered, mirrors the design's category nav. The Figma
+          layout spaces the filter well below the header and well above the
+          first project (~160px gaps on desktop), so this is deliberately airy. */}
+      <nav aria-label="Filter projects by category" className="mb-20 flex justify-center md:mb-36">
         <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
           {workCategories.map((category) => {
             const isActive = category === active;
@@ -38,8 +37,10 @@ export function WorkGallery() {
                   onClick={() => setActive(category)}
                   aria-pressed={isActive}
                   className={cn(
-                    "cursor-pointer text-[11px] uppercase tracking-[0.18em] transition-colors",
-                    isActive ? "text-ink" : "text-ink-muted hover:text-ink",
+                    // Figma shows Helvetica Bold 20px; dialed the weight back to
+                    // normal so the nav reads lighter on screen. Tracking 0.02em.
+                    "font-helvetica cursor-pointer text-sm font-normal tracking-[0.02em] uppercase transition-colors md:text-[18px]",
+                    isActive ? "text-ink" : "text-ink-muted opacity-70 hover:opacity-100",
                   )}
                 >
                   {category}

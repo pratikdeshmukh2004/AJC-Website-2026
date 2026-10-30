@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
@@ -13,20 +14,31 @@ import { Container } from "@/components/ui/Container";
  */
 export function WorkHeader() {
   return (
-    <header className="bg-cream pt-10 md:pt-16">
+    <header className="bg-cream pt-20 md:pt-32">
       <Container className="grid grid-cols-3 items-center">
-        {/* Left — secondary brand */}
-        <p className="font-display text-xl tracking-[0.18em] text-ink md:text-2xl">
-          APEKSHA JAIN
-        </p>
+        {/* Left — secondary brand wordmark. In Figma this is custom vector
+            lettering (not a font), so we use the exact exported SVG. Its paths
+            are filled with the brand taupe (#7D7062 = --color-taupe). */}
+        <Image
+          src="/images/brand/apeksha-jain-wordmark.svg"
+          alt="Apeksha Jain"
+          width={385}
+          height={42}
+          priority
+          className="h-5 w-auto md:h-6"
+        />
 
-        {/* Center — AJC logo */}
-        <Link
-          href="/"
-          aria-label={`${siteConfig.name} — home`}
-          className="justify-self-center font-display text-2xl tracking-[0.12em] text-ink md:text-3xl"
-        >
-          {siteConfig.name}
+        {/* Center — AJC logo. Like the wordmark, the logo in Figma is custom
+            vector lettering, so we use the exact exported SVG (taupe #7D7062). */}
+        <Link href="/" aria-label={`${siteConfig.name} — home`} className="justify-self-center">
+          <Image
+            src="/images/brand/ajc-logo.svg"
+            alt={siteConfig.name}
+            width={96}
+            height={42}
+            priority
+            className="h-6 w-auto md:h-7"
+          />
         </Link>
 
         {/* Right — theme toggle (visual, mirrors the design) */}
@@ -50,13 +62,13 @@ function ThemeToggle() {
         type="button"
         aria-label="Light theme"
         aria-pressed="false"
-        className="h-6 w-6 cursor-pointer rounded-full border border-ink/50 bg-transparent transition-colors hover:border-ink"
+        className="border-ink/50 hover:border-ink h-6 w-6 cursor-pointer rounded-full border bg-transparent transition-colors"
       />
       <button
         type="button"
         aria-label="Dark theme"
         aria-pressed="true"
-        className="h-6 w-6 cursor-pointer rounded-full bg-ink transition-colors"
+        className="bg-ink h-6 w-6 cursor-pointer rounded-full transition-colors"
       />
     </div>
   );
