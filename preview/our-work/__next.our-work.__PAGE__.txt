@@ -1,0 +1,22 @@
+3:"$Sreact.fragment"
+4:"/AJC-Website-2026/preview/_next/static/chunks/3_uh8rmg6qkoj.js"
+5:"/AJC-Website-2026/preview/_next/static/chunks/2n5qeheznvl4u.js"
+6:"/AJC-Website-2026/preview/_next/static/chunks/3ul-4cca-1u2z.js"
+7:I[58365,["$4","$5","$6"],"WorkGallery"]
+8:I[97367,["$4"],"OutletBoundary"]
+9:"$Sreact.suspense"
+d:"ViewportBoundary"
+e:I[97367,["$4"],"$d"]
+f:"MetadataBoundary"
+10:I[97367,["$4"],"$f"]
+c:X
+2:[["children",{"s":"__PAGE__","h":128,"d":{"r":["$","$3","c",{"children":[[["$","h1",null,{"className":"sr-only","children":"Our Work — All Projects"}],["$","$L7",null,{}]],[["$","script","script-0",{"src":"/AJC-Website-2026/preview/_next/static/chunks/3ul-4cca-1u2z.js","async":true}]],["$","$L8",null,{"children":["$","$9",null,{"name":"Next.MetadataOutlet","children":"$@a"}]}]]}],"p":"$@b","v":null,"s":"$c"}}]]
+1:[["children",{"s":"our-work","h":32,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":80,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$Le",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L10",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$9",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Our Work — AJC"}],["$","meta","1",{"name":"description","content":"A selection of AJC projects across identity & design, creative direction, experiences, and hospitality — rooted in culture, heritage, and considered design."}],["$","meta","2",{"property":"og:title","content":"AJC — Creative Studio"}],["$","meta","3",{"property":"og:description","content":"AJC is a creative studio crafting brand identities and experiences rooted in culture, heritage, and considered design."}],["$","meta","4",{"property":"og:url","content":"https://ajc.example.com/"}],["$","meta","5",{"property":"og:site_name","content":"AJC"}],["$","meta","6",{"property":"og:locale","content":"en_US"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"AJC — Creative Studio"}],["$","meta","10",{"name":"twitter:description","content":"AJC is a creative studio crafting brand identities and experiences rooted in culture, heritage, and considered design."}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@11","v":null,"s":"$c"}},"a":"$@12","u":"$@13","b":"42KUwS5ofYDo6aA0UfRWG"}
+a:null
+13:true
+c:300
+c:C
+12:0
+11:"$undefined"
+b:"$undefined"
