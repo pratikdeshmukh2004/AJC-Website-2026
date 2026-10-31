@@ -1,59 +1,58 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { AjcLogo, ApekshaJainWordmark } from "@/components/brand";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
+import { MenuPanel } from "@/components/layout/MenuPanel";
 
 /**
  * Header for the /our-work route, matching the Figma design:
  *   left   — secondary brand wordmark "APEKSHA JAIN"
  *   center — the "AJC" logo
- *   right  — a light/dark theme toggle (two circles)
+ *   right  — the two-dot menu toggle (hollow + filled circle)
  *
- * No primary nav links appear here — the category filter row (rendered by
- * WorkGallery) sits directly beneath this header.
+ * The two circles open the shared slide-in {@link MenuPanel} — the same menu
+ * used on the home and about pages. No primary nav links appear here; the
+ * category filter row (rendered by WorkGallery) sits directly beneath.
  */
 export function WorkHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <header className="bg-cream pt-20 md:pt-32">
-      <Container className="grid grid-cols-3 items-center">
-        {/* Left — secondary brand wordmark (reusable brand component, inherits
-            the brand taupe via text-ink). */}
-        <ApekshaJainWordmark title="Apeksha Jain" className="text-ink h-5 md:h-6" />
+    <>
+      <header className="bg-cream pt-20 md:pt-32">
+        <Container className="grid grid-cols-3 items-center">
+          {/* Left — secondary brand wordmark (reusable brand component, inherits
+              the brand taupe via text-ink). Size matches the shared HeroHeader. */}
+          <ApekshaJainWordmark title="Apeksha Jain" className="text-ink h-4 md:h-5" />
 
-        {/* Center — AJC logo (reusable brand component). */}
-        <Link href="/" aria-label={`${siteConfig.name} — home`} className="justify-self-center">
-          <AjcLogo className="text-ink h-6 md:h-7" />
-        </Link>
+          {/* Center — AJC logo (reusable brand component). */}
+          <Link href="/" aria-label={`${siteConfig.name} — home`} className="justify-self-center">
+            <AjcLogo className="text-ink h-6 md:h-7" />
+          </Link>
 
-        {/* Right — theme toggle (visual, mirrors the design) */}
-        <div className="justify-self-end">
-          <ThemeToggle />
-        </div>
-      </Container>
-    </header>
-  );
-}
+          {/* Right — two-dot menu toggle (hollow + filled circle), opens the
+              shared slide-in MenuPanel (same as home / about). */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+            aria-label="Open menu"
+            className="flex cursor-pointer items-center gap-2.5 justify-self-end transition-opacity hover:opacity-80"
+          >
+            <span
+              className="border-ink/60 h-6 w-6 rounded-full border bg-transparent"
+              aria-hidden
+            />
+            <span className="bg-ink h-6 w-6 rounded-full" aria-hidden />
+          </button>
+        </Container>
+      </header>
 
-/**
- * Two separate circles forming a light/dark toggle, matching the design:
- * an outlined (empty) circle for light and a solid taupe circle for dark,
- * sitting side by side with a gap. The dark circle is shown active.
- */
-function ThemeToggle() {
-  return (
-    <div role="group" aria-label="Theme" className="flex items-center gap-2.5">
-      <button
-        type="button"
-        aria-label="Light theme"
-        aria-pressed="false"
-        className="border-ink/50 hover:border-ink h-6 w-6 cursor-pointer rounded-full border bg-transparent transition-colors"
-      />
-      <button
-        type="button"
-        aria-label="Dark theme"
-        aria-pressed="true"
-        className="bg-ink h-6 w-6 cursor-pointer rounded-full transition-colors"
-      />
-    </div>
+      <MenuPanel open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>
   );
 }
