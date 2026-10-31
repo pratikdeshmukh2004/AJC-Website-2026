@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Project } from "@/config/projects";
+import { assetPath } from "@/lib/utils";
 
 /**
  * Single portfolio entry.
@@ -13,8 +14,11 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="group flex flex-col">
       <div className="bg-cream-dark relative aspect-[1710/880] w-full overflow-hidden">
+        {/* next/image does NOT basePath-prefix a raw string src under static
+            export, so prefix it manually — required on GitHub Pages, which
+            serves the site under a subpath (/AJC-Website-2026). */}
         <Image
-          src={project.image}
+          src={assetPath(project.image)}
           alt={project.title}
           fill
           sizes="(min-width: 1536px) 1440px, 100vw"
