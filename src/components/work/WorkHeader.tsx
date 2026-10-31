@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { AjcLogo, ApekshaJainWordmark } from "@/components/brand";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 
@@ -16,29 +16,13 @@ export function WorkHeader() {
   return (
     <header className="bg-cream pt-20 md:pt-32">
       <Container className="grid grid-cols-3 items-center">
-        {/* Left — secondary brand wordmark. In Figma this is custom vector
-            lettering (not a font), so we use the exact exported SVG. Its paths
-            are filled with the brand taupe (#7D7062 = --color-taupe). */}
-        <Image
-          src="/images/brand/apeksha-jain-wordmark.svg"
-          alt="Apeksha Jain"
-          width={385}
-          height={42}
-          priority
-          className="h-5 w-auto md:h-6"
-        />
+        {/* Left — secondary brand wordmark (reusable brand component, inherits
+            the brand taupe via text-ink). */}
+        <ApekshaJainWordmark title="Apeksha Jain" className="text-ink h-5 md:h-6" />
 
-        {/* Center — AJC logo. Like the wordmark, the logo in Figma is custom
-            vector lettering, so we use the exact exported SVG (taupe #7D7062). */}
+        {/* Center — AJC logo (reusable brand component). */}
         <Link href="/" aria-label={`${siteConfig.name} — home`} className="justify-self-center">
-          <Image
-            src="/images/brand/ajc-logo.svg"
-            alt={siteConfig.name}
-            width={96}
-            height={42}
-            priority
-            className="h-6 w-auto md:h-7"
-          />
+          <AjcLogo className="text-ink h-6 md:h-7" />
         </Link>
 
         {/* Right — theme toggle (visual, mirrors the design) */}
