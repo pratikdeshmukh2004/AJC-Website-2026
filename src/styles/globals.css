@@ -67,6 +67,10 @@
      Heading & sub-heading: Cormorant Garamond. Body: Helvetica. */
   --font-cormorant: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-helvetica: "Helvetica Neue AJC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Regular-weight body. "Helvetica Neue AJC" only ships a 700 face, so the
+     browser uses it for normal weight too; this stack skips it to get true
+     regular Helvetica (bold text still uses `font-helvetica font-bold`). */
+  --font-helvetica-regular: "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* Page-wide default font used by Tailwind's preflight. */
   --default-font-family: var(--font-helvetica);
 
