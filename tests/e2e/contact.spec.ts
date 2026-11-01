@@ -55,7 +55,12 @@ test("matches the Figma layout at 1920px", async ({ page }) => {
     Math.abs((await top(page.getByRole("heading", { name: "Say Hello!" }))) - 1247),
   ).toBeLessThanOrEqual(4);
   expect(Math.abs((await top(field(page, /name/i))) - 1408)).toBeLessThanOrEqual(4);
-  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  // Page height without the site footer (the Figma frame doesn't include it).
+  const height = await page.evaluate(
+    () =>
+      document.documentElement.scrollHeight -
+      (document.querySelector("footer")?.getBoundingClientRect().height ?? 0),
+  );
   expect(Math.abs(height - 2159)).toBeLessThanOrEqual(6);
 
   // Form column on the left, photo on the right.

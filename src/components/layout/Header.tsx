@@ -5,11 +5,11 @@ import { Container } from "@/components/ui/Container";
 /** Top navigation. Static, server-rendered. */
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-ink/10 bg-cream/80 backdrop-blur-md">
+    <header className="border-ink/10 bg-cream/80 sticky top-0 z-50 border-b backdrop-blur-md">
       <Container className="flex h-16 items-center justify-between">
         <Link
           href="/"
-          className="font-cormorant text-2xl tracking-wide text-ink"
+          className="font-cormorant text-ink text-2xl tracking-wide"
           aria-label={`${siteConfig.name} — home`}
         >
           {siteConfig.name}
@@ -21,7 +21,7 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-sm tracking-wide text-ink-soft transition-colors hover:text-brand"
+                  className="text-ink-soft hover:text-brand text-sm tracking-wide transition-colors"
                 >
                   {item.label}
                 </Link>
