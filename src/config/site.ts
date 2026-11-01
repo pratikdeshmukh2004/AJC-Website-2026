@@ -29,7 +29,8 @@ export const siteConfig = {
     { label: "Instagram", href: "https://instagram.com/" },
     { label: "LinkedIn", href: "https://linkedin.com/" },
   ],
-  contactEmail: "hello@ajc.example.com",
+  contactEmail: "apeksha@apekshajain.in",
+  location: "New Delhi, India",
 } as const;
 
 export type NavItem = (typeof siteConfig.nav)[number];

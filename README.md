@@ -54,6 +54,8 @@ src/
 public/
 ├── fonts/                # Self-hosted woff2 fonts
 ├── images/               # Static imagery, one folder per section
+│   ├── brand/scripts/    # "Apeksha Jain" script signatures (ScriptCycle)
+│   ├── contact/          # Contact page imagery
 │   ├── home/             # Home posters
 │   └── about/            # About page imagery
 └── videos/               # Home films (hero.mp4, landing-home.mp4)

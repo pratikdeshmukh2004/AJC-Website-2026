@@ -40,3 +40,16 @@ export function assetPath(path: string): string {
   const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return `${base}${path}`;
 }
+
+/**
+ * Size from a 1920px-wide Figma frame, scaled with the viewport.
+ *
+ * Returns `clamp(min, px/1920 of the viewport, px)`: exact at 1920px, smaller
+ * on narrower screens (never below `min`), and capped at the design size on
+ * wider ones.
+ *
+ * @example fig(97, "2.5rem") // heading font size
+ */
+export function fig(px: number, min: string): string {
+  return `clamp(${min}, ${+(px / 19.2).toFixed(3)}vw, ${px}px)`;
+}

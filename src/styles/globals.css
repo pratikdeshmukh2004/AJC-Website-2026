@@ -254,3 +254,19 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
     transform: translateY(0);
   }
 }
+
+/* ---- Contact: the rocking chair rocks gently on its rockers ----
+   Pivots near the bottom so it tips like a real rocking chair. The global
+   reduced-motion rule above stops it for visitors who ask for less motion. */
+.ajc-rock {
+  transform-origin: 50% 92%;
+  animation: ajc-rock 3.2s ease-in-out infinite alternate;
+}
+@keyframes ajc-rock {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
