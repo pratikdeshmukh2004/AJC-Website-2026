@@ -151,3 +151,8 @@ export const projects: Project[] = [
     categories: ["Identity & Design", "Hospitality"],
   },
 ];
+
+/** Look up a single project by its slug. Returns undefined when not found. */
+export function getProjectBySlug(slug: string): Project | undefined {
+  return projects.find((project) => project.slug === slug);
+}
