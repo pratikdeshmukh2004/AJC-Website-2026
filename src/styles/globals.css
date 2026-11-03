@@ -270,3 +270,16 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
     transform: rotate(4deg);
   }
 }
+
+/* ---- Gentle fade-in, e.g. carousel slides after the arrows rotate them ---- */
+.ajc-fade-in {
+  animation: ajc-fade-in 600ms var(--ease-editorial) both;
+}
+@keyframes ajc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
