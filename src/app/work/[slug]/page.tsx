@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
+import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { getProjectBySlug, projects } from "@/config/projects";
 import { assetPath } from "@/lib/utils";
 
@@ -57,6 +58,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   // the editorial scaffold below until their own designs land.
   if (slug === "haveli-experiences") {
     return <HaveliExperiencesPage />;
+  }
+
+  // Neemrana Hotels case study (AJC-23), from the Figma "Neemrana" frame.
+  if (slug === "neemrana-hotels") {
+    return <NeemranaHotelsPage />;
   }
 
   return (
