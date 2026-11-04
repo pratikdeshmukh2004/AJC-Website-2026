@@ -57,7 +57,8 @@ public/
 │   ├── brand/scripts/    # "Apeksha Jain" script signatures (ScriptCycle)
 │   ├── contact/          # Contact page imagery
 │   ├── home/             # Home posters
-│   └── about/            # About page imagery
+│   ├── about/            # About page imagery
+│   └── hospitality/      # AJC Hospitality page imagery
 └── videos/               # Home films (hero.mp4, landing-home.mp4)
 ```
 
