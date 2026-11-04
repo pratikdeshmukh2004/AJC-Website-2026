@@ -6,7 +6,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
-import { getProjectBySlug, projects } from "@/config/projects";
+import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
 
@@ -36,7 +36,12 @@ export async function generateMetadata({
       title: project.title,
       description: project.description,
       // The original PNGs are pruned from the deployed output; share the WebP.
-      images: [{ url: optimizedPath(project.image, 1280) ?? project.image }],
+      images: [
+        {
+          url:
+            optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
+        },
+      ],
     },
   };
 }
@@ -93,7 +98,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
           {/* Category tags */}
           <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-2">
-            {project.categories.map((category) => (
+            {getCategoriesForProject(project.slug).map((category) => (
               <li
                 key={category}
                 className="font-helvetica text-ink-muted text-xs tracking-[0.02em] uppercase md:text-sm"
@@ -103,16 +108,21 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             ))}
           </ul>
 
-          {/* Hero image */}
-          <div className="bg-cream-dark relative mt-12 aspect-[1710/880] w-full overflow-hidden md:mt-16">
-            <OptimizedImage
-              src={assetPath(project.image)}
-              alt={project.title}
-              fill
-              priority
-              sizes="(min-width: 1536px) 1440px, 100vw"
-              className="object-cover"
-            />
+          {/* Hero — the project's two photos side by side, as on the Our Work card */}
+          <div className="mt-12 grid grid-cols-2 gap-2 md:mt-16 md:gap-3">
+            {[project.images.left, project.images.right].map((image) => (
+              <div key={image.src} className="bg-cream-dark w-full overflow-hidden">
+                <OptimizedImage
+                  src={assetPath(image.src)}
+                  alt={project.title}
+                  width={image.width}
+                  height={image.height}
+                  priority
+                  sizes="(min-width: 1536px) 720px, 50vw"
+                  className="h-auto w-full"
+                />
+              </div>
+            ))}
           </div>
 
           {/* Design-pending note — the full case-study sections land here once
