@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { getProjectBySlug, projects } from "@/config/projects";
+import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
 
 type Params = { slug: string };
@@ -34,7 +35,8 @@ export async function generateMetadata({
     openGraph: {
       title: project.title,
       description: project.description,
-      images: [{ url: project.image }],
+      // The original PNGs are pruned from the deployed output; share the WebP.
+      images: [{ url: optimizedPath(project.image, 1280) ?? project.image }],
     },
   };
 }
@@ -103,7 +105,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
           {/* Hero image */}
           <div className="bg-cream-dark relative mt-12 aspect-[1710/880] w-full overflow-hidden md:mt-16">
-            <Image
+            <OptimizedImage
               src={assetPath(project.image)}
               alt={project.title}
               fill

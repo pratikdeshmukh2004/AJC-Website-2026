@@ -54,8 +54,8 @@ export function WorkGallery() {
       {/* Project stack — one full-width project block per row */}
       {visible.length > 0 ? (
         <div className="flex flex-col gap-20 md:gap-28">
-          {visible.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+          {visible.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} priority={i === 0} />
           ))}
         </div>
       ) : (

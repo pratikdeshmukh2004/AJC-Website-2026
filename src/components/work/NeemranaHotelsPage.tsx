@@ -1,4 +1,4 @@
-import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { assetPath } from "@/lib/utils";
@@ -70,7 +70,7 @@ function CroppedPic({
       className={`${tw.abs} overflow-hidden`}
       style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
     >
-      <Image
+      <OptimizedImage
         src={`${IMG}/${src}`}
         alt={alt}
         width={width}
@@ -131,7 +131,7 @@ function PressLogo({
       className={`${tw.abs} block overflow-hidden transition-opacity duration-300 hover:opacity-70`}
       style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
     >
-      <Image
+      <OptimizedImage
         src={`${IMG}/${src}`}
         alt={alt}
         width={width}

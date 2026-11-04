@@ -63,8 +63,30 @@ public/
 
 ## Media
 
-`next/image` optimization is disabled for static export, so images are served
-as-is. Export them web-optimized from Figma (SVG / JPG / WebP, kept lean).
+### Images
+
+A static export has no server, so Next's built-in image optimizer isn't
+available. Instead, drop **full-resolution** PNG/JPG originals into
+`public/images/about/`, `our_work/` or `projects/` and the build does the rest:
+
+- `scripts/optimize-images.mjs` (runs from `npm run build` and `npm run dev`)
+  writes WebP copies at 640 / 960 / 1280 / 1920 / 2560px wide into
+  `public/images/_opt/` (git-ignored) plus a tiny blur preview per image into
+  `src/generated/image-blur.json` (committed). It is incremental, so only new or
+  changed images are re-encoded. Never upscales.
+- `src/lib/image-loader.ts` points `next/image`'s `srcset` at those files, so each
+  visitor downloads one size suited to their screen. Images lazy-load by
+  default; only above-the-fold images set `priority`.
+- `OptimizedImage` (`src/components/ui/OptimizedImage.tsx`) is the drop-in for
+  `next/image` that adds the blur preview. Use it for photos from the folders
+  above, and pass `sizes` to match how wide the image displays.
+- After `next build`, the originals are removed from `out/` (they're never
+  requested), so the deployed site only carries the WebP files. Sources in
+  `public/` are untouched.
+
+To optimize another folder, add it to `dirs` in `src/config/images.json`.
+Everything else (SVGs, posters, static imports) is served as-is, so export
+those lean from Figma (SVG / JPG / WebP).
 
 `hero.mp4` is the brand film behind the home hero, compressed for web
 (1080p H.264, CRF 28, faststart). To re-encode from a new master and
@@ -96,3 +118,7 @@ those sections out. Add imagery under `public/images/`.
 
 `npm run build` emits a fully static site to `out/`. Host it on any static
 host (Vercel, Netlify, S3 + CloudFront, GitHub Pages).
+
+For Vercel drag-and-drop (served from the domain root, no GitHub Pages
+subpath), run `npm run build:vercel` and drag the `out/` folder onto
+vercel.com/new.

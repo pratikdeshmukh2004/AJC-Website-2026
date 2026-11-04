@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { BandDots } from "@/components/home/BandDots";
@@ -179,7 +179,7 @@ export default function AboutPage() {
       <div className={tw.canvasTop}>
         {/* Hero image */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.hero}`}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/1.png`}
             alt="Himalayan pine forest in soft mist"
             width={1920}
@@ -195,7 +195,7 @@ export default function AboutPage() {
         </div>
         {/* Portrait */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.portrait}`}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/2.png`}
             alt="Mountain ridge framed by evergreens"
             width={310}
@@ -279,7 +279,7 @@ export default function AboutPage() {
         {/* What We Do */}
         <p className={`${tw.abs} ${tw.sectionTitle} ${tw.whatWeDoTitle}`}>What We Do</p>
         <div className={`${tw.abs} ${tw.imgFit} ${tw.wwdImage}`}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/4.png`}
             alt="Boat crossing still water at dusk"
             width={310}
@@ -313,7 +313,7 @@ export default function AboutPage() {
         ))}
         {/* Region: In Bhutan */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`} style={{ top: v(5883 - 3477) }}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/5.png`}
             alt="Bhutan — prayer flags over the valley"
             width={900}
@@ -339,7 +339,7 @@ export default function AboutPage() {
         </div>
         {/* Region: In Ladakh */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`} style={{ top: v(6966 - 3477) }}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/6.png`}
             alt="Ladakh — K2 under cloud"
             width={900}
@@ -373,7 +373,7 @@ export default function AboutPage() {
         </div>
         {/* Region: In Punjab */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`} style={{ top: v(8049 - 3477) }}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/7.png`}
             alt="Punjab — the Golden Temple"
             width={900}
@@ -399,7 +399,7 @@ export default function AboutPage() {
         </div>
         {/* Region: In Assam */}
         <div className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`} style={{ top: v(9132 - 3477) }}>
-          <Image
+          <OptimizedImage
             src={`${IMG}/8.png`}
             alt="Assam — river temple on the Brahmaputra"
             width={900}
@@ -428,7 +428,7 @@ export default function AboutPage() {
           className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`}
           style={{ top: v(10215 - 3477) }}
         >
-          <Image
+          <OptimizedImage
             src={`${IMG}/9.png`}
             alt="Bengal — the Howrah Bridge"
             width={900}
@@ -456,7 +456,7 @@ export default function AboutPage() {
           className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`}
           style={{ top: v(11298 - 3477) }}
         >
-          <Image
+          <OptimizedImage
             src={`${IMG}/10.png`}
             alt="Delhi — the Red Fort"
             width={900}
@@ -484,7 +484,7 @@ export default function AboutPage() {
           className={`${tw.abs} ${tw.imgFit} ${tw.regionImage}`}
           style={{ top: v(12381 - 3477) }}
         >
-          <Image
+          <OptimizedImage
             src={`${IMG}/11.png`}
             alt="Rajasthan — the Lake Palace"
             width={900}

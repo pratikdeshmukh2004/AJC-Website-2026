@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { HaveliIntro } from "@/components/work/HaveliIntro";
@@ -115,7 +115,7 @@ function Pic({
   href?: string;
 }) {
   const image = (
-    <Image
+    <OptimizedImage
       src={`${IMG}/${src}`}
       alt={alt}
       width={width}
@@ -200,7 +200,7 @@ export function HaveliExperiencesPage() {
           className={`${tw.abs} ${tw.imgFit}`}
           style={{ left: v(-41), top: v(-146), width: v(2001), height: v(1252) }}
         >
-          <Image
+          <OptimizedImage
             src={`${IMG}/imgTheEntranceOfHaveliDharampura21.png`}
             alt="The entrance of Haveli Dharampura"
             width={2001}

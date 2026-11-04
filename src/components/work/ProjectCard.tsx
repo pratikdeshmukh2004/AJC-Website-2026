@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { Project } from "@/config/projects";
 import { assetPath } from "@/lib/utils";
 
@@ -11,7 +11,14 @@ import { assetPath } from "@/lib/utils";
  * with the serif title on the left and the narrative on the right — mirroring
  * the Figma "OUR WORK - ALL PROJECTS" layout.
  */
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  priority = false,
+}: {
+  project: Project;
+  /** Preload the image — set for the first card only (above the fold). Others lazy-load. */
+  priority?: boolean;
+}) {
   return (
     <article className="group flex flex-col">
       {/* The whole card opens the project's case-study page at /work/<slug>. */}
@@ -24,10 +31,11 @@ export function ProjectCard({ project }: { project: Project }) {
           {/* next/image does NOT basePath-prefix a raw string src under static
               export, so prefix it manually — required on GitHub Pages, which
               serves the site under a subpath (/AJC-Website-2026). */}
-          <Image
+          <OptimizedImage
             src={assetPath(project.image)}
             alt={project.title}
             fill
+            priority={priority}
             sizes="(min-width: 1536px) 1440px, 100vw"
             className="ease-editorial object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
