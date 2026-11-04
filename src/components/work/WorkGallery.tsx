@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { ProjectCard } from "./ProjectCard";
 import { cn } from "@/lib/utils";
-import { projects, workCategories, type WorkCategory } from "@/config/projects";
+import { getProjectsByCategory, workCategories, type WorkCategory } from "@/config/projects";
 
 /**
  * Filterable portfolio grid for the /our-work route.
@@ -16,13 +16,10 @@ import { projects, workCategories, type WorkCategory } from "@/config/projects";
 export function WorkGallery() {
   const [active, setActive] = useState<WorkCategory>("All Projects");
 
-  const visible = useMemo(() => {
-    if (active === "All Projects") return projects;
-    return projects.filter((p) => p.categories.includes(active));
-  }, [active]);
+  const visible = useMemo(() => getProjectsByCategory(active), [active]);
 
   return (
-    <Container className="pt-24 pb-16 md:pt-44 md:pb-24">
+    <Container wide className="pt-24 pb-16 md:pt-44 md:pb-24">
       {/* Filter row — centered, mirrors the design's category nav. The Figma
           layout spaces the filter well below the header and well above the
           first project (~160px gaps on desktop), so this is deliberately airy. */}

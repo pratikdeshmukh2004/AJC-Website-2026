@@ -23,7 +23,7 @@ export function WorkHeader() {
   return (
     <>
       <header className="bg-cream pt-20 md:pt-32">
-        <Container className="grid grid-cols-3 items-center">
+        <Container wide className="grid grid-cols-3 items-center">
           {/* Left — secondary brand wordmark (reusable brand component, inherits
               the brand taupe via text-ink). Size matches the shared HeroHeader. */}
           <ApekshaJainWordmark title="Apeksha Jain" className="text-ink h-4 md:h-5" />
