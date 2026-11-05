@@ -1,4 +1,4 @@
 {
-  "dirs": ["about", "our_work", "projects"],
+  "dirs": ["about", "our_work", "projects", "hospitality"],
   "widths": [640, 960, 1280, 1920, 2560]
 }

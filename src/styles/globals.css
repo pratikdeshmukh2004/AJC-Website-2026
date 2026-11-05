@@ -71,6 +71,10 @@
      browser uses it for normal weight too; this stack skips it to get true
      regular Helvetica (bold text still uses `font-helvetica font-bold`). */
   --font-helvetica-regular: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Leads with plain Helvetica so glyph widths match the pixel-faithful canvas
+     layouts (About / Hospitality). "Helvetica Neue" sets lines ~1.5% wider,
+     which would shift the design's pinned line breaks. */
+  --font-helvetica-ui: Helvetica, "Helvetica Neue", Arial, sans-serif;
   /* Page-wide default font used by Tailwind's preflight. */
   --default-font-family: var(--font-helvetica);
 
