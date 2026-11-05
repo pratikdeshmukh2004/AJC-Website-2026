@@ -29,9 +29,6 @@ export const metadata: Metadata = {
     - colours: headings #7d7062, body #8b7f73, background #f8f7f2
 */
 
-const body = "font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]";
-const bodyStyle = { fontSize: fig(20, "0.95rem"), lineHeight: 1.275, letterSpacing: "0.01em" };
-
 const STAGES: Stage[] = [
   {
     image: boxClosed,
@@ -63,7 +60,10 @@ const STAGES: Stage[] = [
   {
     image: boxKey,
     content: (
-      <div className={body} style={bodyStyle}>
+      <div
+        className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
+        style={{ fontSize: fig(20, "0.95rem"), lineHeight: 1.275, letterSpacing: "0.01em" }}
+      >
         <p>
           When I was younger, my grandmother passed away and left me a steel-box that held her
           life’s pieces. I didn’t get it till she was gone, so there was no meaning in asking her
@@ -79,7 +79,10 @@ const STAGES: Stage[] = [
   {
     image: boxOpen,
     content: (
-      <div className={body} style={bodyStyle}>
+      <div
+        className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
+        style={{ fontSize: fig(20, "0.95rem"), lineHeight: 1.275, letterSpacing: "0.01em" }}
+      >
         <p>
           I believe every person on this planet has their steel-box within them. When they create
           their life’s work, that steel box opens and overflows.
@@ -95,7 +98,10 @@ const STAGES: Stage[] = [
   {
     image: boxOverflowing,
     content: (
-      <div className={body} style={bodyStyle}>
+      <div
+        className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
+        style={{ fontSize: fig(20, "0.95rem"), lineHeight: 1.275, letterSpacing: "0.01em" }}
+      >
         <p>
           AJC is all of us—
           <br />

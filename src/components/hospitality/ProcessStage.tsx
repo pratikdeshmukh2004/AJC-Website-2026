@@ -1,8 +1,7 @@
 "use client";
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { AT, BODY, SMALL_CAPS, SUB, at, u } from "./design";
+import { at, cn, u } from "@/lib/utils";
 
 export type ProcessStageProps = {
   title: string;
@@ -39,8 +38,10 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
   const bodyId = useId();
 
   return (
-    <div className={AT} style={at(g.x, g.y)}>
-      <h3 className={cn(SUB, "xl:whitespace-nowrap")}>{title}</h3>
+    <div className="xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y)" style={at(g.x, g.y)}>
+      <h3 className="font-cormorant text-taupe text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))] xl:whitespace-nowrap">
+        {title}
+      </h3>
 
       <div
         className="relative mt-3 xl:mt-(--gap) xl:ml-(--dx)"
@@ -49,7 +50,7 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
         <p
           id={bodyId}
           className={cn(
-            BODY,
+            "font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]",
             "xl:w-(--bw)",
             !open &&
               "overflow-hidden [mask-image:linear-gradient(#000_1lh,rgb(0_0_0/0.32)_1lh)] xl:[mask-image:none]",
@@ -74,7 +75,7 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
         aria-controls={bodyId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          SMALL_CAPS,
+          "font-helvetica-ui text-[0.8125rem] leading-[1.6] tracking-[0.01em] uppercase xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]",
           "mt-3 block cursor-pointer border-0 bg-transparent p-0 text-left text-[#8b7f73] opacity-[0.79] transition-opacity hover:opacity-100",
           "xl:mt-(--gap) xl:ml-(--dx)",
         )}

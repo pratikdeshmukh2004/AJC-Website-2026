@@ -1,8 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
-import { cn } from "@/lib/utils";
-import { AT_W, BODY, LIST, LIST_TYPE, PINNED_LINE, at } from "./design";
+import { at, cn } from "@/lib/utils";
 
 type Stage = {
   label: string;
@@ -60,11 +59,6 @@ const STAGES: Stage[] = [
 ];
 const DEFAULT_STAGE = 1;
 
-const TAB = cn(
-  LIST,
-  "block w-full cursor-pointer border-0 bg-transparent p-0 text-left transition-opacity",
-);
-
 /**
  * "What We Do": the stage list on the left; the selected stage's description
  * and services show on the right (Figma comment: "Each point content is on the
@@ -105,7 +99,7 @@ export function WhatWeDo() {
         role="tablist"
         aria-orientation="vertical"
         aria-label="What we do"
-        className={cn("mt-8", AT_W)}
+        className="mt-8 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
         style={at(209, 2254, 523)}
       >
         {STAGES.map((s, i) => {
@@ -124,7 +118,12 @@ export function WhatWeDo() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(i)}
               onKeyDown={(e) => onKeyDown(e, i)}
-              className={cn(TAB, selected ? "opacity-100" : "opacity-[0.59] hover:opacity-90")}
+              className={cn(
+                // Uppercase list type (Helvetica 27 / +4%, taupe) on the design's 44px row pitch.
+                "font-helvetica-ui text-taupe text-[0.875rem] tracking-[0.04em] uppercase xl:text-[length:calc(27*var(--u))] leading-[1.9] xl:leading-[calc(44*var(--u))]",
+                "block w-full cursor-pointer border-0 bg-transparent p-0 text-left transition-opacity",
+                selected ? "opacity-100" : "opacity-[0.59] hover:opacity-90",
+              )}
             >
               {s.label}
             </button>
@@ -137,15 +136,17 @@ export function WhatWeDo() {
         id={panelId}
         aria-labelledby={tabId(active)}
         tabIndex={0}
-        className={cn("mt-8 min-h-48 xl:min-h-0", AT_W)}
+        className="mt-8 min-h-48 xl:min-h-0 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
         style={at(1159, 2254, 564)}
       >
         {typeof stage.description === "string" ? (
-          <p className={BODY}>{stage.description}</p>
+          <p className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]">
+            {stage.description}
+          </p>
         ) : stage.description ? (
-          <p className={BODY}>
+          <p className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]">
             {stage.description.map((line) => (
-              <span key={line} className={PINNED_LINE}>
+              <span key={line} className="xl:block xl:whitespace-nowrap">
                 {line}{" "}
               </span>
             ))}
@@ -163,10 +164,7 @@ export function WhatWeDo() {
             // items, while a long item that wraps stays visibly one item.
             <li
               key={service}
-              className={cn(
-                LIST_TYPE,
-                "py-1 leading-[1.4] opacity-[0.59] xl:py-[calc(7*var(--u))] xl:leading-[calc(30*var(--u))]",
-              )}
+              className="font-helvetica-ui text-taupe text-[0.875rem] tracking-[0.04em] uppercase xl:text-[length:calc(27*var(--u))] py-1 leading-[1.4] opacity-[0.59] xl:py-[calc(7*var(--u))] xl:leading-[calc(30*var(--u))]"
             >
               {service}
             </li>
