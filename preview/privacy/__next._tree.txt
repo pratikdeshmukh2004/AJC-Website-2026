@@ -1,5 +1,5 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/1-0ybx341_vz7.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/2twkr2r1uhw40.css","style"]
 :HC["/",""]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"privacy","h":96,"c":"$Q2"}]]
-0:{"b":"iw8qAauuAXjkWyJz3Ciw6","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"GiFnDx8IP4usBuaPj8Ht6","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
