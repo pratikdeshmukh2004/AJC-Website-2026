@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { RouteTransitionListener } from "@/components/layout/RouteTransitionListener";
+import { Footer } from "@/components/layout/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -39,6 +40,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen">
         <RouteTransitionListener />
         {children}
+        {/* On every page except Home (the footer hides itself on "/"). */}
+        <Footer />
       </body>
     </html>
   );

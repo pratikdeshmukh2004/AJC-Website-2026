@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -170,6 +170,11 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
   // Bumped on manual select to reset the 3s autoplay window.
   const [resetKey, setResetKey] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
+  // The 8 carousel tiles are only mounted (and so only downloaded) once the
+  // visitor scrolls into the band. Sticky, stacked images all sit in the
+  // viewport together, so lazy loading alone would fetch every tile as soon as
+  // the band appears. Never reset: once requested they stay cached/mounted.
+  const [tilesRequested, setTilesRequested] = useState(false);
 
   const rafRef = useRef<number | null>(null);
 
@@ -189,6 +194,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
         rafRef.current = null;
         setReduceMotion(true);
         setProgress(1);
+        setTilesRequested(true);
       });
       return () => {
         if (rafRef.current != null) {
@@ -216,6 +222,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
         p = clamp01(scrolled / (pinnable * CONVERGE_FRACTION));
       }
       setProgress(p);
+      if (p > 0.05) setTilesRequested(true);
       // Deactivate teardown: whenever the carousel is not lined up, reset the
       // active slide to 0 so re-entry always starts from tile 1. Done here
       // inside the rAF callback (not a synchronous effect body) so it never
@@ -280,7 +287,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
     >
       {/* Base intro image — stays mounted as the cross-fade base layer. */}
       <div className={`absolute ${bandClass}`}>
-        <Image
+        <OptimizedImage
           src={`${imgBase}/3.png`}
           alt="River view of the Taj Mahal, aquatint"
           width={1920}
@@ -292,7 +299,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
       {/* Cross-fade tile stack (3-1.png..3-8.png). Only the active tile is
           opaque while the carousel is active; otherwise all fade out and the
           base intro shows through. pointer-events-none so dots stay clickable. */}
-      {Array.from({ length: SLIDE_COUNT }, (_, i) => {
+      {tilesRequested && Array.from({ length: SLIDE_COUNT }, (_, i) => {
         const visible = active && index === i;
         return (
           <div
@@ -302,7 +309,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
               visible ? "opacity-100" : "opacity-0"
             }`}
           >
-            <Image
+            <OptimizedImage
               src={`${imgBase}/3-${i + 1}.png`}
               alt={`Carousel tile ${i + 1}`}
               width={1920}

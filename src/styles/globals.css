@@ -67,6 +67,14 @@
      Heading & sub-heading: Cormorant Garamond. Body: Helvetica. */
   --font-cormorant: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-helvetica: "Helvetica Neue AJC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Regular-weight body. "Helvetica Neue AJC" only ships a 700 face, so the
+     browser uses it for normal weight too; this stack skips it to get true
+     regular Helvetica (bold text still uses `font-helvetica font-bold`). */
+  --font-helvetica-regular: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Leads with plain Helvetica so glyph widths match the pixel-faithful canvas
+     layouts (About / Hospitality). "Helvetica Neue" sets lines ~1.5% wider,
+     which would shift the design's pinned line breaks. */
+  --font-helvetica-ui: Helvetica, "Helvetica Neue", Arial, sans-serif;
   /* Page-wide default font used by Tailwind's preflight. */
   --default-font-family: var(--font-helvetica);
 
@@ -248,5 +256,34 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+/* ---- Contact: the rocking chair rocks gently on its rockers ----
+   Pivots near the bottom so it tips like a real rocking chair. The global
+   reduced-motion rule above stops it for visitors who ask for less motion. */
+.ajc-rock {
+  transform-origin: 50% 92%;
+  animation: ajc-rock 3.2s ease-in-out infinite alternate;
+}
+@keyframes ajc-rock {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+/* ---- Gentle fade-in, e.g. carousel slides after the arrows rotate them ---- */
+.ajc-fade-in {
+  animation: ajc-fade-in 600ms var(--ease-editorial) both;
+}
+@keyframes ajc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -56,7 +56,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
         aria-modal="true"
         aria-label="Site menu"
         className={cn(
-          "absolute inset-y-0 right-0 flex w-full flex-col bg-gradient-to-b from-cream to-cream-dark transition-transform duration-500 ease-editorial sm:w-[62%] md:w-[42%] lg:w-[34%]",
+          "from-cream to-cream-dark ease-editorial absolute inset-y-0 right-0 flex w-full flex-col bg-gradient-to-b transition-transform duration-500 sm:w-[62%] md:w-[42%] lg:w-[34%]",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
@@ -66,9 +66,15 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
             type="button"
             onClick={onClose}
             aria-label="Close menu"
-            className="cursor-pointer text-brown-dark transition-opacity hover:opacity-60"
+            className="text-brown-dark cursor-pointer transition-opacity hover:opacity-60"
           >
-            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              aria-hidden
+            >
               <path d="M6 6l12 12M18 6L6 18" strokeWidth="1.4" strokeLinecap="round" />
             </svg>
           </button>
@@ -76,10 +82,10 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
 
         {/* Quote */}
         <div className="px-8 md:px-12">
-          <blockquote className="max-w-md font-cormorant text-xl leading-snug text-brown-dark md:text-2xl">
+          <blockquote className="font-cormorant text-brown-dark max-w-md text-xl leading-snug md:text-2xl">
             &ldquo;{siteConfig.menuQuote.text}&rdquo;
           </blockquote>
-          <p className="mt-4 text-[11px] tracking-[0.18em] text-ink-muted uppercase">
+          <p className="text-ink-muted mt-4 text-[11px] tracking-[0.18em] uppercase">
             {siteConfig.menuQuote.author}
           </p>
         </div>
@@ -101,10 +107,8 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                     onClick={onClose}
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "inline-flex items-center gap-2 font-cormorant text-2xl transition-colors md:text-[1.75rem]",
-                      isActive
-                        ? "text-brown-dark"
-                        : "text-brown hover:text-brown-dark",
+                      "font-cormorant inline-flex items-center gap-2 text-2xl transition-colors md:text-[1.75rem]",
+                      isActive ? "text-brown-dark" : "text-brown hover:text-brown-dark",
                     )}
                   >
                     {item.label}

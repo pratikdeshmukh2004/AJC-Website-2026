@@ -13,11 +13,15 @@ import { MenuPanel } from "@/components/layout/MenuPanel";
  */
 export function HeroHeader({
   menuOnly = false,
+  tone = "light",
 }: {
   /** Show only the menu toggle (no "Apeksha Jain" / "AJC" logos), e.g. on About. */
   menuOnly?: boolean;
+  /** `light` = white marks over the film; `dark` = taupe marks on paper pages. */
+  tone?: "light" | "dark";
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const ink = tone === "dark" ? "text-taupe" : "text-white";
 
   return (
     <>
@@ -29,12 +33,12 @@ export function HeroHeader({
         >
           {menuOnly ? null : (
             <>
-              {/* Brand marks take the text colour — change `text-white` to recolour. */}
-              <ApekshaJainWordmark title="Apeksha Jain" className="h-4 text-white md:h-5" />
+              {/* Brand marks take the text colour (set by `tone`). */}
+              <ApekshaJainWordmark title="Apeksha Jain" className={`h-4 md:h-5 ${ink}`} />
 
               <Link
                 href="/"
-                className="pointer-events-auto flex text-white"
+                className={`pointer-events-auto flex ${ink}`}
                 aria-label={`${siteConfig.name} — home`}
               >
                 <AjcLogo className="h-6 md:h-7" />
@@ -49,10 +53,10 @@ export function HeroHeader({
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-label="Open menu"
-            className="pointer-events-auto flex cursor-pointer items-center gap-2 transition-opacity hover:opacity-80"
+            className={`pointer-events-auto flex cursor-pointer items-center gap-2 transition-opacity hover:opacity-80 ${ink}`}
           >
-            <span className="h-3.5 w-3.5 rounded-full border border-white" aria-hidden />
-            <span className="h-3.5 w-3.5 rounded-full bg-white" aria-hidden />
+            <span className="h-3.5 w-3.5 rounded-full border border-current" aria-hidden />
+            <span className="h-3.5 w-3.5 rounded-full bg-current" aria-hidden />
           </button>
         </div>
       </header>

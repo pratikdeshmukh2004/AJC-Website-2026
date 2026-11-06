@@ -15,6 +15,11 @@
 /.next/
 /out/
 
+# generated at build time by scripts/optimize-images.mjs — see npm run build.
+# (src/generated/image-blur.json is committed: code imports it, so a fresh
+# clone must typecheck before the first build.)
+/public/images/_opt/
+
 # production
 /build
 
