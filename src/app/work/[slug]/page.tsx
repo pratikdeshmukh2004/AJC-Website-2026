@@ -6,6 +6,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
+import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
@@ -70,6 +71,12 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   // Neemrana Hotels case study (AJC-23), from the Figma "Neemrana" frame.
   if (slug === "neemrana-hotels") {
     return <NeemranaHotelsPage />;
+  }
+
+  // Virsa Baltistan identity page (AJC-16), Figma node 2823:1389. Its visual
+  // archive page lives at /work/virsa-baltistan/archive.
+  if (slug === "virsa-baltistan") {
+    return <VirsaBaltistanPage />;
   }
 
   return (
