@@ -6,6 +6,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
+import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
@@ -78,6 +79,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   // Alchi Kitchen project page (AJC-19), Figma node 2823:2994.
   if (slug === "alchi-kitchen") {
     return <AlchiKitchenPage />;
+  }
+
+  // Assam Bengal Navigation case study (AJC-24), from its Figma frame.
+  if (slug === "assam-bengal-navigation") {
+    return <AssamBengalNavigationPage />;
   }
 
   return (
