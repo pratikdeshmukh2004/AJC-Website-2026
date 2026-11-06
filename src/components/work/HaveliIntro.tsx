@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
+import { u } from "@/lib/utils";
 
 /*
   Expandable hero intro body for the Haveli Dharampura project page.
@@ -13,15 +14,10 @@ import { forwardRef } from "react";
   elements *below* the intro (the portrait + play triangle) out of the way.
   This block is forwardRef'd so the parent can measure its rendered height and
   shift those lower elements by exactly the overflow.
+
+  Classes are written directly on each element (the About-page convention);
+  only the varying Figma offsets are set inline via u().
 */
-
-const v = (px: number) => `calc(${px} * var(--u))`;
-
-const body =
-  "font-helvetica-regular text-[#9b9484] text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]";
-const bodyBold =
-  "font-helvetica font-bold text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]";
-const pill = "bg-[rgba(253,251,244,0.66)]";
 
 type Props = {
   expanded: boolean;
@@ -36,7 +32,11 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
     // Absolutely-positioned flow block anchored at the Figma intro origin
     // (x972, y1438, width 677). Children stack in normal flow so the toggle
     // always sits directly beneath the last paragraph.
-    <div ref={ref} className={`absolute ${body}`} style={{ left: v(972), top: v(1438), width: v(677) }}>
+    <div
+      ref={ref}
+      className="font-helvetica-regular absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+      style={{ left: u(972), top: u(1438), width: u(677) }}
+    >
       <p>
         The Haveli Archive is a visual reverie born in the tangled lanes of Purani Dilli, where our
         lens turned toward a beautifully restored, 200-year-old Mughal Haveli where time pauses as
@@ -78,13 +78,13 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className={`${pill} ${bodyBold} relative mt-[calc(16*var(--u))] block cursor-pointer text-left`}
+        className="font-helvetica relative mt-[calc(16*var(--u))] block cursor-pointer bg-[rgba(253,251,244,0.66)] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484]"
         style={{
-          width: v(747),
-          marginLeft: v(-35),
-          paddingTop: v(28),
-          paddingBottom: v(28),
-          paddingLeft: v(35),
+          width: u(747),
+          marginLeft: u(-35),
+          paddingTop: u(28),
+          paddingBottom: u(28),
+          paddingLeft: u(35),
         }}
       >
         {expanded ? "Read less" : "Read more"}

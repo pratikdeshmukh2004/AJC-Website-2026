@@ -1,7 +1,7 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
-import { assetPath } from "@/lib/utils";
+import { assetPath, u } from "@/lib/utils";
 
 /*
   Neemrana Hotels — reproduction of the Figma project-page frame "Neemrana"
@@ -9,38 +9,14 @@ import { assetPath } from "@/lib/utils";
 
   Same technique as the Haveli and About pages: an absolutely-positioned canvas
   where `--u` = 1 Figma px = 100cqw / 1920, so the layout scales proportionally
-  with the viewport (exact at 1920px, smaller below).
+  with the viewport (exact at 1920px, smaller below). Tailwind is applied
+  directly to each element (the About-page convention); only the varying Figma
+  offsets are set inline via u().
 
   Palette: background #fdfbf4, headings #7d7062 (taupe), body #9b9484 (sage).
 */
 
 const IMG = assetPath("/images/projects/neemrana-hotels");
-
-// Figma px → canvas units.
-const v = (px: number) => `calc(${px} * var(--u))`;
-
-const tw = {
-  page: "@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]",
-  // Content ends at the "Ranjit's Svaasa" label (y4915) plus breathing room.
-  canvas: "relative w-full h-[calc(5150*var(--u))]",
-  abs: "absolute",
-
-  bigTitle:
-    "font-cormorant text-[#7d7062] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]",
-  sectionTitle:
-    "font-cormorant text-[#7d7062] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]",
-
-  body: "font-helvetica-regular text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]",
-  bodyBold:
-    "font-helvetica font-bold text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]",
-
-  // Credits / film captions — Helvetica, taupe, 28px, 80% opacity, uppercase.
-  caption:
-    "font-helvetica-regular uppercase text-[#7d7062] opacity-80 text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))]",
-
-  eyebrow:
-    "font-helvetica font-bold uppercase text-white opacity-80 text-[length:calc(28*var(--u))] tracking-[calc(0.56*var(--u))]",
-};
 
 /** Crop offsets (percent of the frame) copied from the Figma image fills. */
 type Crop = { w: number; h: number; left: number; top: number };
@@ -67,8 +43,8 @@ function CroppedPic({
 }) {
   return (
     <div
-      className={`${tw.abs} overflow-hidden`}
-      style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
+      className="absolute overflow-hidden"
+      style={{ left: u(left), top: u(top), width: u(width), height: u(height) }}
     >
       <OptimizedImage
         src={`${IMG}/${src}`}
@@ -98,8 +74,8 @@ function PlayButton({ top }: { top: number }) {
       src={`${IMG}/play-ring.svg`}
       alt=""
       aria-hidden
-      className={tw.abs}
-      style={{ left: v(911), top: v(top), width: v(98), height: v(98) }}
+      className="absolute"
+      style={{ left: u(911), top: u(top), width: u(98), height: u(98) }}
     />
   );
 }
@@ -128,8 +104,8 @@ function PressLogo({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={alt}
-      className={`${tw.abs} block overflow-hidden transition-opacity duration-300 hover:opacity-70`}
-      style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
+      className="absolute block overflow-hidden transition-opacity duration-300 hover:opacity-70"
+      style={{ left: u(left), top: u(top), width: u(width), height: u(height) }}
     >
       <OptimizedImage
         src={`${IMG}/${src}`}
@@ -149,11 +125,12 @@ function PressLogo({
  */
 export function NeemranaHotelsPage() {
   return (
-    <div className={tw.page}>
+    <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
       {/* Overlay chrome (menu toggle), same as About/home */}
       <HeroHeader menuOnly />
 
-      <div className={tw.canvas}>
+      {/* Canvas height ends at the "Ranjit's Svaasa" label (y4915) plus breathing room. */}
+      <div className="relative h-[calc(5150*var(--u))] w-full">
         {/* ============ HERO ============ */}
         <CroppedPic
           src="hero.png"
@@ -165,28 +142,40 @@ export function NeemranaHotelsPage() {
           crop={{ w: 111.65, h: 117.15, left: -5.25, top: 9.03 }}
           priority
         />
-        <p className={`${tw.abs} ${tw.eyebrow}`} style={{ left: v(103), top: v(543), width: v(348) }}>
+        <p
+          className="font-helvetica absolute text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80"
+          style={{ left: u(103), top: u(543), width: u(348) }}
+        >
           2026 / ২০২৬
         </p>
         <p
-          className={`${tw.abs} ${tw.eyebrow} text-right`}
-          style={{ left: v(1384), top: v(543), width: v(433) }}
+          className="font-helvetica absolute text-right text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80"
+          style={{ left: u(1384), top: u(543), width: u(433) }}
         >
           AJC in Rajasthan / राजस्थान
         </p>
 
         {/* ============ TITLE + CREDITS + INTRO ============ */}
-        <h1 className={`${tw.abs} ${tw.bigTitle}`} style={{ left: v(109), top: v(1190), width: v(1088) }}>
+        <h1
+          className="font-cormorant absolute text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] text-[#7d7062]"
+          style={{ left: u(109), top: u(1190), width: u(1088) }}
+        >
           Neemrana
           <br />
           Fort-Palace
         </h1>
-        <div className={`${tw.abs} ${tw.caption}`} style={{ left: v(109), top: v(1436), width: v(523) }}>
+        <div
+          className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
+          style={{ left: u(109), top: u(1436), width: u(523) }}
+        >
           <p>Brand Film</p>
           <p>Creative Direction</p>
         </div>
 
-        <div className={`${tw.abs} ${tw.body} space-y-[1.2em]`} style={{ left: v(981), top: v(1335), width: v(677) }}>
+        <div
+          className="font-helvetica-regular absolute space-y-[1.2em] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+          style={{ left: u(981), top: u(1335), width: u(677) }}
+        >
           <p>
             Eight years ago, in 2017, we stayed at Neemrana Fort Palace for the very first time. Two
             years later, we found ourselves at the Ramgarh Bungalows. As young travelers, what began
@@ -224,12 +213,15 @@ export function NeemranaHotelsPage() {
           crop={{ w: 103.13, h: 110.8, left: -1.03, top: -4.94 }}
         />
         <PlayButton top={2422} />
-        <p className={`${tw.abs} ${tw.caption}`} style={{ left: v(109), top: v(2950), width: v(391) }}>
+        <p
+          className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
+          style={{ left: u(109), top: u(2950), width: u(391) }}
+        >
           Neemrana Fort-Palace
         </p>
         <p
-          className={`${tw.abs} ${tw.caption} text-right`}
-          style={{ left: v(1244), top: v(2950), width: v(566) }}
+          className="font-helvetica-regular absolute text-right text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
+          style={{ left: u(1244), top: u(2950), width: u(566) }}
         >
           A Piece of Livable History
         </p>
@@ -245,18 +237,24 @@ export function NeemranaHotelsPage() {
           crop={{ w: 115.99, h: 124.48, left: -7.39, top: -2.3 }}
         />
         <PlayButton top={3485} />
-        <p className={`${tw.abs} ${tw.caption}`} style={{ left: v(109), top: v(4013), width: v(391) }}>
+        <p
+          className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
+          style={{ left: u(109), top: u(4013), width: u(391) }}
+        >
           Hill Fort Kesroli
         </p>
         <p
-          className={`${tw.abs} ${tw.caption} text-right`}
-          style={{ left: v(1244), top: v(4013), width: v(566) }}
+          className="font-helvetica-regular absolute text-right text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
+          style={{ left: u(1244), top: u(4013), width: u(566) }}
         >
           The Oldest Living Fort Hotel
         </p>
 
         {/* ============ FEATURES ============ */}
-        <h2 className={`${tw.abs} ${tw.bigTitle}`} style={{ left: v(109), top: v(4218), width: v(1088) }}>
+        <h2
+          className="font-cormorant absolute text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] text-[#7d7062]"
+          style={{ left: u(109), top: u(4218), width: u(1088) }}
+        >
           Features
         </h2>
         <PressLogo
@@ -297,34 +295,43 @@ export function NeemranaHotelsPage() {
         />
 
         {/* ============ TEAM ============ */}
-        <h2 className={`${tw.abs} ${tw.bigTitle}`} style={{ left: v(109), top: v(4577), width: v(1088) }}>
+        <h2
+          className="font-cormorant absolute text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] text-[#7d7062]"
+          style={{ left: u(109), top: u(4577), width: u(1088) }}
+        >
           Team
         </h2>
-        <p className={`${tw.abs} ${tw.bodyBold}`} style={{ left: v(965), top: v(4634), width: v(400) }}>
+        <p
+          className="font-helvetica absolute text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+          style={{ left: u(965), top: u(4634), width: u(400) }}
+        >
           POST PRODUCTION
         </p>
-        <p className={`${tw.abs} ${tw.body} uppercase`} style={{ left: v(1452), top: v(4634), width: v(260) }}>
+        <p
+          className="font-helvetica-regular absolute text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] text-[#9b9484] uppercase"
+          style={{ left: u(1452), top: u(4634), width: u(260) }}
+        >
           Pulkit Khandelwal
         </p>
 
         {/* ============ NEXT PROJECT ============ */}
         <div
-          className={`${tw.abs} font-cormorant font-bold text-[#7d7062] text-[length:calc(80*var(--u))] leading-none text-center`}
-          style={{ left: v(905), top: v(4723), width: v(110) }}
+          className="font-cormorant absolute text-center text-[length:calc(80*var(--u))] leading-none font-bold text-[#7d7062]"
+          style={{ left: u(905), top: u(4723), width: u(110) }}
           aria-hidden
         >
           &gt;
         </div>
         <Link
           href="/work/ranjits-svaasa"
-          className={`${tw.abs} ${tw.sectionTitle} block text-center`}
-          style={{ left: v(654), top: v(4811), width: v(612) }}
+          className="font-cormorant absolute block text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))] text-[#7d7062]"
+          style={{ left: u(654), top: u(4811), width: u(612) }}
         >
           Next Project
         </Link>
         <p
-          className={`${tw.abs} ${tw.body} uppercase text-center`}
-          style={{ left: v(810), top: v(4915), width: v(300) }}
+          className="font-helvetica-regular absolute text-center text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] text-[#9b9484] uppercase"
+          style={{ left: u(810), top: u(4915), width: u(300) }}
         >
           Ranjit&rsquo;s Svaasa
         </p>

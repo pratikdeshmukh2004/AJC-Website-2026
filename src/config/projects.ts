@@ -27,6 +27,11 @@ export type ProjectImage = {
   /** Intrinsic pixel size, so next/image reserves the right ratio (uncropped). */
   width: number;
   height: number;
+  /**
+   * Page this photo opens from the Our Work card, when it isn't the project's
+   * own /work/<slug> page. `title` names that page for screen readers.
+   */
+  link?: { href: string; title: string };
 };
 
 export type Project = {
@@ -49,7 +54,15 @@ export const projects: Project[] = [
     description:
       "Launch identity for a boutique luxury hotel in India. Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and royal legacy of Baltistan.",
     images: {
-      left: { src: "/images/our_work/1-left.png", width: 851, height: 880 },
+      // Per AJC-16: the left photo opens the visual-archive page (Figma node
+      // 2823:865); the right photo and the text open /work/virsa-baltistan
+      // (Figma node 2823:1389).
+      left: {
+        src: "/images/our_work/1-left.png",
+        width: 851,
+        height: 880,
+        link: { href: "/work/virsa-baltistan/archive", title: "Archive of Virsa Baltistan" },
+      },
       right: { src: "/images/our_work/1-right.png", width: 850, height: 880 },
     },
   },
