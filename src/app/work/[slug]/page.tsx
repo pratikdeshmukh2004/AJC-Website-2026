@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ComponentType } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
@@ -14,6 +15,23 @@ import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
 
 type Params = { slug: string };
+
+/**
+ * Projects with a dedicated, pixel-faithful case-study page, keyed by slug.
+ * Any project not listed here falls back to the editorial scaffold below. To
+ * add one: build the page in components/work and register it here.
+ *
+ * Kept in this file rather than config/projects.ts on purpose: that config is
+ * imported by the client-side Our Work gallery, and referencing the page
+ * components there would pull every case study into its bundle.
+ */
+const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
+  "haveli-experiences": HaveliExperiencesPage, // AJC-22
+  "neemrana-hotels": NeemranaHotelsPage, // AJC-23
+  "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
+  "alchi-kitchen": AlchiKitchenPage, // AJC-19
+  "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
+};
 
 /**
  * Pre-render one static page per project at build time. Required under
@@ -58,33 +76,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
-  // Haveli Experiences has a full, pixel-faithful case-study design (AJC-22),
-  // reproduced from the Figma project-page frame. Other projects fall back to
-  // the editorial scaffold below until their own designs land.
-  if (slug === "haveli-experiences") {
-    return <HaveliExperiencesPage />;
-  }
-
-  // Neemrana Hotels case study (AJC-23), from the Figma "Neemrana" frame.
-  if (slug === "neemrana-hotels") {
-    return <NeemranaHotelsPage />;
-  }
-
-  // Virsa Baltistan identity page (AJC-16), Figma node 2823:1389. Its visual
-  // archive page lives at /work/virsa-baltistan/archive.
-  if (slug === "virsa-baltistan") {
-    return <VirsaBaltistanPage />;
-  }
-
-  // Alchi Kitchen project page (AJC-19), Figma node 2823:2994.
-  if (slug === "alchi-kitchen") {
-    return <AlchiKitchenPage />;
-  }
-
-  // Assam Bengal Navigation case study (AJC-24), from its Figma frame.
-  if (slug === "assam-bengal-navigation") {
-    return <AssamBengalNavigationPage />;
-  }
+  const CaseStudy = CASE_STUDIES[slug];
+  if (CaseStudy) return <CaseStudy />;
 
   return (
     <div className="bg-cream flex min-h-screen flex-col">
