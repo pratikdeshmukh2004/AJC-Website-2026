@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/2twkr2r1uhw40.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/0jyt7byqqsmxb.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"haveli-experiences","s":["virsa-baltistan"]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"GiFnDx8IP4usBuaPj8Ht6","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"6YmgcVHQCZ5qQo5Ei9x80","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
