@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
 /*
   Expandable body copy with the "Read more" translucent pill used on the
@@ -8,21 +9,17 @@ import { forwardRef } from "react";
   Bold 20px). Collapsed: `lead` + optional `collapsedTail`. Expanded: `lead` +
   `expandedTail`; the pill flips to "Read less".
 
+  Sizes use the page canvas unit `--u` (1 Figma px = 100cqw / 1920), so this
+  must render inside a canvas that defines it. Position it with `className`
+  (e.g. `left-[calc(971*var(--u))] top-[calc(1438*var(--u))] w-[calc(652*var(--u))]`).
+
   State is owned by the parent (`expanded` / `onToggle`) so it can reflow
   content below. The block is forwardRef'd so the parent can measure it.
 */
 
-const v = (px: number) => `calc(${px} * var(--u))`;
-
-const body =
-  "font-helvetica-regular text-[#9b9484] text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]";
-const bodyBold =
-  "font-helvetica font-bold text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]";
-
 type Props = {
-  left: number;
-  top: number;
-  width: number;
+  /** Absolute position + width of the block, in canvas units. */
+  className?: string;
   /** Paragraphs always shown. */
   lead: string[];
   /** Truncated last paragraph shown only while collapsed. */
@@ -34,7 +31,7 @@ type Props = {
 };
 
 export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreCopy(
-  { left, top, width, lead, collapsedTail, expandedTail, expanded, onToggle },
+  { className, lead, collapsedTail, expandedTail, expanded, onToggle },
   ref,
 ) {
   const paragraphs = expanded
@@ -44,9 +41,15 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
       : lead;
 
   return (
-    <div ref={ref} className={`absolute ${body}`} style={{ left: v(left), top: v(top), width: v(width) }}>
+    <div
+      ref={ref}
+      className={cn(
+        "font-helvetica-regular text-sage absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]",
+        className,
+      )}
+    >
       {paragraphs.map((text, i) => (
-        <p key={i} className={i > 0 ? "mt-[1em]" : undefined}>
+        <p key={i} className={cn(i > 0 && "mt-[1em]")}>
           {text}
         </p>
       ))}
@@ -54,14 +57,7 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className={`${bodyBold} relative mt-[calc(16*var(--u))] block cursor-pointer bg-[rgba(253,251,244,0.66)] text-left`}
-        style={{
-          width: v(747),
-          marginLeft: v(-35),
-          paddingTop: v(28),
-          paddingBottom: v(28),
-          paddingLeft: v(35),
-        }}
+        className="font-helvetica text-sage bg-cream/66 relative mt-[calc(16*var(--u))] ml-[calc(-35*var(--u))] block w-[calc(747*var(--u))] cursor-pointer py-[calc(28*var(--u))] pl-[calc(35*var(--u))] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]"
       >
         {expanded ? "Read less" : "Read more"}
       </button>
