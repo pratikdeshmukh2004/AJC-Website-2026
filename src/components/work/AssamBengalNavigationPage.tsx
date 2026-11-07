@@ -5,20 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
-import { assetPath } from "@/lib/utils";
+import { assetPath, cn } from "@/lib/utils";
 
 /*
   Assam Bengal Navigation — reproduction of the Figma project-page frame
   "Assam Bengal Navigation" (node 3232:191, 1920 x 29323) for AJC-24.
 
-  Same technique as the Haveli / Neemrana pages: an absolutely-positioned
-  canvas where `--u` = 1 Figma px = 100cqw / 1920, so the layout scales
+  Same technique as the About / Haveli / Neemrana pages: an absolutely
+  positioned canvas where `--u` = 1 Figma px = 100cqw / 1920, so every Figma
+  coordinate is written `calc(<px>*var(--u))` and the layout scales
   proportionally with the viewport (exact at 1920px, smaller below).
 
-  Palette: background #fdfbf4, headings #7d7062 (taupe), body #9b9484 (sage).
-  Figma percentage offsets were converted to px against the 1920 x 29323 frame.
+  Colours use the design tokens: cream #fdfbf4 (page), taupe #7d7062
+  (headings), sage #9b9484 (body). Figma percentage offsets were converted to
+  px against the 1920 x 29323 frame; image crops are the Figma fill offsets.
 */
 
+// String srcs are not basePath-prefixed by next/image / <video>, so prefix
+// them here (required on GitHub Pages, which serves the site under a subpath).
 const IMG = assetPath("/images/projects/assam-bengal-navigation");
 const VID = assetPath("/videos/assam-bengal-navigation");
 
@@ -30,158 +34,6 @@ const FILMS: Film[] = [
   { src: `${VID}/8-2.mp4`, poster: `${VID}/poster-8-2.jpg` },
   { src: `${VID}/8-4.mp4`, poster: `${VID}/poster-8-4.jpg` },
 ];
-
-// Figma px → canvas units.
-const v = (px: number) => `calc(${px} * var(--u))`;
-
-const tw = {
-  page: "@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]",
-  // Content ends at the "Alchi Kitchen" label (y28011) plus breathing room.
-  canvas: "relative w-full h-[calc(28250*var(--u))]",
-  abs: "absolute",
-
-  bigTitle:
-    "font-cormorant text-[#7d7062] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]",
-  sectionTitle:
-    "font-cormorant text-[#7d7062] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]",
-
-  body: "font-helvetica-regular text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]",
-  bodyBold:
-    "font-helvetica font-bold text-[#9b9484] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))]",
-  credits:
-    "font-helvetica-regular uppercase text-[#7d7062] opacity-80 text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))]",
-  eyebrow:
-    "font-helvetica font-bold uppercase text-white opacity-80 text-[length:calc(28*var(--u))] tracking-[calc(0.56*var(--u))]",
-  arrow:
-    "font-helvetica font-bold text-[#9b9484] text-[length:calc(46*var(--u))] leading-none tracking-[calc(0.92*var(--u))] text-center",
-};
-
-/** Image-fill crop (percent of the frame), copied from the Figma fills. */
-type Crop = { w: number; h: number; left: number; top: number };
-
-type PicSpec = {
-  src: string;
-  alt: string;
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  /** Omit for a plain object-cover fill. */
-  crop?: Crop;
-  priority?: boolean;
-};
-
-function Pic({ src, alt, left, top, width, height, crop, priority = false }: PicSpec) {
-  return (
-    <div
-      className={`${tw.abs} overflow-hidden`}
-      style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
-    >
-      <Image
-        src={`${IMG}/${src}`}
-        alt={alt}
-        width={width}
-        height={height}
-        priority={priority}
-        sizes="(min-width: 1920px) 1920px, 100vw"
-        className={crop ? "absolute max-w-none" : "absolute inset-0 h-full w-full object-cover"}
-        style={
-          crop
-            ? { width: `${crop.w}%`, height: `${crop.h}%`, left: `${crop.left}%`, top: `${crop.top}%` }
-            : undefined
-        }
-      />
-    </div>
-  );
-}
-
-/** White play triangle (Figma Polygon), rotated to point right. */
-function PlayGlyph() {
-  return (
-    <span className="pointer-events-none absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-transform duration-300 group-hover:scale-125" style={{ width: v(30), height: v(31) }}>
-      <svg viewBox="0 0 56.2917 48.75" className="h-full w-full rotate-90" fill="white" aria-hidden>
-        <path d="M28.1458 0L56.2917 48.75H0L28.1458 0Z" />
-      </svg>
-    </span>
-  );
-}
-
-/**
- * A film that plays inline, inside its own Figma box — no popup. Shows the
- * poster + centred play triangle; on click the same box swaps to a <video>
- * with native controls that plays right there.
- */
-function InlineFilm({
-  film,
-  left,
-  top,
-  width,
-  height,
-  label,
-}: {
-  film: Film;
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  label: string;
-}) {
-  const [playing, setPlaying] = useState(false);
-  return (
-    <div
-      className={`${tw.abs} overflow-hidden`}
-      style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
-    >
-      {playing ? (
-        <video
-          key={film.src}
-          src={film.src}
-          poster={film.poster}
-          controls
-          autoPlay
-          playsInline
-          className="absolute inset-0 h-full w-full bg-black object-cover"
-        />
-      ) : (
-        <button
-          type="button"
-          onClick={() => setPlaying(true)}
-          aria-label={label}
-          className="group absolute inset-0 h-full w-full cursor-pointer"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={film.poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
-          <PlayGlyph />
-        </button>
-      )}
-    </div>
-  );
-}
-
-/** Press logo that links out to the article. */
-function PressLogo({
-  src,
-  alt,
-  href,
-  left,
-  top,
-  width,
-  height,
-  crop,
-}: PicSpec & { href: string }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={alt}
-      className={`${tw.abs} block transition-opacity duration-300 hover:opacity-70`}
-      style={{ left: v(left), top: v(top), width: v(width), height: v(height) }}
-    >
-      <Pic src={src} alt={alt} left={0} top={0} width={width} height={height} crop={crop} />
-    </a>
-  );
-}
 
 /* ---------- Copy (Figma frame + Jira AJC-24 page copy) ---------- */
 
@@ -205,56 +57,101 @@ const SAIL_MORE = [
   "Near the ghats, you witness the Hooghly, or the lower Ganges – being prayed to in the quiet of the early morning. During the sail, you watch the captain mindfully navigate the shifting waters, while the evenings fill the ship’s salon with the vibrant dances and cultures of neighboring states.",
 ];
 
-/* ---------- Images (positions/crops from the Figma frame) ---------- */
+/**
+ * Absolutely-positioned image box. `className` positions/sizes the box in
+ * canvas units; `imgClassName` is the Figma crop (defaults to a plain
+ * object-cover fill). With `href` the image becomes an external press link.
+ */
+function Pic({
+  src,
+  alt,
+  className,
+  imgClassName,
+  priority = false,
+  href,
+}: {
+  src: string;
+  alt: string;
+  className: string;
+  imgClassName?: string;
+  priority?: boolean;
+  href?: string;
+}) {
+  const image = (
+    <Image
+      src={`${IMG}/${src}`}
+      alt={alt}
+      width={1920}
+      height={1080}
+      priority={priority}
+      sizes="(min-width: 1920px) 1920px, 100vw"
+      className={cn("absolute max-w-none", imgClassName ?? "inset-0 h-full w-full object-cover")}
+    />
+  );
 
-const bands: PicSpec[] = [
-  // Full-bleed bands.
-  { src: "imgA7R063822.png", alt: "Guests on the deck of the ABN Rajmahal", left: -65, top: 3105, width: 2048, height: 1236, crop: { w: 100, h: 110.44, left: 0, top: -5.21 } },
-  { src: "imgA7R087911.png", alt: "The ABN Rajmahal sailing on the Hooghly", left: -67, top: 7719, width: 2048, height: 1236, crop: { w: 100.04, h: 110.52, left: -0.02, top: 0 } },
-  { src: "imgA7R080701.png", alt: "River life along the Hooghly", left: -6, top: 15318, width: 1925, height: 1238, crop: { w: 100, h: 103.66, left: 0, top: -0.01 } },
-  { src: "imgA7R084482.png", alt: "Sunrise over the river", left: -1, top: 21350, width: 1925, height: 1238, crop: { w: 114.84, h: 216.88, left: -0.02, top: -30.55 } },
-  { src: "imgScreenshot20261008At125814Am2.png", alt: "The river at dusk", left: -1, top: 25678, width: 1920, height: 1233, crop: { w: 100.03, h: 233.83, left: -0.06, top: -14.75 } },
-];
+  return (
+    <div className={cn("absolute overflow-hidden", className)}>
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={alt}
+          className="block h-full w-full transition-opacity duration-300 hover:opacity-70"
+        >
+          {image}
+        </a>
+      ) : (
+        image
+      )}
+    </div>
+  );
+}
 
-const gallery: PicSpec[] = [
-  // Setting Sail on the Hooghly
-  { src: "imgDsc0847445.png", alt: "Ghat on the Hooghly", left: 1125, top: 4570, width: 513, height: 769 },
-  { src: "imgDsc0071517.png", alt: "Setting sail from Calcutta", left: 302, top: 5784, width: 858, height: 686, crop: { w: 119.93, h: 100.01, left: -10.02, top: 0.04 } },
-  { src: "img0D3A80823.png", alt: "Detail aboard the ship", left: 1180, top: 5782, width: 458, height: 706, crop: { w: 273.75, h: 118.53, left: -111.52, top: -15.7 } },
-  { src: "imgDsc0847443.png", alt: "Craft along the river", left: 302, top: 6488, width: 661, height: 931, crop: { w: 100.02, h: 106.46, left: -0.13, top: -4.91 } },
-  { src: "imgDsc0847444.png", alt: "Riverside village", left: 981, top: 6488, width: 661, height: 931, crop: { w: 100.02, h: 106.46, left: -0.13, top: -4.91 } },
-  // ABN Rajmahal
-  { src: "imgScreenshot20261008At120033Am1.png", alt: "The ABN Rajmahal", left: 1184, top: 9290, width: 480, height: 656, crop: { w: 179.55, h: 197.75, left: -58.62, top: -0.04 } },
-  { src: "imgA7R081591.png", alt: "Ship interior", left: 306, top: 9983, width: 854, height: 678, crop: { w: 119.09, h: 100.01, left: -9.52, top: -0.01 } },
-  { src: "imgA7R078832.png", alt: "Ship detail", left: 1184, top: 9983, width: 482, height: 678, crop: { w: 104.2, h: 111.21, left: -0.02, top: 0 } },
-  { src: "imgScreenshot20261007At13835Pm3.png", alt: "Cruise moment", left: 302, top: 10697, width: 419, height: 614, crop: { w: 109.44, h: 112.22, left: -1.39, top: -7.03 } },
-  { src: "imgA7R070671.png", alt: "Cruise moment", left: 748, top: 10697, width: 409, height: 614 },
-  { src: "imgScreenshot20261007At114333Pm1.png", alt: "Cruise moment", left: 1184, top: 10697, width: 480, height: 614, crop: { w: 190.83, h: 100, left: 0, top: 0 } },
-  // The Saloon At Sunrise
-  { src: "imgA7R064191.png", alt: "The saloon at sunrise", left: 1178, top: 12877, width: 455, height: 682 },
-  { src: "imgDsc0847458.png", alt: "Saloon detail", left: 291, top: 13598, width: 458, height: 686, crop: { w: 112.16, h: 112.35, left: -5.65, top: -2.68 } },
-  { src: "imgDsc0071522.png", alt: "Saloon detail", left: 771, top: 13598, width: 858, height: 686, crop: { w: 119.93, h: 100.01, left: -10.02, top: 0.04 } },
-  { src: "imgA7R080412.png", alt: "Morning in the saloon", left: 258, top: 14323, width: 887, height: 686, crop: { w: 116.01, h: 100.01, left: -3.16, top: 0.04 } },
-  { src: "imgDsc0847465.png", alt: "Saloon detail", left: 1166, top: 14323, width: 463, height: 686, crop: { w: 98.86, h: 100.4, left: 1.14, top: -0.9 } },
-  // The River Cruise Spaces
-  { src: "imgA7R058472.png", alt: "Cruise space", left: 1166, top: 16894, width: 480, height: 686, crop: { w: 114.31, h: 120, left: -11.36, top: -13.18 } },
-  { src: "imgDsc0071526.png", alt: "Cruise space", left: 284, top: 17598, width: 858, height: 686, crop: { w: 119.93, h: 100.01, left: -10.02, top: 0.04 } },
-  { src: "imgA7R071523.png", alt: "Cruise space", left: 1166, top: 17600, width: 480, height: 687, crop: { w: 115.43, h: 121, left: 0.04, top: -17.96 } },
-  { src: "imgA7R056532.png", alt: "Cruise space", left: 274, top: 18320, width: 479, height: 686, crop: { w: 144.17, h: 151.08, left: -0.01, top: -46.28 } },
-  { src: "imgDsc0071527.png", alt: "Cruise space", left: 788, top: 18320, width: 858, height: 686, crop: { w: 119.93, h: 100.01, left: -19.96, top: 0.04 } },
-  { src: "imgA7R085101.png", alt: "Cruise space", left: 269, top: 19044, width: 1376, height: 917 },
-  { src: "imgA7R084861.png", alt: "Cruise space", left: 711, top: 20236, width: 494, height: 841, crop: { w: 122.69, h: 108.01, left: -0.01, top: 0 } },
-  // The Bengal Experience
-  { src: "imgA7R077811.png", alt: "Bengal experience", left: 1156, top: 22878, width: 457, height: 692, crop: { w: 100.08, h: 100, left: -0.04, top: 0 } },
-  { src: "imgA7R077612.png", alt: "Bengal experience", left: 1156, top: 23596, width: 457, height: 592, crop: { w: 194.42, h: 100.01, left: -41.77, top: -0.01 } },
-  { src: "imgScreenshot20261007At112251Pm1.png", alt: "Bengal experience", left: 274, top: 23602, width: 859, height: 594, crop: { w: 106.64, h: 103.37, left: -6.64, top: -3.37 } },
-  { src: "imgDsc0847451.png", alt: "Bengal experience", left: 274, top: 24213, width: 1340, height: 686, crop: { w: 101.24, h: 300, left: -0.63, top: -60.47 } },
-  { src: "imgScreenshot20261008At125446Am1.png", alt: "Bengal experience", left: 274, top: 24916, width: 457, height: 600, crop: { w: 101.09, h: 115.5, left: -1.09, top: -1.02 } },
-  { src: "imgScreenshot20261008At125814Am2.png", alt: "Bengal experience", left: 755, top: 24916, width: 859, height: 600, crop: { w: 100.03, h: 215, left: -0.02, top: -55.33 } },
-  { src: "imgScreenshot20261008At125119Am1.png", alt: "Bengal experience", left: 755, top: 24920, width: 858, height: 592, crop: { w: 107.46, h: 104.15, left: -7.46, top: -0.01 } },
-];
+/**
+ * A film that plays inline, inside its own Figma box — no popup. Shows the
+ * poster + centred play triangle; on click the same box swaps to a <video>
+ * with native controls that plays right there.
+ */
+function InlineFilm({ film, className, label }: { film: Film; className: string; label: string }) {
+  const [playing, setPlaying] = useState(false);
 
-const portraitCrop: Crop = { w: 130.98, h: 110.25, left: 0, top: -5.06 };
+  return (
+    <div className={cn("absolute overflow-hidden", className)}>
+      {playing ? (
+        <video
+          key={film.src}
+          src={film.src}
+          poster={film.poster}
+          controls
+          autoPlay
+          playsInline
+          className="absolute inset-0 h-full w-full bg-black object-cover"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPlaying(true)}
+          aria-label={label}
+          className="group absolute inset-0 h-full w-full cursor-pointer"
+        >
+          {/* Raw <img>: the poster is a runtime video frame, not a build-time asset. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={film.poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          {/* White play triangle (Figma Polygon), rotated to point right. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 left-1/2 flex h-[calc(31*var(--u))] w-[calc(30*var(--u))] -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-transform duration-300 group-hover:scale-125"
+          >
+            <svg viewBox="0 0 56.2917 48.75" className="h-full w-full rotate-90" fill="white">
+              <path d="M28.1458 0L56.2917 48.75H0L28.1458 0Z" />
+            </svg>
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
 
 export function AssamBengalNavigationPage() {
   const [introExpanded, setIntroExpanded] = useState(false);
@@ -262,9 +159,9 @@ export function AssamBengalNavigationPage() {
   // Which film the second portrait's carousel is pointing at.
   const [filmIndex, setFilmIndex] = useState(0);
 
-  // The portrait + play triangle sit right under the intro (Figma y1937).
-  // When the intro expands, measure its bottom and push them down by the
-  // overflow so nothing collides.
+  // The portrait film sits right under the intro (Figma y1937). When the intro
+  // expands, measure its bottom and push the portrait down by the overflow so
+  // nothing collides.
   const introRef = useRef<HTMLDivElement>(null);
   const [portraitShift, setPortraitShift] = useState(0);
 
@@ -294,47 +191,40 @@ export function AssamBengalNavigationPage() {
   }, [introExpanded]);
 
   return (
-    <div className={tw.page}>
+    <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
+      {/* Overlay chrome (menu toggle), same as About/home */}
       <HeroHeader menuOnly />
 
-      <div className={tw.canvas}>
+      {/* Canvas ends at the "Alchi Kitchen" label (y28011) plus breathing room. */}
+      <div className="relative h-[calc(28250*var(--u))] w-full">
         {/* ============ HERO (two stacked fills) ============ */}
         <Pic
           src="img461Ff345C41Bffd3Be4D10F9926B9Eff1.png"
           alt="The ABN Rajmahal on the Hooghly River"
-          left={-21}
-          top={-22}
-          width={1941}
-          height={1086}
-          crop={{ w: 100.01, h: 143, left: -0.01, top: -16.29 }}
+          className="top-[calc(-22*var(--u))] left-[calc(-21*var(--u))] h-[calc(1086*var(--u))] w-[calc(1941*var(--u))]"
+          imgClassName="top-[-16.29%] left-[-0.01%] h-[143%] w-[100.01%]"
           priority
         />
         <Pic
           src="img461Ff345C41Bffd3Be4D10F9926B9Eff2.png"
           alt=""
-          left={-21}
-          top={-22}
-          width={1941}
-          height={1086}
-          crop={{ w: 100, h: 119.02, left: 0, top: -14.83 }}
+          className="top-[calc(-22*var(--u))] left-[calc(-21*var(--u))] h-[calc(1086*var(--u))] w-[calc(1941*var(--u))]"
+          imgClassName="top-[-14.83%] left-0 h-[119.02%] w-full"
           priority
         />
 
-        <p className={`${tw.abs} ${tw.eyebrow}`} style={{ left: v(75), top: v(526), width: v(348) }}>
+        <p className="font-helvetica absolute top-[calc(526*var(--u))] left-[calc(75*var(--u))] w-[calc(348*var(--u))] text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
           2026 / ২০২৬
         </p>
-        <p
-          className={`${tw.abs} ${tw.eyebrow} text-right`}
-          style={{ left: v(1441), top: v(526), width: v(348) }}
-        >
+        <p className="font-helvetica absolute top-[calc(526*var(--u))] left-[calc(1441*var(--u))] w-[calc(348*var(--u))] text-right text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
           AJC in Bengal / বাংলা
         </p>
 
         {/* ============ TITLE + CREDITS + INTRO ============ */}
-        <h1 className={`${tw.abs} ${tw.bigTitle}`} style={{ left: v(108), top: v(1232), width: v(1088) }}>
+        <h1 className="font-cormorant text-taupe absolute top-[calc(1232*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Assam Bengal Navigation
         </h1>
-        <div className={`${tw.abs} ${tw.credits}`} style={{ left: v(108), top: v(1438), width: v(523) }}>
+        <div className="font-helvetica-regular text-taupe absolute top-[calc(1438*var(--u))] left-[calc(108*var(--u))] w-[calc(523*var(--u))] text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] uppercase opacity-80">
           <p>Creative Direction</p>
           <p>Photography</p>
           <p>Videography</p>
@@ -342,93 +232,293 @@ export function AssamBengalNavigationPage() {
         </div>
         <ReadMoreCopy
           ref={introRef}
-          left={971}
-          top={1438}
-          width={652}
+          className="top-[calc(1438*var(--u))] left-[calc(971*var(--u))] w-[calc(652*var(--u))]"
           lead={INTRO_LEAD}
           expandedTail={INTRO_MORE}
           expanded={introExpanded}
-          onToggle={() => setIntroExpanded((p) => !p)}
+          onToggle={() => setIntroExpanded((prev) => !prev)}
         />
 
         {/* Portrait film — plays inline. Shifts down with an expanded intro. */}
         <div
-          className="absolute inset-0 transition-transform duration-500 ease-out"
-          style={{ transform: `translateY(${v(portraitShift)})` }}
+          className="pointer-events-none absolute inset-0 transition-transform duration-500 ease-out"
+          style={{ transform: `translateY(calc(${portraitShift} * var(--u)))` }}
         >
           <InlineFilm
             film={FILMS[0]}
-            left={719}
-            top={1937}
-            width={481}
-            height={859}
+            className="pointer-events-auto top-[calc(1937*var(--u))] left-[calc(719*var(--u))] h-[calc(859*var(--u))] w-[calc(481*var(--u))]"
             label="Play the Assam Bengal Navigation film"
           />
         </div>
 
         {/* ============ SETTING SAIL ON THE HOOGHLY ============ */}
         <ReadMoreCopy
-          left={134}
-          top={5072}
-          width={652}
+          className="top-[calc(5072*var(--u))] left-[calc(134*var(--u))] w-[calc(652*var(--u))]"
           lead={SAIL_LEAD}
           collapsedTail={SAIL_COLLAPSED}
           expandedTail={SAIL_MORE}
           expanded={sailExpanded}
-          onToggle={() => setSailExpanded((p) => !p)}
+          onToggle={() => setSailExpanded((prev) => !prev)}
         />
-        <h2 className={`${tw.abs} ${tw.sectionTitle}`} style={{ left: v(302), top: v(5639), width: v(827) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(5639*var(--u))] left-[calc(302*var(--u))] w-[calc(827*var(--u))] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]">
           Setting Sail on the Hooghly
         </h2>
 
-        {/* ============ HEADINGS ============ */}
-        <h2 className={`${tw.abs} ${tw.sectionTitle}`} style={{ left: v(306), top: v(9243), width: v(827) }}>
+        {/* ============ SECTION HEADINGS ============ */}
+        <h2 className="font-cormorant text-taupe absolute top-[calc(9243*var(--u))] left-[calc(306*var(--u))] w-[calc(827*var(--u))] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]">
           ABN Rajmahal
         </h2>
-        <h2 className={`${tw.abs} ${tw.sectionTitle}`} style={{ left: v(291), top: v(12875), width: v(827) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(12875*var(--u))] left-[calc(291*var(--u))] w-[calc(827*var(--u))] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]">
           The Saloon
           <br />
           At Sunrise
         </h2>
-        <h2 className={`${tw.abs} ${tw.sectionTitle}`} style={{ left: v(274), top: v(16892), width: v(827) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(16892*var(--u))] left-[calc(274*var(--u))] w-[calc(827*var(--u))] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]">
           The River Cruise
           <br />
           Spaces
         </h2>
-        <h2 className={`${tw.abs} ${tw.sectionTitle}`} style={{ left: v(274), top: v(22836), width: v(827) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(22836*var(--u))] left-[calc(274*var(--u))] w-[calc(827*var(--u))] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]">
           The Bengal
           <br />
           Experience
         </h2>
 
-        {/* ============ IMAGES ============ */}
-        {bands.slice(0, 4).map((p) => (
-          <Pic key={`${p.src}-${p.top}`} {...p} />
-        ))}
-        {gallery.map((p) => (
-          <Pic key={`${p.src}-${p.left}-${p.top}`} {...p} />
-        ))}
-        <Pic {...bands[4]} />
+        {/* ============ FULL-BLEED BANDS ============ */}
+        <Pic
+          src="imgA7R063822.png"
+          alt="Guests on the deck of the ABN Rajmahal"
+          className="top-[calc(3105*var(--u))] left-[calc(-65*var(--u))] h-[calc(1236*var(--u))] w-[calc(2048*var(--u))]"
+          imgClassName="top-[-5.21%] left-0 h-[110.44%] w-full"
+        />
+        <Pic
+          src="imgA7R087911.png"
+          alt="The ABN Rajmahal sailing on the Hooghly"
+          className="top-[calc(7719*var(--u))] left-[calc(-67*var(--u))] h-[calc(1236*var(--u))] w-[calc(2048*var(--u))]"
+          imgClassName="top-0 left-[-0.02%] h-[110.52%] w-[100.04%]"
+        />
+        <Pic
+          src="imgA7R080701.png"
+          alt="River life along the Hooghly"
+          className="top-[calc(15318*var(--u))] left-[calc(-6*var(--u))] h-[calc(1238*var(--u))] w-[calc(1925*var(--u))]"
+          imgClassName="top-[-0.01%] left-0 h-[103.66%] w-full"
+        />
+        <Pic
+          src="imgA7R084482.png"
+          alt="Sunrise over the river"
+          className="top-[calc(21350*var(--u))] left-[calc(-1*var(--u))] h-[calc(1238*var(--u))] w-[calc(1925*var(--u))]"
+          imgClassName="top-[-30.55%] left-[-0.02%] h-[216.88%] w-[114.84%]"
+        />
 
-        {/* Second portrait — a film carousel. The ‹ › arrows step through the
-            project films (the poster visibly changes); the play triangle plays
-            the current film inline. `key` re-mounts the player per film so it
-            resets to the new poster. */}
+        {/* ============ SETTING SAIL ON THE HOOGHLY — GALLERY ============ */}
+        <Pic
+          src="imgDsc0847445.png"
+          alt="Ghat on the Hooghly"
+          className="top-[calc(4570*var(--u))] left-[calc(1125*var(--u))] h-[calc(769*var(--u))] w-[calc(513*var(--u))]"
+        />
+        <Pic
+          src="imgDsc0071517.png"
+          alt="Setting sail from Calcutta"
+          className="top-[calc(5784*var(--u))] left-[calc(302*var(--u))] h-[calc(686*var(--u))] w-[calc(858*var(--u))]"
+          imgClassName="top-[0.04%] left-[-10.02%] h-[100.01%] w-[119.93%]"
+        />
+        <Pic
+          src="img0D3A80823.png"
+          alt="Detail aboard the ship"
+          className="top-[calc(5782*var(--u))] left-[calc(1180*var(--u))] h-[calc(706*var(--u))] w-[calc(458*var(--u))]"
+          imgClassName="top-[-15.7%] left-[-111.52%] h-[118.53%] w-[273.75%]"
+        />
+        <Pic
+          src="imgDsc0847443.png"
+          alt="Craft along the river"
+          className="top-[calc(6488*var(--u))] left-[calc(302*var(--u))] h-[calc(931*var(--u))] w-[calc(661*var(--u))]"
+          imgClassName="top-[-4.91%] left-[-0.13%] h-[106.46%] w-[100.02%]"
+        />
+        <Pic
+          src="imgDsc0847444.png"
+          alt="Riverside village"
+          className="top-[calc(6488*var(--u))] left-[calc(981*var(--u))] h-[calc(931*var(--u))] w-[calc(661*var(--u))]"
+          imgClassName="top-[-4.91%] left-[-0.13%] h-[106.46%] w-[100.02%]"
+        />
+
+        {/* ============ ABN RAJMAHAL — GALLERY ============ */}
+        <Pic
+          src="imgScreenshot20261008At120033Am1.png"
+          alt="The ABN Rajmahal"
+          className="top-[calc(9290*var(--u))] left-[calc(1184*var(--u))] h-[calc(656*var(--u))] w-[calc(480*var(--u))]"
+          imgClassName="top-[-0.04%] left-[-58.62%] h-[197.75%] w-[179.55%]"
+        />
+        <Pic
+          src="imgA7R081591.png"
+          alt="Ship interior"
+          className="top-[calc(9983*var(--u))] left-[calc(306*var(--u))] h-[calc(678*var(--u))] w-[calc(854*var(--u))]"
+          imgClassName="top-[-0.01%] left-[-9.52%] h-[100.01%] w-[119.09%]"
+        />
+        <Pic
+          src="imgA7R078832.png"
+          alt="Ship detail"
+          className="top-[calc(9983*var(--u))] left-[calc(1184*var(--u))] h-[calc(678*var(--u))] w-[calc(482*var(--u))]"
+          imgClassName="top-0 left-[-0.02%] h-[111.21%] w-[104.2%]"
+        />
+        <Pic
+          src="imgScreenshot20261007At13835Pm3.png"
+          alt="Cruise moment"
+          className="top-[calc(10697*var(--u))] left-[calc(302*var(--u))] h-[calc(614*var(--u))] w-[calc(419*var(--u))]"
+          imgClassName="top-[-7.03%] left-[-1.39%] h-[112.22%] w-[109.44%]"
+        />
+        <Pic
+          src="imgA7R070671.png"
+          alt="Cruise moment"
+          className="top-[calc(10697*var(--u))] left-[calc(748*var(--u))] h-[calc(614*var(--u))] w-[calc(409*var(--u))]"
+        />
+        <Pic
+          src="imgScreenshot20261007At114333Pm1.png"
+          alt="Cruise moment"
+          className="top-[calc(10697*var(--u))] left-[calc(1184*var(--u))] h-[calc(614*var(--u))] w-[calc(480*var(--u))]"
+          imgClassName="top-0 left-0 h-full w-[190.83%]"
+        />
+
+        {/* ============ THE SALOON AT SUNRISE — GALLERY ============ */}
+        <Pic
+          src="imgA7R064191.png"
+          alt="The saloon at sunrise"
+          className="top-[calc(12877*var(--u))] left-[calc(1178*var(--u))] h-[calc(682*var(--u))] w-[calc(455*var(--u))]"
+        />
+        <Pic
+          src="imgDsc0847458.png"
+          alt="Saloon detail"
+          className="top-[calc(13598*var(--u))] left-[calc(291*var(--u))] h-[calc(686*var(--u))] w-[calc(458*var(--u))]"
+          imgClassName="top-[-2.68%] left-[-5.65%] h-[112.35%] w-[112.16%]"
+        />
+        <Pic
+          src="imgDsc0071522.png"
+          alt="Saloon detail"
+          className="top-[calc(13598*var(--u))] left-[calc(771*var(--u))] h-[calc(686*var(--u))] w-[calc(858*var(--u))]"
+          imgClassName="top-[0.04%] left-[-10.02%] h-[100.01%] w-[119.93%]"
+        />
+        <Pic
+          src="imgA7R080412.png"
+          alt="Morning in the saloon"
+          className="top-[calc(14323*var(--u))] left-[calc(258*var(--u))] h-[calc(686*var(--u))] w-[calc(887*var(--u))]"
+          imgClassName="top-[0.04%] left-[-3.16%] h-[100.01%] w-[116.01%]"
+        />
+        <Pic
+          src="imgDsc0847465.png"
+          alt="Saloon detail"
+          className="top-[calc(14323*var(--u))] left-[calc(1166*var(--u))] h-[calc(686*var(--u))] w-[calc(463*var(--u))]"
+          imgClassName="top-[-0.9%] left-[1.14%] h-[100.4%] w-[98.86%]"
+        />
+
+        {/* ============ THE RIVER CRUISE SPACES — GALLERY ============ */}
+        <Pic
+          src="imgA7R058472.png"
+          alt="Cruise space"
+          className="top-[calc(16894*var(--u))] left-[calc(1166*var(--u))] h-[calc(686*var(--u))] w-[calc(480*var(--u))]"
+          imgClassName="top-[-13.18%] left-[-11.36%] h-[120%] w-[114.31%]"
+        />
+        <Pic
+          src="imgDsc0071526.png"
+          alt="Cruise space"
+          className="top-[calc(17598*var(--u))] left-[calc(284*var(--u))] h-[calc(686*var(--u))] w-[calc(858*var(--u))]"
+          imgClassName="top-[0.04%] left-[-10.02%] h-[100.01%] w-[119.93%]"
+        />
+        <Pic
+          src="imgA7R071523.png"
+          alt="Cruise space"
+          className="top-[calc(17600*var(--u))] left-[calc(1166*var(--u))] h-[calc(687*var(--u))] w-[calc(480*var(--u))]"
+          imgClassName="top-[-17.96%] left-[0.04%] h-[121%] w-[115.43%]"
+        />
+        <Pic
+          src="imgA7R056532.png"
+          alt="Cruise space"
+          className="top-[calc(18320*var(--u))] left-[calc(274*var(--u))] h-[calc(686*var(--u))] w-[calc(479*var(--u))]"
+          imgClassName="top-[-46.28%] left-[-0.01%] h-[151.08%] w-[144.17%]"
+        />
+        <Pic
+          src="imgDsc0071527.png"
+          alt="Cruise space"
+          className="top-[calc(18320*var(--u))] left-[calc(788*var(--u))] h-[calc(686*var(--u))] w-[calc(858*var(--u))]"
+          imgClassName="top-[0.04%] left-[-19.96%] h-[100.01%] w-[119.93%]"
+        />
+        <Pic
+          src="imgA7R085101.png"
+          alt="Cruise space"
+          className="top-[calc(19044*var(--u))] left-[calc(269*var(--u))] h-[calc(917*var(--u))] w-[calc(1376*var(--u))]"
+        />
+        <Pic
+          src="imgA7R084861.png"
+          alt="Cruise space"
+          className="top-[calc(20236*var(--u))] left-[calc(711*var(--u))] h-[calc(841*var(--u))] w-[calc(494*var(--u))]"
+          imgClassName="top-0 left-[-0.01%] h-[108.01%] w-[122.69%]"
+        />
+
+        {/* ============ THE BENGAL EXPERIENCE — GALLERY ============ */}
+        <Pic
+          src="imgA7R077811.png"
+          alt="Bengal experience"
+          className="top-[calc(22878*var(--u))] left-[calc(1156*var(--u))] h-[calc(692*var(--u))] w-[calc(457*var(--u))]"
+          imgClassName="top-0 left-[-0.04%] h-full w-[100.08%]"
+        />
+        <Pic
+          src="imgA7R077612.png"
+          alt="Bengal experience"
+          className="top-[calc(23596*var(--u))] left-[calc(1156*var(--u))] h-[calc(592*var(--u))] w-[calc(457*var(--u))]"
+          imgClassName="top-[-0.01%] left-[-41.77%] h-[100.01%] w-[194.42%]"
+        />
+        <Pic
+          src="imgScreenshot20261007At112251Pm1.png"
+          alt="Bengal experience"
+          className="top-[calc(23602*var(--u))] left-[calc(274*var(--u))] h-[calc(594*var(--u))] w-[calc(859*var(--u))]"
+          imgClassName="top-[-3.37%] left-[-6.64%] h-[103.37%] w-[106.64%]"
+        />
+        <Pic
+          src="imgDsc0847451.png"
+          alt="Bengal experience"
+          className="top-[calc(24213*var(--u))] left-[calc(274*var(--u))] h-[calc(686*var(--u))] w-[calc(1340*var(--u))]"
+          imgClassName="top-[-60.47%] left-[-0.63%] h-[300%] w-[101.24%]"
+        />
+        <Pic
+          src="imgScreenshot20261008At125446Am1.png"
+          alt="Bengal experience"
+          className="top-[calc(24916*var(--u))] left-[calc(274*var(--u))] h-[calc(600*var(--u))] w-[calc(457*var(--u))]"
+          imgClassName="top-[-1.02%] left-[-1.09%] h-[115.5%] w-[101.09%]"
+        />
+        <Pic
+          src="imgScreenshot20261008At125814Am2.png"
+          alt="Bengal experience"
+          className="top-[calc(24916*var(--u))] left-[calc(755*var(--u))] h-[calc(600*var(--u))] w-[calc(859*var(--u))]"
+          imgClassName="top-[-55.33%] left-[-0.02%] h-[215%] w-[100.03%]"
+        />
+        <Pic
+          src="imgScreenshot20261008At125119Am1.png"
+          alt="Bengal experience"
+          className="top-[calc(24920*var(--u))] left-[calc(755*var(--u))] h-[calc(592*var(--u))] w-[calc(858*var(--u))]"
+          imgClassName="top-[-0.01%] left-[-7.46%] h-[104.15%] w-[107.46%]"
+        />
+
+        {/* Closing full-bleed band (sits above the gallery, under the quote) */}
+        <Pic
+          src="imgScreenshot20261008At125814Am2.png"
+          alt="The river at dusk"
+          className="top-[calc(25678*var(--u))] left-[calc(-1*var(--u))] h-[calc(1233*var(--u))] w-[calc(1920*var(--u))]"
+          imgClassName="top-[-14.75%] left-[-0.06%] h-[233.83%] w-[100.03%]"
+        />
+
+        {/* ============ FILM CAROUSEL ============
+            The ‹ › arrows step through the project films (the poster visibly
+            changes); the play triangle plays the current film inline. `key`
+            re-mounts the player per film so it resets to the new poster. */}
         <InlineFilm
           key={filmIndex}
           film={FILMS[filmIndex]}
-          left={719}
-          top={11666}
-          width={481}
-          height={859}
+          className="top-[calc(11666*var(--u))] left-[calc(719*var(--u))] h-[calc(859*var(--u))] w-[calc(481*var(--u))]"
           label={`Play film ${filmIndex + 1} of ${FILMS.length}`}
         />
         <button
           type="button"
           aria-label="Previous film"
           onClick={() => setFilmIndex((i) => (i - 1 + FILMS.length) % FILMS.length)}
-          className={`${tw.abs} ${tw.arrow} cursor-pointer transition-opacity hover:opacity-60`}
-          style={{ left: v(254), top: v(12033), width: v(73) }}
+          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(254*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
         >
           &lt;
         </button>
@@ -436,109 +526,85 @@ export function AssamBengalNavigationPage() {
           type="button"
           aria-label="Next film"
           onClick={() => setFilmIndex((i) => (i + 1) % FILMS.length)}
-          className={`${tw.abs} ${tw.arrow} cursor-pointer transition-opacity hover:opacity-60`}
-          style={{ left: v(1591), top: v(12033), width: v(73) }}
+          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(1591*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
         >
           &gt;
         </button>
 
         {/* Pull quote over the full-bleed band */}
-        <p
-          className="absolute text-center font-cormorant font-medium text-[#f8f7f2] text-[length:calc(40*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-2.4*var(--u))]"
-          style={{ left: v(328), top: v(26329), width: v(1262) }}
-        >
+        <p className="font-cormorant absolute top-[calc(26329*var(--u))] left-[calc(328*var(--u))] w-[calc(1262*var(--u))] text-center text-[length:calc(40*var(--u))] leading-[calc(76*var(--u))] font-medium tracking-[calc(-2.4*var(--u))] text-[#f8f7f2]">
           “You realise, India is this, and here, in the East, as profoundly as it is anywhere else.”
         </p>
 
         {/* ============ FEATURES ============ */}
-        <h2 className={`${tw.abs} ${tw.bigTitle}`} style={{ left: v(169), top: v(27075), width: v(868) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(27075*var(--u))] left-[calc(169*var(--u))] w-[calc(868*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Features
         </h2>
-        <PressLogo
+        <Pic
           src="imgImage62.png"
           alt="Read the Assam Bengal Navigation feature in The New York Times"
           href="https://www.nytimes.com/2008/12/21/travel/21personal.html?pagewanted=all&_r=1&"
-          left={169}
-          top={27225}
-          width={457}
-          height={99}
-          crop={{ w: 100, h: 259.66, left: 0, top: -79.83 }}
+          className="top-[calc(27225*var(--u))] left-[calc(169*var(--u))] h-[calc(99*var(--u))] w-[calc(457*var(--u))]"
+          imgClassName="top-[-79.83%] left-0 h-[259.66%] w-full"
         />
-        <PressLogo
+        <Pic
           src="imgImage4.png"
           alt="Read the Assam Bengal Navigation feature in Condé Nast Traveler"
           href="https://www.cntraveler.com/story/brahmaputra-river-cruise-in-india-with-andbeyond"
-          left={711}
-          top={27225}
-          width={214}
-          height={76}
+          className="top-[calc(27225*var(--u))] left-[calc(711*var(--u))] h-[calc(76*var(--u))] w-[calc(214*var(--u))]"
         />
-        <PressLogo
+        <Pic
           src="imgImage63.png"
           alt="Read the Assam Bengal Navigation feature on CNN Travel"
           href="https://edition.cnn.com/travel/article/adventure-cruises"
-          left={1009}
-          top={27225}
-          width={152}
-          height={84}
-          crop={{ w: 100, h: 85.82, left: 0, top: 7.09 }}
+          className="top-[calc(27225*var(--u))] left-[calc(1009*var(--u))] h-[calc(84*var(--u))] w-[calc(152*var(--u))]"
+          imgClassName="top-[7.09%] left-0 h-[85.82%] w-full"
         />
-        <PressLogo
+        <Pic
           src="imgImage66.png"
           alt="Read the Assam Bengal Navigation feature in The Guardian"
           href="https://www.theguardian.com/travel/2016/feb/27/worlds-40-best-cruise-holidays"
-          left={1287}
-          top={27221}
-          width={242}
-          height={83}
-          crop={{ w: 100.35, h: 164.94, left: -0.17, top: -31.17 }}
+          className="top-[calc(27221*var(--u))] left-[calc(1287*var(--u))] h-[calc(83*var(--u))] w-[calc(242*var(--u))]"
+          imgClassName="top-[-31.17%] left-[-0.17%] h-[164.94%] w-[100.35%]"
         />
-        <PressLogo
+        <Pic
           src="imgImage65.png"
           alt="Read the Assam Bengal Navigation feature in Smithsonian Magazine"
           href="https://www.smithsonianmag.com/travel/flower-markets-colonial-forts-shrines-battlefields-take-journey-into-india-180987171/"
-          left={1650}
-          top={27197}
-          width={110}
-          height={127}
+          className="top-[calc(27197*var(--u))] left-[calc(1650*var(--u))] h-[calc(127*var(--u))] w-[calc(110*var(--u))]"
         />
 
         {/* ============ TEAM ============ */}
-        <h2 className={`${tw.abs} ${tw.bigTitle} whitespace-nowrap`} style={{ left: v(161), top: v(27444) }}>
+        <h2 className="font-cormorant text-taupe absolute top-[calc(27444*var(--u))] left-[calc(161*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] whitespace-nowrap">
           Team
         </h2>
-        <p className={`${tw.abs} ${tw.bodyBold} uppercase`} style={{ left: v(444), top: v(27459), width: v(184) }}>
-          PHOTOGRAPHY
+        <p className="font-helvetica text-sage absolute top-[calc(27459*var(--u))] left-[calc(444*var(--u))] w-[calc(184*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] uppercase">
+          Photography
         </p>
-        <p className={`${tw.abs} ${tw.body} whitespace-nowrap uppercase`} style={{ left: v(780), top: v(27459) }}>
-          ansen antony
+        <p className="font-helvetica-regular text-sage absolute top-[calc(27459*var(--u))] left-[calc(780*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
+          Ansen Antony
         </p>
-        <p className={`${tw.abs} ${tw.bodyBold} uppercase`} style={{ left: v(444), top: v(27493), width: v(248) }}>
+        <p className="font-helvetica text-sage absolute top-[calc(27493*var(--u))] left-[calc(444*var(--u))] w-[calc(248*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] uppercase">
           Film &amp; Sound Design
         </p>
-        <p className={`${tw.abs} ${tw.body} whitespace-nowrap uppercase`} style={{ left: v(780), top: v(27493) }}>
-          Saksham khanna
+        <p className="font-helvetica-regular text-sage absolute top-[calc(27493*var(--u))] left-[calc(780*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
+          Saksham Khanna
         </p>
 
         {/* ============ NEXT PROJECT ============ */}
         <p
-          className={`${tw.abs} font-cormorant font-bold text-[#7d7062] text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))] text-center`}
-          style={{ left: v(905), top: v(27825), width: v(110) }}
           aria-hidden
+          className="font-cormorant text-taupe absolute top-[calc(27825*var(--u))] left-[calc(905*var(--u))] w-[calc(110*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] font-bold tracking-[calc(-4.8*var(--u))]"
         >
           &gt;
         </p>
         <Link
           href="/work/alchi-kitchen"
-          className={`${tw.abs} ${tw.sectionTitle} block text-center`}
-          style={{ left: v(654), top: v(27912), width: v(612) }}
+          className="font-cormorant text-taupe absolute top-[calc(27912*var(--u))] left-[calc(654*var(--u))] block w-[calc(612*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]"
         >
           Next Project
         </Link>
-        <p
-          className={`${tw.abs} ${tw.body} uppercase text-center whitespace-nowrap`}
-          style={{ left: v(810), top: v(28011), width: v(300) }}
-        >
+        <p className="font-helvetica-regular text-sage absolute top-[calc(28011*var(--u))] left-[calc(810*var(--u))] w-[calc(300*var(--u))] text-center text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Alchi Kitchen
         </p>
       </div>
