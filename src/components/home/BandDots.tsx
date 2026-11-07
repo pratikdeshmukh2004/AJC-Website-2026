@@ -2,6 +2,7 @@
 
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useEffect, useRef, useState } from "react";
+import { u } from "@/lib/utils";
 
 /**
  * River-band stage interaction ("worlds within worlds") driven by scroll
@@ -43,7 +44,7 @@ import { useEffect, useRef, useState } from "react";
  *     stays green when inactive at scroll top).
  *   - the base intro 3.png stays mounted as the cross-fade BASE layer; tile
  *     `index` (0-based → 3-1.png..3-8.png) fades IN over it (opacity 0 → 1).
- *   - that slide's caption (SLIDES[index]: title + description) fades IN on the
+ *   - that slide's caption (the BandSlide's title + description) fades IN on the
  *     left, level with the dot row, a beat after its tile, so two captions
  *     never overlap.
  *   - autoplay starts: every 3000ms index advances 0→1→…→7→0. Autoplay PAUSES
@@ -95,20 +96,6 @@ const SCATTERED: [number, number, number][] = [
 // Number of tiles / dots in the carousel.
 const SLIDE_COUNT = SCATTERED.length; // 8
 
-// Caption for each slide, index-aligned with the tile files (SLIDES[i] ↔
-// 3-{i+1}.png): `title` is the place, `description` the country / continent
-// shown under it. Keep exactly one entry per tile (SLIDE_COUNT).
-const SLIDES: { title: string; description: string }[] = [
-  { title: "", description: "" }, // 3-1.png (Taj Mahal)
-  { title: "Bhutan", description: "Asia" }, // 3-2.png
-  { title: "Ladakh", description: "India" }, // 3-3.png
-  { title: "Punjab", description: "India" }, // 3-4.png
-  { title: "Bengal", description: "India" }, // 3-5.png
-  { title: "Delhi", description: "India" }, // 3-6.png
-  { title: "Rajasthan", description: "India" }, // 3-7.png
-  { title: "Assam", description: "India" }, // 3-8.png
-];
-
 // Lined-up row: evenly spaced across the band, centered vertically on the row
 // and sitting just BELOW the "worlds within worlds" headline (headline
 // stage-top ≈ 500, height ≈ 66), so the row clears the text instead of
@@ -124,29 +111,6 @@ const CONVERGE_FRACTION = 0.85;
 
 // Autoplay cadence.
 const AUTOPLAY_MS = 3000;
-
-// Fade duration class for the tile cross-fade (~500ms) and headline fade.
-const FADE = "transition-opacity duration-500";
-
-// Caption (title + description) block: left-aligned near the stage's left edge
-// (x ≈ 200, measured from the design reference) and vertically centered on the
-// dot row, so it reads as a side label next to the indicators.
-const CAPTION_LEFT = 200; // Figma px
-const ROW_CENTER = ROW_TOP + ROW_DIAMETER / 2; // Figma px
-
-// Caption fade. The outgoing caption leaves quickly; the incoming one waits for
-// the tile cross-fade to be mostly done, so two place names never overlap. The
-// global reduced-motion rule zeroes transition-duration but not the delay,
-// hence motion-reduce:delay-0 (the swap stays instant).
-const CAPTION_SHOWN = "opacity-100 duration-500 delay-300 motion-reduce:delay-0";
-const CAPTION_HIDDEN = "opacity-0 duration-200";
-
-// Figma px → canvas units.
-const u = (px: number) => `calc(${px} * var(--u))`;
-
-// Soft dark halo behind the cream caption text so it stays readable on the
-// lighter paintings (a tight edge shadow plus a wide, faint glow).
-const CAPTION_SHADOW = `0 ${u(1)} ${u(3)} rgba(0, 0, 0, 0.35), 0 0 ${u(22)} rgba(0, 0, 0, 0.5)`;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -296,60 +260,76 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
         />
       </div>
 
-      {/* Cross-fade tile stack (3-1.png..3-8.png). Only the active tile is
-          opaque while the carousel is active; otherwise all fade out and the
-          base intro shows through. pointer-events-none so dots stay clickable. */}
-      {tilesRequested && Array.from({ length: SLIDE_COUNT }, (_, i) => {
-        const visible = active && index === i;
-        return (
-          <div
-            key={i}
-            aria-hidden={!visible}
-            className={`absolute ${bandClass} ${FADE} pointer-events-none ${
-              visible ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <OptimizedImage
-              src={`${imgBase}/3-${i + 1}.png`}
-              alt={`Carousel tile ${i + 1}`}
-              width={1920}
-              height={1080}
-              sizes="100vw"
-            />
-          </div>
-        );
-      })}
-
-      {/* Slide captions (title + description), index-aligned with the tile
-          stack above. A separate layer (not inside the tile) so the fade timing
-          can differ from the tile's; same `visible` rule as the tile. Hidden
-          captions are aria-hidden like their tiles. pointer-events-none so the
-          dots stay clickable. */}
-      {SLIDES.map(({ title, description }, i) => {
-        const visible = active && index === i;
-        return (
-          <div
-            key={i}
-            aria-hidden={!visible}
-            className={`pointer-events-none absolute -translate-y-1/2 text-left transition-opacity ${
-              visible ? CAPTION_SHOWN : CAPTION_HIDDEN
-            }`}
-            style={{ left: u(CAPTION_LEFT), top: u(ROW_CENTER), textShadow: CAPTION_SHADOW }}
-          >
-            <p className="font-cormorant text-[length:calc(55*var(--u))] leading-[calc(60*var(--u))] font-semibold tracking-[calc(1.1*var(--u))] text-[#f8f7f2]">
-              {title}
-            </p>
-            <p className="font-helvetica mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#f8f7f2]">
-              {description}
-            </p>
-          </div>
-        );
-      })}
+      {/* Cross-fade tile stack (3-1.png..3-8.png) with each tile's place caption.
+          Only the active slide is shown while the carousel is active; otherwise
+          all fade out and the base intro shows through. Tiles mount once the
+          visitor scrolls into the band (see tilesRequested). */}
+      {tilesRequested && (
+        <>
+          <BandSlide n={1} shown={active && index === 0} imgBase={imgBase} bandClass={bandClass} />
+          <BandSlide
+            n={2}
+            title="Bhutan"
+            description="Asia"
+            shown={active && index === 1}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={3}
+            title="Ladakh"
+            description="India"
+            shown={active && index === 2}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={4}
+            title="Punjab"
+            description="India"
+            shown={active && index === 3}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={5}
+            title="Bengal"
+            description="India"
+            shown={active && index === 4}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={6}
+            title="Delhi"
+            description="India"
+            shown={active && index === 5}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={7}
+            title="Rajasthan"
+            description="India"
+            shown={active && index === 6}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+          <BandSlide
+            n={8}
+            title="Assam"
+            description="India"
+            shown={active && index === 7}
+            imgBase={imgBase}
+            bandClass={bandClass}
+          />
+        </>
+      )}
 
       {/* Band headline — fades out and hides once the carousel activates. The
           cream color / semibold weight are untouched (opacity-only fade). */}
       <p
-        className={`absolute ${headlineClass} ${FADE} ${
+        className={`absolute ${headlineClass} transition-opacity duration-500 ${
           active ? "opacity-0" : "opacity-100"
         }`}
         aria-hidden={active}
@@ -398,5 +378,68 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
         );
       })}
     </div>
+  );
+}
+
+/**
+ * One carousel slide: the full-stage tile image plus, when it has a place, a
+ * caption beside the dot row. Captions are a separate layer so their fade can
+ * differ from the tile's: the outgoing caption leaves fast; the incoming one
+ * waits for the tile cross-fade, so two place names never overlap (the global
+ * reduced-motion rule zeroes durations but not delays, hence
+ * motion-reduce:delay-0). Hidden layers are aria-hidden and pointer-events-none
+ * so the dots stay clickable.
+ */
+function BandSlide({
+  n,
+  title,
+  description,
+  shown,
+  imgBase,
+  bandClass,
+}: {
+  /** 1-based tile number, matching `3-{n}.png`. */
+  n: number;
+  title?: string;
+  description?: string;
+  shown: boolean;
+  imgBase: string;
+  bandClass: string;
+}) {
+  return (
+    <>
+      <div
+        aria-hidden={!shown}
+        className={`absolute ${bandClass} pointer-events-none transition-opacity duration-500 ${
+          shown ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <OptimizedImage
+          src={`${imgBase}/3-${n}.png`}
+          alt={`Carousel tile ${n}`}
+          width={1920}
+          height={1080}
+          sizes="100vw"
+        />
+      </div>
+
+      {title ? (
+        // Left-aligned near the stage edge (x 200), vertically centred on the dot
+        // row (y 583). Soft dark halo keeps the cream text readable on light paintings.
+        <div
+          aria-hidden={!shown}
+          className={`pointer-events-none absolute top-[calc(583*var(--u))] left-[calc(200*var(--u))] -translate-y-1/2 text-left transition-opacity [text-shadow:0_calc(1*var(--u))_calc(3*var(--u))_rgba(0,0,0,0.35),0_0_calc(22*var(--u))_rgba(0,0,0,0.5)] ${
+            shown ? "opacity-100 duration-500 delay-300 motion-reduce:delay-0" : "opacity-0 duration-200"
+          }`}
+        >
+          <p className="font-cormorant text-[length:calc(55*var(--u))] leading-[calc(60*var(--u))] font-semibold tracking-[calc(1.1*var(--u))] text-[#f8f7f2]">
+            {title}
+          </p>
+          <p className="font-helvetica mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#f8f7f2]">
+            {description}
+          </p>
+        </div>
+      ) : null}
+    </>
   );
 }
