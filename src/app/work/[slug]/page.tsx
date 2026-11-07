@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
+import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
@@ -21,11 +22,7 @@ export function generateStaticParams(): Params[] {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
@@ -39,8 +36,7 @@ export async function generateMetadata({
       // The original PNGs are pruned from the deployed output; share the WebP.
       images: [
         {
-          url:
-            optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
+          url: optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
         },
       ],
     },
@@ -79,8 +75,13 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
     return <VirsaBaltistanPage />;
   }
 
+  // Alchi Kitchen project page (AJC-19), Figma node 2823:2994.
+  if (slug === "alchi-kitchen") {
+    return <AlchiKitchenPage />;
+  }
+
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
+    <div className="bg-cream flex min-h-screen flex-col">
       <WorkHeader />
 
       <main className="flex-1">
