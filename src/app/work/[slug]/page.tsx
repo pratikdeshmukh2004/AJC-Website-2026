@@ -9,6 +9,7 @@ import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
+import { SilkRouteAtelierPage } from "@/components/work/SilkRouteAtelierPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
@@ -31,6 +32,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
   "alchi-kitchen": AlchiKitchenPage, // AJC-19
   "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
+  "silk-route-atelier": SilkRouteAtelierPage, // AJC-18
 };
 
 /**
