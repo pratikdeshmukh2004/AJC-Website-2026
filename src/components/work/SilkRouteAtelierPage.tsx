@@ -2,7 +2,6 @@ import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { VirsaExpandableIntro } from "@/components/work/VirsaExpandableIntro";
-import { WorkBody, WorkHeading, WorkLabel } from "@/components/work/WorkCopy";
 import { assetPath } from "@/lib/utils";
 
 /*
@@ -43,19 +42,16 @@ export function SilkRouteAtelierPage() {
           sizes="100vw"
           className="absolute top-0 left-0 h-auto w-[calc(1920*var(--u))]"
         />
-        <WorkHeading
-          as="h1"
-          className="top-[calc(1215*var(--u))] left-[calc(109*var(--u))] w-[calc(868*var(--u))]"
-        >
+        <h1 className="font-cormorant text-taupe absolute top-[calc(1215*var(--u))] left-[calc(109*var(--u))] w-[calc(868*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           The Silk Route Atelier
-        </WorkHeading>
+        </h1>
         <ul className="font-helvetica-regular text-taupe absolute top-[calc(1520*var(--u))] left-[calc(109*var(--u))] w-[calc(560*var(--u))] text-[length:calc(28*var(--u))] leading-[calc(32*var(--u))] tracking-[calc(0.56*var(--u))] uppercase opacity-80">
           <li>Cultural Research</li>
           <li>Heritage Brand Concept</li>
           <li>Brand Identity</li>
           <li>Packaging Design</li>
         </ul>
-        <WorkBody className="top-[calc(1520*var(--u))] left-[calc(981*var(--u))]">
+        <div className="font-helvetica-regular text-sage absolute top-[calc(1520*var(--u))] left-[calc(981*var(--u))] flex w-[calc(677*var(--u))] flex-col gap-[calc(20*var(--u))] text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]">
           <p>
             How do you take the ancient, sacred vocabulary of the high Himalayas and translate it
             into a modern, global luxury language? This proprietary case study by AJC explores the
@@ -67,7 +63,7 @@ export function SilkRouteAtelierPage() {
             endangered regional heritage and contemporary global design, drawing heavily from the
             historical syncretism of the Silk Route.
           </p>
-        </WorkBody>
+        </div>
       </section>
 
       {/* ============ B. IDENTITY … COLOUR STRIP (Figma y 2018–7120) ============ */}
@@ -81,9 +77,9 @@ export function SilkRouteAtelierPage() {
           className="absolute top-0 left-0 h-auto w-[calc(1920*var(--u))]"
         />
 
-        <WorkHeading className="top-[calc(1207*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))]">
+        <h2 className="font-cormorant text-taupe absolute top-[calc(1207*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Identity
-        </WorkHeading>
+        </h2>
         <OptimizedImage
           src={`${IMG}/3.png`}
           alt="The Silk Route Atelier logo, a tiger above the wordmark, on a construction grid"
@@ -100,10 +96,10 @@ export function SilkRouteAtelierPage() {
           sizes="(min-width: 1920px) 950px, 50vw"
           className="absolute top-[calc(1113*var(--u))] left-[calc(970*var(--u))] h-auto w-[calc(950*var(--u))]"
         />
-        <WorkLabel className="top-[calc(2222*var(--u))] left-[calc(126*var(--u))]">
+        <p className="font-helvetica-regular text-sage absolute top-[calc(2222*var(--u))] left-[calc(126*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           The Myth of the Four Dignities
-        </WorkLabel>
-        <WorkBody className="top-[calc(2222*var(--u))] left-[calc(971*var(--u))]">
+        </p>
+        <div className="font-helvetica-regular text-sage absolute top-[calc(2222*var(--u))] left-[calc(971*var(--u))] flex w-[calc(677*var(--u))] flex-col gap-[calc(20*var(--u))] text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]">
           <p>
             In Tibetan Buddhist mythology, the tiger represents one of the Four Dignities –
             embodying strength, confidence, and absolute humility. Historically, it was a guardian
@@ -116,7 +112,7 @@ export function SilkRouteAtelierPage() {
             creative resilience needed to make ancient traditions roar on a contemporary global
             stage.
           </p>
-        </WorkBody>
+        </div>
 
         <OptimizedImage
           src={`${IMG}/5-1.png`}
@@ -135,9 +131,9 @@ export function SilkRouteAtelierPage() {
           className="absolute top-[calc(2507*var(--u))] left-[calc(960*var(--u))] h-auto w-[calc(960*var(--u))]"
         />
 
-        <WorkHeading className="top-[calc(3702*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))]">
+        <h2 className="font-cormorant text-taupe absolute top-[calc(3702*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Colour Palette
-        </WorkHeading>
+        </h2>
         <OptimizedImage
           src={`${IMG}/6.png`}
           alt="A Thangka detail of a raised hand and swirling mineral-pigment clouds"
@@ -159,9 +155,9 @@ export function SilkRouteAtelierPage() {
 
       {/* ============ C. COLOUR PALETTE COPY (Figma y 7120, Read more) ============ */}
       <section className="relative">
-        <WorkLabel className="top-0 left-[calc(126*var(--u))]">
+        <p className="font-helvetica-regular text-sage absolute top-0 left-[calc(126*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Hues as old as the Himalayas
-        </WorkLabel>
+        </p>
         <VirsaExpandableIntro
           x={971}
           y={0}
@@ -206,9 +202,9 @@ export function SilkRouteAtelierPage() {
 
       {/* ============ D. TYPOGRAPHY … PACKAGING (Figma y 7440–10935) ============ */}
       <section className="relative h-[calc(3495*var(--u))]">
-        <WorkHeading className="top-0 left-[calc(109*var(--u))] w-[calc(1088*var(--u))]">
+        <h2 className="font-cormorant text-taupe absolute top-0 left-[calc(109*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Typography
-        </WorkHeading>
+        </h2>
         <OptimizedImage
           src={`${IMG}/7-1.png`}
           alt="Hand-lettered Tibetan script in the Kyuk style, in red ink"
@@ -228,19 +224,19 @@ export function SilkRouteAtelierPage() {
         <p className="font-helvetica text-sage absolute top-[calc(508*var(--u))] left-[calc(126*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Script Kyuk
         </p>
-        <WorkLabel className="top-[calc(508*var(--u))] left-[calc(637*var(--u))] w-[calc(220*var(--u))] text-right">
+        <p className="font-helvetica-regular text-sage absolute top-[calc(508*var(--u))] left-[calc(637*var(--u))] w-[calc(220*var(--u))] text-right text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Cursive &amp; Informal
-        </WorkLabel>
+        </p>
         <p className="font-helvetica text-sage absolute top-[calc(508*var(--u))] left-[calc(990*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Script Umey
         </p>
-        <WorkLabel className="top-[calc(508*var(--u))] left-[calc(1248*var(--u))] w-[calc(500*var(--u))] text-right">
+        <p className="font-helvetica-regular text-sage absolute top-[calc(508*var(--u))] left-[calc(1248*var(--u))] w-[calc(500*var(--u))] text-right text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Variation of Uchen, Cursive &amp; Headless
-        </WorkLabel>
+        </p>
         <p className="font-helvetica-regular text-sage absolute top-[calc(664*var(--u))] left-[calc(126*var(--u))] text-[length:calc(28*var(--u))] leading-[calc(32*var(--u))] tracking-[calc(0.56*var(--u))] whitespace-nowrap uppercase">
           Script as sacred geometry
         </p>
-        <WorkBody className="top-[calc(665*var(--u))] left-[calc(954*var(--u))] gap-[calc(22*var(--u))] text-[length:calc(18*var(--u))] tracking-[calc(0.36*var(--u))]">
+        <div className="font-helvetica-regular text-sage absolute top-[calc(665*var(--u))] left-[calc(954*var(--u))] flex w-[calc(677*var(--u))] flex-col gap-[calc(20*var(--u))] gap-[calc(22*var(--u))] text-[length:calc(18*var(--u))] text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] tracking-[calc(0.36*var(--u))]">
           <p>
             To anchor the visual identity in authentic regional richness, the proposed visual
             framework integrates traditional script written in Umey and Kyuk variations,
@@ -252,14 +248,14 @@ export function SilkRouteAtelierPage() {
             brand’s role not as a mere fashion label, but as a living archive of the Silk Route’s
             cultural cross-pollination.
           </p>
-        </WorkBody>
+        </div>
 
-        <WorkHeading className="top-[calc(1075*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))]">
+        <h2 className="font-cormorant text-taupe absolute top-[calc(1075*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Brand Assets
-        </WorkHeading>
-        <WorkLabel className="top-[calc(1120*var(--u))] left-[calc(971*var(--u))]">
+        </h2>
+        <p className="font-helvetica-regular text-sage absolute top-[calc(1120*var(--u))] left-[calc(971*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Packaging
-        </WorkLabel>
+        </p>
         <OptimizedImage
           src={`${IMG}/8-1.png`}
           alt="A deep red Silk Route Atelier shopping bag with dark ribbon handles in hard sunlight"
@@ -348,21 +344,21 @@ export function SilkRouteAtelierPage() {
           className="absolute top-0 left-[calc(450*var(--u))] h-auto w-[calc(1040*var(--u))]"
         />
 
-        <WorkHeading className="top-[calc(1300*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))]">
+        <h2 className="font-cormorant text-taupe absolute top-[calc(1300*var(--u))] left-[calc(109*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
           Team
-        </WorkHeading>
+        </h2>
         <p className="font-helvetica text-sage absolute top-[calc(1330*var(--u))] left-[calc(954*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Visual Design
         </p>
-        <WorkLabel className="top-[calc(1330*var(--u))] left-[calc(1338*var(--u))]">
+        <p className="font-helvetica-regular text-sage absolute top-[calc(1330*var(--u))] left-[calc(1338*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Praneet Selva
-        </WorkLabel>
+        </p>
         <p className="font-helvetica text-sage absolute top-[calc(1365*var(--u))] left-[calc(954*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Tibetan Script
         </p>
-        <WorkLabel className="top-[calc(1365*var(--u))] left-[calc(1338*var(--u))]">
+        <p className="font-helvetica-regular text-sage absolute top-[calc(1365*var(--u))] left-[calc(1338*var(--u))] text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
           Lobsang Tsultrim (Lahaul)
-        </WorkLabel>
+        </p>
 
         <p
           aria-hidden
