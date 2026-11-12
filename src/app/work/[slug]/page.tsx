@@ -9,6 +9,7 @@ import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
 import { RanjitsSvaasaPage } from "@/components/work/RanjitsSvaasaPage";
+import { LaheLifePage } from "@/components/work/LaheLifePage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { SilkRouteAtelierPage } from "@/components/work/SilkRouteAtelierPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
@@ -35,6 +36,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
   "silk-route-atelier": SilkRouteAtelierPage, // AJC-18
   "ranjits-svaasa": RanjitsSvaasaPage, // AJC-20
+  "lahe-life": LaheLifePage, // AJC-29
 };
 
 /**
