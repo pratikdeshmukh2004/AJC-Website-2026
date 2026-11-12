@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/344jo7n77_w62.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/3dhhtzeafg_0d.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"virsa-archive","s":["virsa-baltistan"]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"7lrKAFEdoTZQNYy_MjZ4D","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"SYcs7CHnUhxeZZSfMG2Ts","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
