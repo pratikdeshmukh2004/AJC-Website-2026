@@ -39,7 +39,6 @@ const FILMS: Film[] = [
 // it and the intro copy when the intro expands.
 const PORTRAIT_TOP = 1937;
 const PORTRAIT_GAP = 64;
-
 /* ---------- Copy (Figma frame + Jira AJC-24 page copy) ---------- */
 
 const INTRO_LEAD = [
