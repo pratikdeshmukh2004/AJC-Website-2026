@@ -1,11 +1,11 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
-import { assetPath, cn } from "@/lib/utils";
+import { assetPath, cn, u } from "@/lib/utils";
 
 /*
   Assam Bengal Navigation — reproduction of the Figma project-page frame
@@ -35,6 +35,10 @@ const FILMS: Film[] = [
   { src: `${VID}/8-4.mp4`, poster: `${VID}/poster-8-4.jpg` },
 ];
 
+// The portrait film starts at Figma y1937; keep this much clear space between
+// it and the intro copy when the intro expands.
+const PORTRAIT_TOP = 1937;
+const PORTRAIT_GAP = 64;
 /* ---------- Copy (Figma frame + Jira AJC-24 page copy) ---------- */
 
 const INTRO_LEAD = [
@@ -78,7 +82,7 @@ function Pic({
   href?: string;
 }) {
   const image = (
-    <Image
+    <OptimizedImage
       src={`${IMG}/${src}`}
       alt={alt}
       width={1920}
@@ -135,7 +139,8 @@ function InlineFilm({ film, className, label }: { film: Film; className: string;
           aria-label={label}
           className="group absolute inset-0 h-full w-full cursor-pointer"
         >
-          {/* Raw <img>: the poster is a runtime video frame, not a build-time asset. */}
+          {/* Raw <img>: the poster lives with the film in /videos, outside the
+              optimized image folders, so next/image would add nothing. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={film.poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
           {/* White play triangle (Figma Polygon), rotated to point right. */}
@@ -174,7 +179,7 @@ export function AssamBengalNavigationPage() {
       if (!canvas) return;
       const unit = canvas.clientWidth / 1920;
       const bottomFigma = (el.offsetTop + el.offsetHeight) / unit;
-      const overflow = bottomFigma + 64 - 1937;
+      const overflow = bottomFigma + PORTRAIT_GAP - PORTRAIT_TOP;
       setPortraitShift(introExpanded && overflow > 0 ? overflow : 0);
     };
 
@@ -242,7 +247,7 @@ export function AssamBengalNavigationPage() {
         {/* Portrait film — plays inline. Shifts down with an expanded intro. */}
         <div
           className="pointer-events-none absolute inset-0 transition-transform duration-500 ease-out"
-          style={{ transform: `translateY(calc(${portraitShift} * var(--u)))` }}
+          style={{ transform: `translateY(${u(portraitShift)})` }}
         >
           <InlineFilm
             film={FILMS[0]}

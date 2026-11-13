@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import type { ComponentType } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
+import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
@@ -15,6 +17,23 @@ import { assetPath } from "@/lib/utils";
 type Params = { slug: string };
 
 /**
+ * Projects with a dedicated, pixel-faithful case-study page, keyed by slug.
+ * Any project not listed here falls back to the editorial scaffold below. To
+ * add one: build the page in components/work and register it here.
+ *
+ * Kept in this file rather than config/projects.ts on purpose: that config is
+ * imported by the client-side Our Work gallery, and referencing the page
+ * components there would pull every case study into its bundle.
+ */
+const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
+  "haveli-experiences": HaveliExperiencesPage, // AJC-22
+  "neemrana-hotels": NeemranaHotelsPage, // AJC-23
+  "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
+  "alchi-kitchen": AlchiKitchenPage, // AJC-19
+  "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
+};
+
+/**
  * Pre-render one static page per project at build time. Required under
  * `output: export` (there is no server to resolve dynamic params at runtime).
  */
@@ -22,11 +41,7 @@ export function generateStaticParams(): Params[] {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
@@ -40,8 +55,7 @@ export async function generateMetadata({
       // The original PNGs are pruned from the deployed output; share the WebP.
       images: [
         {
-          url:
-            optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
+          url: optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
         },
       ],
     },
@@ -62,23 +76,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
-  // Haveli Experiences has a full, pixel-faithful case-study design (AJC-22),
-  // reproduced from the Figma project-page frame. Other projects fall back to
-  // the editorial scaffold below until their own designs land.
-  if (slug === "haveli-experiences") {
-    return <HaveliExperiencesPage />;
-  }
-
-  // Neemrana Hotels case study (AJC-23), from the Figma "Neemrana" frame.
-  if (slug === "neemrana-hotels") {
-    return <NeemranaHotelsPage />;
-  }
-
-  // Virsa Baltistan identity page (AJC-16), Figma node 2823:1389. Its visual
-  // archive page lives at /work/virsa-baltistan/archive.
-  if (slug === "virsa-baltistan") {
-    return <VirsaBaltistanPage />;
-  }
+  const CaseStudy = CASE_STUDIES[slug];
+  if (CaseStudy) return <CaseStudy />;
 
   // Assam Bengal Navigation case study (AJC-24), from its Figma frame.
   if (slug === "assam-bengal-navigation") {
@@ -86,7 +85,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
+    <div className="bg-cream flex min-h-screen flex-col">
       <WorkHeader />
 
       <main className="flex-1">
