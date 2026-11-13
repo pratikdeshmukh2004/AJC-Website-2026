@@ -6,10 +6,14 @@ import { Container } from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
+import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { HillTribePage } from "@/components/work/HillTribePage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
+import { RanjitsSvaasaPage } from "@/components/work/RanjitsSvaasaPage";
+import { LaheLifePage } from "@/components/work/LaheLifePage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
+import { SilkRouteAtelierPage } from "@/components/work/SilkRouteAtelierPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
@@ -31,8 +35,12 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "neemrana-hotels": NeemranaHotelsPage, // AJC-23
   "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
   "alchi-kitchen": AlchiKitchenPage, // AJC-19
+  "balti-kitchen": BaltiKitchenPage, // AJC-30
   "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
   "hill-tribe": HillTribePage, // AJC-27
+  "silk-route-atelier": SilkRouteAtelierPage, // AJC-18
+  "ranjits-svaasa": RanjitsSvaasaPage, // AJC-20
+  "lahe-life": LaheLifePage, // AJC-29
 };
 
 /**
