@@ -1,7 +1,45 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+
+/**
+ * Reflow helper for a <ReadMoreCopy> that sits above other canvas content.
+ * Attach `ref` to the block; when `expanded`, `shift` is how many Figma px
+ * (canvas units) the content below must move down so the longer copy never
+ * overlaps whatever starts at `nextTop` (Figma y), keeping `gap` clear.
+ */
+export function useExpandReflow(expanded: boolean, nextTop: number, gap = 64) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shift, setShift] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const measure = () => {
+      const canvas = el.offsetParent as HTMLElement | null;
+      if (!canvas) return;
+      const unit = canvas.clientWidth / 1920;
+      const bottom = (el.offsetTop + el.offsetHeight) / unit;
+      const overflow = bottom + gap - nextTop;
+      setShift(expanded && overflow > 0 ? overflow : 0);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    const parent = el.offsetParent as HTMLElement | null;
+    if (parent) ro.observe(parent);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [expanded, nextTop, gap]);
+
+  return [ref, shift] as const;
+}
 
 /*
   Expandable body copy with the "Read more" translucent pill used on the
@@ -20,6 +58,8 @@ import { cn } from "@/lib/utils";
 type Props = {
   /** Absolute position + width of the block, in canvas units. */
   className?: string;
+  /** Body-copy colour class (the "Read more" pill stays sage). */
+  textClassName?: string;
   /** Paragraphs always shown. */
   lead: string[];
   /** Truncated last paragraph shown only while collapsed. */
@@ -31,7 +71,7 @@ type Props = {
 };
 
 export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreCopy(
-  { className, lead, collapsedTail, expandedTail, expanded, onToggle },
+  { className, textClassName = "text-sage", lead, collapsedTail, expandedTail, expanded, onToggle },
   ref,
 ) {
   const paragraphs = expanded
@@ -44,7 +84,8 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
     <div
       ref={ref}
       className={cn(
-        "font-helvetica-regular text-sage absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]",
+        "font-helvetica-regular absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))]",
+        textClassName,
         className,
       )}
     >

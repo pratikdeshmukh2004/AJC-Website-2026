@@ -37,10 +37,12 @@
  */
 import { readdir, mkdir, stat, readFile, writeFile, copyFile, rm } from "node:fs/promises";
 import { join, extname, basename, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import config from "../src/config/images.json" with { type: "json" };
 
-const ROOT = new URL("..", import.meta.url).pathname;
+// fileURLToPath (not URL.pathname) so the path is valid on Windows too.
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PUBLIC_IMAGES = join(ROOT, "public", "images");
 const OUT_DIR = join(PUBLIC_IMAGES, "_opt");
 const BLUR_MANIFEST = join(ROOT, "src", "generated", "image-blur.json");

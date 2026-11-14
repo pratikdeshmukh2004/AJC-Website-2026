@@ -8,6 +8,7 @@ import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
+import { HillTribePage } from "@/components/work/HillTribePage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
 import { RanjitsSvaasaPage } from "@/components/work/RanjitsSvaasaPage";
 import { LaheLifePage } from "@/components/work/LaheLifePage";
@@ -36,6 +37,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "alchi-kitchen": AlchiKitchenPage, // AJC-19
   "balti-kitchen": BaltiKitchenPage, // AJC-30
   "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
+  "hill-tribe": HillTribePage, // AJC-27
   "silk-route-atelier": SilkRouteAtelierPage, // AJC-18
   "ranjits-svaasa": RanjitsSvaasaPage, // AJC-20
   "lahe-life": LaheLifePage, // AJC-29
@@ -86,6 +88,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
   const CaseStudy = CASE_STUDIES[slug];
   if (CaseStudy) return <CaseStudy />;
+
+  // Assam Bengal Navigation case study (AJC-24), from its Figma frame.
+  if (slug === "assam-bengal-navigation") {
+    return <AssamBengalNavigationPage />;
+  }
 
   return (
     <div className="bg-cream flex min-h-screen flex-col">
