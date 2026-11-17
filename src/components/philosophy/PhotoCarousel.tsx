@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import Image from "next/image";
 import { cn, fig } from "@/lib/utils";
 // Static imports: Next fingerprints the files and applies the basePath itself.
@@ -61,9 +61,14 @@ const SLIDES = [
 
 export function PhotoCarousel() {
   const [offset, setOffset] = useState(0);
+  // Which way the last step went (0 until the first click), so photos slide in from that side.
+  const [direction, setDirection] = useState(0);
   const n = SLIDES.length;
   const order = SLIDES.map((_, i) => SLIDES[(i + offset) % n]);
-  const step = (d: number) => setOffset((o) => (o + d + n) % n);
+  const step = (d: number) => {
+    setDirection(d);
+    setOffset((o) => (o + d + n) % n);
+  };
 
   return (
     <section aria-roledescription="carousel" aria-label="Photographs" className="relative">
@@ -73,12 +78,22 @@ export function PhotoCarousel() {
       >
         {order.map((s, i) => (
           <figure
-            // Keyed by position too, so each rotation remounts and fades in.
+            // Keyed by position too, so each rotation remounts and slides in.
             key={`${s.key}-${offset}`}
             aria-roledescription="slide"
             aria-label={`${((i + offset) % n) + 1} of ${n}`}
-            className={cn("ajc-fade-in shrink-0", i > 0 && "hidden md:block")}
-            style={{ width: fig(s.width, "14rem") }}
+            className={cn(
+              "shrink-0",
+              direction !== 0 && "ajc-slide-in",
+              i > 0 && "hidden md:block",
+            )}
+            style={
+              {
+                width: fig(s.width, "14rem"),
+                // Each photo travels one place: its own width plus the gap.
+                "--slide-from": `calc(${direction} * (${fig(s.width, "14rem")} + ${fig(138, "1rem")}))`,
+              } as CSSProperties
+            }
           >
             {s.body}
           </figure>
@@ -105,7 +120,7 @@ function ArrowButton({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="hover:text-taupe absolute top-1/2 -translate-y-1/2 cursor-pointer p-2 text-[#9b9484] transition-colors"
+      className="group hover:text-taupe absolute top-1/2 -translate-y-1/2 cursor-pointer p-2 text-[#9b9484] transition-colors"
       style={{ [side]: `calc(${fig(149, "0.75rem")} - 0.5rem)` }}
     >
       <svg
@@ -114,6 +129,7 @@ function ArrowButton({
         stroke="currentColor"
         strokeWidth="3.5"
         aria-hidden
+        className="transition-transform duration-300 group-hover:scale-125 group-active:scale-90"
         style={{ width: fig(26, "1.1rem") }}
       >
         <path d={side === "left" ? "M23 2 4 12l19 10" : "M3 2l19 10L3 22"} strokeLinejoin="miter" />

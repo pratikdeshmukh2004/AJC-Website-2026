@@ -37,7 +37,11 @@ export function RanjitsSvaasaPage() {
   const [track, setTrack] = useState<string | null>(null);
   const [filmPlaying, setFilmPlaying] = useState(false);
   const [slide, setSlide] = useState(0);
+  // Which way each slider last stepped (1 next, -1 previous): the new content enters from that side.
+  const [slideDirection, setSlideDirection] = useState(1);
+  const [leavingSlide, setLeavingSlide] = useState<number | null>(null);
   const [storyIndex, setStoryIndex] = useState(0);
+  const [storyDirection, setStoryDirection] = useState(0);
   const [storyPlaying, setStoryPlaying] = useState(false);
 
   // Expanding a Read more block pushes everything below it down by the overflow.
@@ -585,33 +589,62 @@ export function RanjitsSvaasaPage() {
             <h2 className="font-cormorant text-taupe absolute top-[calc(14483*var(--u))] left-[calc(102*var(--u))] w-[calc(612*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
               Social Media
             </h2>
-            {["6-1", "6-2", "6-3", "6-4"].map((name, i) => (
+            {/* Clipped frame: the old screen slides out as the new one slides in. */}
+            <div className="absolute top-[calc(14692*var(--u))] left-[calc(515*var(--u))] h-[calc(1756*var(--u))] w-[calc(889*var(--u))] overflow-hidden">
+              {leavingSlide !== null && leavingSlide !== slide ? (
+                <OptimizedImage
+                  key={`leaving-${leavingSlide}`}
+                  src={`${IMG}/6-${leavingSlide + 1}.png`}
+                  alt=""
+                  aria-hidden
+                  width={889}
+                  height={1756}
+                  sizes="(min-width: 1920px) 889px, 50vw"
+                  onAnimationEnd={() => setLeavingSlide(null)}
+                  className={cn(
+                    "ajc-slide-out absolute inset-0 h-full w-full object-cover",
+                    slideDirection > 0 ? "[--slide-to:-100%]" : "[--slide-to:100%]",
+                  )}
+                />
+              ) : null}
               <OptimizedImage
-                key={name}
-                src={`${IMG}/${name}.png`}
+                key={slide}
+                src={`${IMG}/6-${slide + 1}.png`}
                 alt="Ranjit’s Svaasa Instagram feed"
                 width={889}
                 height={1756}
                 sizes="(min-width: 1920px) 889px, 50vw"
                 className={cn(
-                  "absolute top-[calc(14692*var(--u))] left-[calc(515*var(--u))] h-[calc(1756*var(--u))] w-[calc(889*var(--u))] object-cover transition-opacity duration-500",
-                  i === slide ? "opacity-100" : "pointer-events-none opacity-0",
+                  "absolute inset-0 h-full w-full object-cover",
+                  leavingSlide !== null &&
+                    cn(
+                      "ajc-slide-in",
+                      slideDirection > 0 ? "[--slide-from:100%]" : "[--slide-from:-100%]",
+                    ),
                 )}
               />
-            ))}
+            </div>
             <button
               type="button"
               aria-label="Previous screen"
-              onClick={() => setSlide((i) => (i + 3) % 4)}
-              className="font-helvetica text-sage absolute top-[calc(15503*var(--u))] left-[calc(254*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+              onClick={() => {
+                setSlideDirection(-1);
+                setLeavingSlide(slide);
+                setSlide((i) => (i + 3) % 4);
+              }}
+              className="font-helvetica text-sage absolute top-[calc(15503*var(--u))] left-[calc(254*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
             >
               &lt;
             </button>
             <button
               type="button"
               aria-label="Next screen"
-              onClick={() => setSlide((i) => (i + 1) % 4)}
-              className="font-helvetica text-sage absolute top-[calc(15503*var(--u))] left-[calc(1591*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+              onClick={() => {
+                setSlideDirection(1);
+                setLeavingSlide(slide);
+                setSlide((i) => (i + 1) % 4);
+              }}
+              className="font-helvetica text-sage absolute top-[calc(15503*var(--u))] left-[calc(1591*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
             >
               &gt;
             </button>
@@ -633,48 +666,58 @@ export function RanjitsSvaasaPage() {
               SVAASA STORIES
             </p>
             <div className="absolute top-[calc(17833*var(--u))] left-[calc(707*var(--u))] h-[calc(900*var(--u))] w-[calc(506*var(--u))] overflow-hidden">
-              {storyPlaying ? (
-                <video
-                  key={storyIndex}
-                  src={assetPath(`/videos/ranjits-svaasa/8-${storyIndex + 1}.mp4`)}
-                  controls
-                  autoPlay
-                  playsInline
-                  className="absolute inset-0 h-full w-full bg-black object-cover"
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setStoryPlaying(true)}
-                  aria-label={`Play story ${storyIndex + 1} of 2`}
-                  className="group absolute inset-0 h-full w-full cursor-pointer"
-                >
-                  <OptimizedImage
-                    src={`${IMG}/stories-poster.png`}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1920px) 506px, 40vw"
-                    className="object-cover"
+              <div
+                // Keyed so each step remounts the story and slides it in.
+                key={storyIndex}
+                className={cn(
+                  "absolute inset-0",
+                  storyDirection > 0 && "ajc-slide-in [--slide-from:100%]",
+                  storyDirection < 0 && "ajc-slide-in [--slide-from:-100%]",
+                )}
+              >
+                {storyPlaying ? (
+                  <video
+                    src={assetPath(`/videos/ranjits-svaasa/8-${storyIndex + 1}.mp4`)}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="absolute inset-0 h-full w-full bg-black object-cover"
                   />
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 48.75 56.2917"
-                    fill="white"
-                    className="absolute top-1/2 left-1/2 h-[calc(35*var(--u))] w-[calc(30*var(--u))] -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 group-hover:scale-125"
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setStoryPlaying(true)}
+                    aria-label={`Play story ${storyIndex + 1} of 2`}
+                    className="group absolute inset-0 h-full w-full cursor-pointer"
                   >
-                    <path d="M0 0L48.75 28.1458L0 56.2917Z" />
-                  </svg>
-                </button>
-              )}
+                    <OptimizedImage
+                      src={`${IMG}/stories-poster.png`}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1920px) 506px, 40vw"
+                      className="object-cover"
+                    />
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 48.75 56.2917"
+                      fill="white"
+                      className="absolute top-1/2 left-1/2 h-[calc(35*var(--u))] w-[calc(30*var(--u))] -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 group-hover:scale-125"
+                    >
+                      <path d="M0 0L48.75 28.1458L0 56.2917Z" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
             <button
               type="button"
               aria-label="Previous story"
               onClick={() => {
+                setStoryDirection(-1);
                 setStoryIndex((i) => (i + 1) % 2);
                 setStoryPlaying(false);
               }}
-              className="font-helvetica text-sage absolute top-[calc(18233*var(--u))] left-[calc(255*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+              className="font-helvetica text-sage absolute top-[calc(18233*var(--u))] left-[calc(255*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
             >
               &lt;
             </button>
@@ -682,10 +725,11 @@ export function RanjitsSvaasaPage() {
               type="button"
               aria-label="Next story"
               onClick={() => {
+                setStoryDirection(1);
                 setStoryIndex((i) => (i + 1) % 2);
                 setStoryPlaying(false);
               }}
-              className="font-helvetica text-sage absolute top-[calc(18233*var(--u))] left-[calc(1592*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+              className="font-helvetica text-sage absolute top-[calc(18233*var(--u))] left-[calc(1592*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
             >
               &gt;
             </button>

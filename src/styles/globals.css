@@ -290,6 +290,33 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
   }
 }
 
+/* ---- Carousels: slides really move, the old one out and the new one in ----
+   Direction and distance come from two custom properties set on the element:
+   --slide-from (where the new slide starts) and --slide-to (where the old one
+   ends). Clip the carousel (overflow-hidden) so they slide inside its frame. */
+.ajc-slide-in {
+  animation: ajc-slide-in 650ms var(--ease-editorial) backwards;
+}
+.ajc-slide-out {
+  animation: ajc-slide-out 650ms var(--ease-editorial) forwards;
+}
+@keyframes ajc-slide-in {
+  from {
+    transform: translateX(var(--slide-from, 100%));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes ajc-slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--slide-to, -100%));
+  }
+}
+
 /* ---- Gentle fade-in, e.g. carousel slides after the arrows rotate them ---- */
 .ajc-fade-in {
   animation: ajc-fade-in 600ms var(--ease-editorial) both;

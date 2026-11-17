@@ -163,6 +163,9 @@ export function AssamBengalNavigationPage() {
   const [sailExpanded, setSailExpanded] = useState(false);
   // Which film the second portrait's carousel is pointing at.
   const [filmIndex, setFilmIndex] = useState(0);
+  // Which way the films last stepped (1 next, -1 previous): the new film enters from that side.
+  const [filmDirection, setFilmDirection] = useState(1);
+  const [leavingFilm, setLeavingFilm] = useState<number | null>(null);
 
   // The portrait film sits right under the intro (Figma y1937). When the intro
   // expands, measure its bottom and push the portrait down by the overflow so
@@ -513,25 +516,57 @@ export function AssamBengalNavigationPage() {
             The ‹ › arrows step through the project films (the poster visibly
             changes); the play triangle plays the current film inline. `key`
             re-mounts the player per film so it resets to the new poster. */}
-        <InlineFilm
-          key={filmIndex}
-          film={FILMS[filmIndex]}
-          className="top-[calc(11666*var(--u))] left-[calc(719*var(--u))] h-[calc(859*var(--u))] w-[calc(481*var(--u))]"
-          label={`Play film ${filmIndex + 1} of ${FILMS.length}`}
-        />
+        {/* Clipped frame: the old film's poster slides out as the new one slides in. */}
+        <div
+          onAnimationEnd={() => setLeavingFilm(null)}
+          className="absolute top-[calc(11666*var(--u))] left-[calc(719*var(--u))] h-[calc(859*var(--u))] w-[calc(481*var(--u))] overflow-hidden"
+        >
+          {leavingFilm !== null && leavingFilm !== filmIndex ? (
+            <InlineFilm
+              key={`leaving-${leavingFilm}`}
+              film={FILMS[leavingFilm]}
+              className={cn(
+                "ajc-slide-out inset-0 h-full w-full",
+                filmDirection > 0 ? "[--slide-to:-100%]" : "[--slide-to:100%]",
+              )}
+              label=""
+            />
+          ) : null}
+          <InlineFilm
+            key={filmIndex}
+            film={FILMS[filmIndex]}
+            className={cn(
+              "inset-0 h-full w-full",
+              leavingFilm !== null &&
+                cn(
+                  "ajc-slide-in",
+                  filmDirection > 0 ? "[--slide-from:100%]" : "[--slide-from:-100%]",
+                ),
+            )}
+            label={`Play film ${filmIndex + 1} of ${FILMS.length}`}
+          />
+        </div>
         <button
           type="button"
           aria-label="Previous film"
-          onClick={() => setFilmIndex((i) => (i - 1 + FILMS.length) % FILMS.length)}
-          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(254*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+          onClick={() => {
+            setFilmDirection(-1);
+            setLeavingFilm(filmIndex);
+            setFilmIndex((i) => (i - 1 + FILMS.length) % FILMS.length);
+          }}
+          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(254*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
         >
           &lt;
         </button>
         <button
           type="button"
           aria-label="Next film"
-          onClick={() => setFilmIndex((i) => (i + 1) % FILMS.length)}
-          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(1591*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-opacity hover:opacity-60"
+          onClick={() => {
+            setFilmDirection(1);
+            setLeavingFilm(filmIndex);
+            setFilmIndex((i) => (i + 1) % FILMS.length);
+          }}
+          className="font-helvetica text-sage absolute top-[calc(12033*var(--u))] left-[calc(1591*var(--u))] w-[calc(73*var(--u))] cursor-pointer text-center text-[length:calc(46*var(--u))] leading-none font-bold tracking-[calc(0.92*var(--u))] transition-[opacity,transform] duration-300 hover:scale-125 hover:opacity-60 active:scale-90"
         >
           &gt;
         </button>
