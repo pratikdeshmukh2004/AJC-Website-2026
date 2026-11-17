@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { StreamText } from "@/components/ui/StreamText";
 import { cn, u } from "@/lib/utils";
@@ -29,6 +29,7 @@ export function VirsaExpandableIntro({
   fade,
   toggle,
   gapBelow,
+  responsive = false,
 }: {
   /** Figma position and width of the intro copy within its section. */
   x: number;
@@ -43,9 +44,62 @@ export function VirsaExpandableIntro({
   /** "Read more" position, relative to the copy's top-left. */
   toggle: { x: number; y: number };
   gapBelow: number;
+  /**
+   * Flow layout below xl (full-width text at a readable size, a 3.5em fade),
+   * and the Figma canvas geometry from xl up. Off by default: the pages that
+   * are still canvas-only scale the whole frame instead.
+   */
+  responsive?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const copyId = useId();
+
+  if (responsive) {
+    // Canvas geometry as CSS variables, read by the xl: classes below.
+    const vars = {
+      "--ix": u(x),
+      "--iy": u(y),
+      "--iw": u(width),
+      "--ib": u(gapBelow),
+      "--ty": u(toggle.y),
+      "--tx": u(toggle.x),
+      "--fx": u(fade.x),
+      "--fy": u(fade.y),
+      "--fw": u(fade.width),
+      "--fh": u(fade.height),
+    } as CSSProperties;
+
+    return (
+      <div className="px-6 xl:ml-(--ix) xl:w-(--iw) xl:px-0 xl:pt-(--iy) xl:pb-(--ib)" style={vars}>
+        <div
+          id={copyId}
+          className={cn(
+            "font-helvetica-regular relative text-base leading-[1.45] tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
+            expanded
+              ? "xl:pb-[calc(32*var(--u))]"
+              : "max-h-[17em] overflow-hidden xl:h-(--ty) xl:max-h-none",
+          )}
+        >
+          <StreamText enabled={expanded}>{expanded ? full : preview}</StreamText>
+          {expanded ? null : (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-[3.5em] bg-[rgba(253,251,244,0.66)] xl:inset-x-auto xl:top-(--fy) xl:bottom-auto xl:left-(--fx) xl:h-(--fh) xl:w-(--fw)"
+            />
+          )}
+        </div>
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-controls={copyId}
+          onClick={() => setExpanded((open) => !open)}
+          className="group/readmore font-helvetica mt-3 block cursor-pointer text-left text-base font-bold text-[#9b9484] transition-opacity hover:opacity-70 xl:mt-0 xl:ml-(--tx) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+        >
+          <ReadMoreLabel expanded={expanded} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
