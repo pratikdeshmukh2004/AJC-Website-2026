@@ -1,7 +1,9 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { u } from "@/lib/utils";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
+import { cn, u } from "@/lib/utils";
 
 /*
   Intro copy with "Read more" (AJC-16).
@@ -52,11 +54,13 @@ export function VirsaExpandableIntro({
       <div
         id={copyId}
         // Paragraphs follow on the next line with no extra space, as in Figma.
-        className="font-helvetica-regular relative text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+        className={cn(
+          "font-helvetica-regular relative text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]",
+        )}
         // Collapsed: the copy box ends where the design puts "Read more".
         style={expanded ? { paddingBottom: u(32) } : { height: u(toggle.y) }}
       >
-        {expanded ? full : preview}
+        <StreamText enabled={expanded}>{expanded ? full : preview}</StreamText>
         {expanded ? null : (
           <div
             aria-hidden
@@ -75,10 +79,10 @@ export function VirsaExpandableIntro({
         aria-expanded={expanded}
         aria-controls={copyId}
         onClick={() => setExpanded((open) => !open)}
-        className="font-helvetica block cursor-pointer text-left text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484] transition-opacity hover:opacity-70"
+        className="group/readmore font-helvetica block cursor-pointer text-left text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484] transition-opacity hover:opacity-70"
         style={{ marginLeft: u(toggle.x) }}
       >
-        {expanded ? "Read less" : "Read more"}
+        <ReadMoreLabel expanded={expanded} />
       </button>
     </div>
   );

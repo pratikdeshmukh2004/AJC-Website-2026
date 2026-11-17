@@ -264,7 +264,7 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
    reduced-motion rule above stops it for visitors who ask for less motion. */
 .ajc-rock {
   transform-origin: 50% 92%;
-  animation: ajc-rock 3.2s ease-in-out infinite alternate;
+  animation: ajc-rock 1.2s ease-in-out infinite alternate;
 }
 @keyframes ajc-rock {
   from {
@@ -272,6 +272,21 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
   }
   to {
     transform: rotate(4deg);
+  }
+}
+
+/* ---- Text revealed by "Read more": each word fades in (see StreamText) ----
+   Per-word delays are set inline. `backwards`, not `both`: afterwards the word
+   keeps its own opacity. */
+.ajc-stream {
+  animation: ajc-stream 350ms ease-out backwards;
+}
+@keyframes ajc-stream {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

@@ -4,6 +4,8 @@ import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
 import { assetPath, at, cn } from "@/lib/utils";
 
 /*
@@ -168,16 +170,19 @@ export function BaltiKitchenPage() {
                 !introExpanded && "max-h-[9.5em] overflow-hidden",
               )}
             >
-              Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
-              land of greens cradled between the stark, colossal mountains of Ladakh. There, you see
-              buckwheat fields swaying at the slightest breeze and local farmer-women at work,
-              beautifully unbothered by the summer sun. In a parallel vision, there was I, who would
-              often be tempted to take a walk up the mountain paths to reach the village. Knowing
-              me, my walks invariably led me to Balti Kitchen, where the finest local cuisine in
-              town was to be found. Run by Hajira Khan, the first female entrepreneur from the
-              village, Balti Kitchen is a space where the ancient recipes of Baltistan live on
-              through the day. Cooked to this day in traditional stone pots, her herbed, mellow, yet
-              deeply flavorful food became the very birthplace of Balti Kitchen’s new identity.
+              <StreamText enabled={introExpanded}>
+                Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
+                land of greens cradled between the stark, colossal mountains of Ladakh. There, you
+                see buckwheat fields swaying at the slightest breeze and local farmer-women at work,
+                beautifully unbothered by the summer sun. In a parallel vision, there was I, who
+                would often be tempted to take a walk up the mountain paths to reach the village.
+                Knowing me, my walks invariably led me to Balti Kitchen, where the finest local
+                cuisine in town was to be found. Run by Hajira Khan, the first female entrepreneur
+                from the village, Balti Kitchen is a space where the ancient recipes of Baltistan
+                live on through the day. Cooked to this day in traditional stone pots, her herbed,
+                mellow, yet deeply flavorful food became the very birthplace of Balti Kitchen’s new
+                identity.
+              </StreamText>
             </p>
             {/* Figma veil: cream fade over the last lines while collapsed */}
             {!introExpanded && (
@@ -191,9 +196,9 @@ export function BaltiKitchenPage() {
             type="button"
             onClick={() => setIntroExpanded((prev) => !prev)}
             aria-expanded={introExpanded}
-            className="font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(40*var(--u))]"
+            className="group/readmore font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(40*var(--u))]"
           >
-            {introExpanded ? "Read less" : "Read more"}
+            <ReadMoreLabel expanded={introExpanded} />
           </button>
         </Copy>
 

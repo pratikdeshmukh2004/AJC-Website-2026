@@ -4,6 +4,8 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
 import { assetPath, at, cn } from "@/lib/utils";
 
 /*
@@ -137,16 +139,20 @@ export function LaheLifePage() {
             {introExpanded && (
               <>
                 <p>
-                  This culture of presence is carried forward by Jungle Travels India through
-                  decades of regional knowledge, and preserved by Lahé Looms through a contemporary
-                  approach to sustainable craft. In spaces like Laheké Cafe, this rhythm is brought
-                  into an urban setting, bridging the local supply chain with a refined, considered
-                  aesthetic.
+                  <StreamText enabled>
+                    This culture of presence is carried forward by Jungle Travels India through
+                    decades of regional knowledge, and preserved by Lahé Looms through a
+                    contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
+                    rhythm is brought into an urban setting, bridging the local supply chain with a
+                    refined, considered aesthetic.
+                  </StreamText>
                 </p>
                 <p>
-                  The best experiences of Lahé are the ones that are rooted; they offer a way of
-                  experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
-                  place.
+                  <StreamText enabled>
+                    The best experiences of Lahé are the ones that are rooted; they offer a way of
+                    experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
+                    place.
+                  </StreamText>
                 </p>
               </>
             )}
@@ -162,9 +168,9 @@ export function LaheLifePage() {
             type="button"
             onClick={() => setIntroExpanded((prev) => !prev)}
             aria-expanded={introExpanded}
-            className="font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(30*var(--u))]"
+            className="group/readmore font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(30*var(--u))]"
           >
-            {introExpanded ? "Read less" : "Read more"}
+            <ReadMoreLabel expanded={introExpanded} />
           </button>
         </Copy>
 
