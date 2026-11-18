@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { optimizedPath } from "@/lib/image-paths";
-import { u } from "@/lib/utils";
+import { at, cn, u } from "@/lib/utils";
 
 /*
   A film in a Figma box (AJC-16: the ibex mascot film). Shows the poster
@@ -24,6 +24,7 @@ export function VirsaFilmPlayer({
   title,
   box,
   triangle,
+  responsive = false,
 }: {
   src: string;
   /** Poster frame (an optimized image path). */
@@ -33,6 +34,12 @@ export function VirsaFilmPlayer({
   box: { x: number; y: number; w: number; h: number };
   /** The play triangle, relative to the box's top-left. */
   triangle: { x: number; y: number; size: number };
+  /**
+   * Flow layout below xl (full width at the box's aspect ratio, triangle
+   * centred) and the Figma canvas geometry from xl up. Off by default: the
+   * canvas-only pages scale the whole frame instead.
+   */
+  responsive?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
@@ -46,8 +53,21 @@ export function VirsaFilmPlayer({
 
   return (
     <div
-      className="absolute overflow-hidden bg-[#9b9484]"
-      style={{ left: u(box.x), top: u(box.y), width: u(box.w), height: u(box.h) }}
+      className={cn(
+        "overflow-hidden bg-[#9b9484]",
+        responsive
+          ? "relative aspect-(--ar) w-full xl:absolute xl:top-(--y) xl:left-(--x) xl:aspect-auto xl:h-(--h) xl:w-(--w)"
+          : "absolute",
+      )}
+      style={
+        responsive
+          ? ({
+              ...at(box.x, box.y, box.w),
+              "--h": u(box.h),
+              "--ar": `${box.w} / ${box.h}`,
+            } as CSSProperties)
+          : { left: u(box.x), top: u(box.y), width: u(box.w), height: u(box.h) }
+      }
     >
       <video
         ref={videoRef}
@@ -78,13 +98,21 @@ export function VirsaFilmPlayer({
             viewBox="0 0 56.2917 48.75"
             fill="white"
             aria-hidden
-            className="absolute rotate-90 transition-transform duration-300 group-hover:scale-110"
-            style={{
-              left: u(triangle.x),
-              top: u(triangle.y),
-              width: u(triangle.size),
-              height: u(triangle.size),
-            }}
+            className={cn(
+              "absolute rotate-90 transition-transform duration-300 group-hover:scale-110",
+              responsive &&
+                "top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 xl:size-[calc(65*var(--u))]",
+            )}
+            style={
+              responsive
+                ? undefined
+                : {
+                    left: u(triangle.x),
+                    top: u(triangle.y),
+                    width: u(triangle.size),
+                    height: u(triangle.size),
+                  }
+            }
           >
             <path d="M28.1458 0L56.2917 48.75H0L28.1458 0Z" />
           </svg>
