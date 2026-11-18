@@ -7,6 +7,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
+import { FarmersHouseCafePage } from "@/components/work/FarmersHouseCafePage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { HillTribePage } from "@/components/work/HillTribePage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
@@ -43,6 +44,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "ranjits-svaasa": RanjitsSvaasaPage, // AJC-20
   "lahe-life": LaheLifePage, // AJC-29
   "laheke-cafe": LahekeCafePage, // AJC-26
+  "farmers-house-cafe": FarmersHouseCafePage, // AJC-25
 };
 
 /**
