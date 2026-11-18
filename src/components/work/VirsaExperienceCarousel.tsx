@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ArrowButton } from "@/components/work/VirsaSlideCarousel";
 import { u } from "@/lib/utils";
@@ -56,8 +56,17 @@ export function VirsaExperienceCarousel({
   href: string;
 }) {
   const [offset, setOffset] = useState(0);
+  // Which way the last step went, and the offset we left (its edge tile slides out).
+  const [direction, setDirection] = useState(1);
+  const [leavingOffset, setLeavingOffset] = useState<number | null>(null);
   const n = items.length;
-  const step = (delta: number) => setOffset((o) => (o + delta + n) % n);
+  const step = (delta: number) => {
+    setDirection(delta);
+    setLeavingOffset(offset);
+    setOffset((o) => (o + delta + n) % n);
+  };
+  // Tiles travel one slot: from where the neighbouring slot sits.
+  const pitch = slots[1].x - slots[0].x;
 
   return (
     <section
@@ -66,17 +75,60 @@ export function VirsaExperienceCarousel({
       className="absolute left-0 w-full"
       style={{ top: u(y), height: u(h) }}
     >
+      {leavingOffset !== null && leavingOffset !== offset
+        ? // The tile that leaves: the left one going next, the right one going back.
+          (() => {
+            const slotIndex = direction > 0 ? 0 : 1;
+            const slot = slots[slotIndex];
+            const item = items[(leavingOffset + slotIndex) % n];
+            return (
+              <article
+                key={`leaving-${item.title}-${leavingOffset}`}
+                aria-hidden
+                inert
+                onAnimationEnd={() => setLeavingOffset(null)}
+                className="ajc-slide-out absolute overflow-hidden bg-[#9b9484]"
+                style={
+                  {
+                    left: u(slot.x),
+                    top: 0,
+                    width: u(slot.w),
+                    height: u(h),
+                    "--slide-to": u(direction * -pitch),
+                  } as CSSProperties
+                }
+              >
+                <OptimizedImage
+                  src={item.image}
+                  alt=""
+                  width={slot.w}
+                  height={h}
+                  sizes={sizesFor(slot.w)}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </article>
+            );
+          })()
+        : null}
       {slots.map((slot, i) => {
         const index = (offset + i) % n;
         const item = items[index];
         return (
           <article
-            // Keyed by offset too, so each step remounts the tile and fades it in.
+            // Keyed by offset too, so each step remounts the tile and slides it in.
             key={`${item.title}-${offset}`}
             aria-roledescription="slide"
             aria-label={`${index + 1} of ${n}`}
-            className="ajc-fade-in absolute overflow-hidden bg-[#9b9484]"
-            style={{ left: u(slot.x), top: 0, width: u(slot.w), height: u(h) }}
+            className={`absolute overflow-hidden bg-[#9b9484] ${leavingOffset === null ? "" : "ajc-slide-in"}`}
+            style={
+              {
+                left: u(slot.x),
+                top: 0,
+                width: u(slot.w),
+                height: u(h),
+                "--slide-from": u(direction * pitch),
+              } as CSSProperties
+            }
           >
             <OptimizedImage
               src={item.image}

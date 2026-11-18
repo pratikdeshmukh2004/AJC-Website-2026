@@ -4,6 +4,8 @@ import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
 import { assetPath, at, cn } from "@/lib/utils";
 
 /*
@@ -125,7 +127,7 @@ export function BaltiKitchenPage() {
 
       <div className="relative flex flex-col gap-6 pb-20 xl:block xl:h-[calc(12225*var(--u))] xl:pb-0">
         {/* ============ HERO (1920 x 1083) ============ */}
-        <section className="relative h-svh w-full xl:absolute xl:top-0 xl:left-0 xl:h-[calc(1083*var(--u))]">
+        <section className="relative aspect-[1920/1083] w-full xl:absolute xl:top-0 xl:left-0 xl:aspect-auto xl:h-[calc(1083*var(--u))]">
           <OptimizedImage
             src={`${IMG}/1.png`}
             alt="A woman in a red shawl reaching for apples in an orchard, a woven basket on her arm"
@@ -138,7 +140,7 @@ export function BaltiKitchenPage() {
           <p className="font-helvetica absolute bottom-6 left-6 text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-[calc(508*var(--u))] xl:bottom-auto xl:left-[calc(103*var(--u))] xl:w-[calc(348*var(--u))] xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]">
             2025 / ٢٠٢٥
           </p>
-          <p className="font-helvetica absolute right-6 bottom-14 text-right text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 sm:bottom-6 xl:top-[calc(508*var(--u))] xl:right-auto xl:bottom-auto xl:left-[calc(1469*var(--u))] xl:w-[calc(348*var(--u))] xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]">
+          <p className="font-helvetica absolute right-6 bottom-6 text-right text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-[calc(508*var(--u))] xl:right-auto xl:bottom-auto xl:left-[calc(1469*var(--u))] xl:w-[calc(348*var(--u))] xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]">
             AJC in Ladakh / لداخ
           </p>
         </section>
@@ -168,16 +170,19 @@ export function BaltiKitchenPage() {
                 !introExpanded && "max-h-[9.5em] overflow-hidden",
               )}
             >
-              Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
-              land of greens cradled between the stark, colossal mountains of Ladakh. There, you see
-              buckwheat fields swaying at the slightest breeze and local farmer-women at work,
-              beautifully unbothered by the summer sun. In a parallel vision, there was I, who would
-              often be tempted to take a walk up the mountain paths to reach the village. Knowing
-              me, my walks invariably led me to Balti Kitchen, where the finest local cuisine in
-              town was to be found. Run by Hajira Khan, the first female entrepreneur from the
-              village, Balti Kitchen is a space where the ancient recipes of Baltistan live on
-              through the day. Cooked to this day in traditional stone pots, her herbed, mellow, yet
-              deeply flavorful food became the very birthplace of Balti Kitchen’s new identity.
+              <StreamText enabled={introExpanded}>
+                Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
+                land of greens cradled between the stark, colossal mountains of Ladakh. There, you
+                see buckwheat fields swaying at the slightest breeze and local farmer-women at work,
+                beautifully unbothered by the summer sun. In a parallel vision, there was I, who
+                would often be tempted to take a walk up the mountain paths to reach the village.
+                Knowing me, my walks invariably led me to Balti Kitchen, where the finest local
+                cuisine in town was to be found. Run by Hajira Khan, the first female entrepreneur
+                from the village, Balti Kitchen is a space where the ancient recipes of Baltistan
+                live on through the day. Cooked to this day in traditional stone pots, her herbed,
+                mellow, yet deeply flavorful food became the very birthplace of Balti Kitchen’s new
+                identity.
+              </StreamText>
             </p>
             {/* Figma veil: cream fade over the last lines while collapsed */}
             {!introExpanded && (
@@ -191,9 +196,9 @@ export function BaltiKitchenPage() {
             type="button"
             onClick={() => setIntroExpanded((prev) => !prev)}
             aria-expanded={introExpanded}
-            className="font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(40*var(--u))]"
+            className="group/readmore font-helvetica text-sage mt-3 block cursor-pointer text-left font-bold xl:mt-[calc(40*var(--u))]"
           >
-            {introExpanded ? "Read less" : "Read more"}
+            <ReadMoreLabel expanded={introExpanded} />
           </button>
         </Copy>
 

@@ -1,6 +1,8 @@
 "use client";
 
 import { forwardRef, useLayoutEffect, useRef, useState } from "react";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
 import { cn } from "@/lib/utils";
 
 /**
@@ -91,16 +93,16 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
     >
       {paragraphs.map((text, i) => (
         <p key={i} className={cn(i > 0 && "mt-[1em]")}>
-          {text}
+          <StreamText enabled={expanded && i >= lead.length}>{text}</StreamText>
         </p>
       ))}
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="font-helvetica text-sage bg-cream/66 relative mt-[calc(16*var(--u))] ml-[calc(-35*var(--u))] block w-[calc(747*var(--u))] cursor-pointer py-[calc(28*var(--u))] pl-[calc(35*var(--u))] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]"
+        className="group/readmore font-helvetica text-sage bg-cream/66 relative mt-[calc(16*var(--u))] ml-[calc(-35*var(--u))] block w-[calc(747*var(--u))] cursor-pointer py-[calc(28*var(--u))] pl-[calc(35*var(--u))] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]"
       >
-        {expanded ? "Read less" : "Read more"}
+        <ReadMoreLabel expanded={expanded} />
       </button>
     </div>
   );
