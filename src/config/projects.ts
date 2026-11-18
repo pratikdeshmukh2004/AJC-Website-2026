@@ -208,6 +208,34 @@ export const projects: Project[] = [
   },
 ];
 
+/** A track in a case-study music player. `cover` is a path under /public. */
+export type PlaylistTrack = {
+  title: string;
+  artist: string;
+  duration: string;
+  cover?: string;
+};
+
+/**
+ * Farmers' House Cafe "Music Curation" playlist (Figma 2823:1543, AJC-25).
+ * Only the first album cover was supplied; the others fall back to a typeset
+ * sleeve until their art is exported. Full playlist:
+ * https://open.spotify.com/playlist/41rdexJ91isMLneg1KbX3F
+ */
+export const farmersHousePlaylist: PlaylistTrack[] = [
+  {
+    title: "People Talking",
+    artist: "Robert John Ardiff",
+    duration: "03:54",
+    cover: "/images/projects/farmers-house-cafe/cover-people-talking.png",
+  },
+  { title: "Vagabond", artist: "Caamp", duration: "02:09" },
+  { title: "Blackbird", artist: "The Beatles", duration: "02:18" },
+  { title: "Cheek to Cheek", artist: "Fred Astaire", duration: "03:18" },
+  { title: "Sunrise", artist: "Norah Jones", duration: "03:21" },
+  { title: "Like a River", artist: "Ocie Elliott", duration: "03:35" },
+];
+
 /** Look up a single project by its slug. Returns undefined when not found. */
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);
