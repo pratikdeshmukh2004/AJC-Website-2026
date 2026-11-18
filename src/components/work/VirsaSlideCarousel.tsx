@@ -34,9 +34,17 @@ export function VirsaSlideCarousel({
   fit?: "cover" | "contain";
 }) {
   const [index, setIndex] = useState(0);
+  // Which way the last step went, and the slide that is still sliding out.
+  const [direction, setDirection] = useState(1);
+  const [leaving, setLeaving] = useState<number | null>(null);
   const n = slides.length;
-  const step = (delta: number) => setIndex((i) => (i + delta + n) % n);
+  const step = (delta: number) => {
+    setDirection(delta);
+    setLeaving(index);
+    setIndex((i) => (i + delta + n) % n);
+  };
   const slide = slides[index];
+  const fitClass = fit === "contain" ? "object-contain object-top" : "object-cover";
 
   return (
     <section
@@ -52,16 +60,33 @@ export function VirsaSlideCarousel({
         className="absolute overflow-hidden"
         style={{ left: u(box.x), top: 0, width: u(box.w), height: u(box.h) }}
       >
+        {leaving !== null && leaving !== index ? (
+          <OptimizedImage
+            key={`leaving-${slides[leaving].src}`}
+            src={slides[leaving].src}
+            alt=""
+            aria-hidden
+            width={Math.round(box.w)}
+            height={Math.round(box.h)}
+            sizes={sizesFor(box.w)}
+            onAnimationEnd={() => setLeaving(null)}
+            className={`ajc-slide-out absolute inset-0 h-full w-full ${fitClass} ${
+              direction > 0 ? "[--slide-to:-100%]" : "[--slide-to:100%]"
+            }`}
+          />
+        ) : null}
         <OptimizedImage
-          // Keyed by src so each step remounts the image and fades it in.
+          // Keyed by src so each step remounts the image and slides it in.
           key={slide.src}
           src={slide.src}
           alt={slide.alt}
           width={Math.round(box.w)}
           height={Math.round(box.h)}
           sizes={sizesFor(box.w)}
-          className={`ajc-fade-in absolute inset-0 h-full w-full ${
-            fit === "contain" ? "object-contain object-top" : "object-cover"
+          className={`absolute inset-0 h-full w-full ${fitClass} ${
+            leaving === null
+              ? ""
+              : `ajc-slide-in ${direction > 0 ? "[--slide-from:100%]" : "[--slide-from:-100%]"}`
           }`}
         />
       </div>
@@ -105,10 +130,15 @@ export function ArrowButton({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="font-helvetica hover:text-taupe absolute cursor-pointer text-center text-[length:calc(46*var(--u))] leading-[calc(63*var(--u))] font-bold text-[#9b9484] transition-colors"
+      className="group font-helvetica hover:text-taupe absolute cursor-pointer text-center text-[length:calc(46*var(--u))] leading-[calc(63*var(--u))] font-bold text-[#9b9484] transition-colors"
       style={{ left: u(x), top: u(y), width: u(73), height: u(63) }}
     >
-      <span aria-hidden>{children}</span>
+      <span
+        aria-hidden
+        className="inline-block transition-transform duration-300 group-hover:scale-125 group-active:scale-90"
+      >
+        {children}
+      </span>
     </button>
   );
 }

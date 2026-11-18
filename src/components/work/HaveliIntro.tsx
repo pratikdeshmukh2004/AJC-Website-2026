@@ -1,6 +1,8 @@
 "use client";
 
 import { forwardRef } from "react";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
+import { StreamText } from "@/components/ui/StreamText";
 import { u } from "@/lib/utils";
 
 /*
@@ -48,21 +50,25 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
       {expanded ? (
         <>
           <p className="mt-[1em]">
-            We began with a comprehensive photography and videography overhaul, archiving the daily
-            movement of the space through a deeply immersive lens. From the exact emotion a guest
-            experiences upon entering into the courtyard, to the thoughtfully curated heritage
-            rituals, every visual asset was built to showcase the paradox of past and present
-            sharing the same room.
+            <StreamText enabled>
+              We began with a comprehensive photography and videography overhaul, archiving the
+              daily movement of the space through a deeply immersive lens. From the exact emotion a
+              guest experiences upon entering into the courtyard, to the thoughtfully curated
+              heritage rituals, every visual asset was built to showcase the paradox of past and
+              present sharing the same room.
+            </StreamText>
           </p>
           <p className="mt-[1em]">
-            Through our deep dive into the property&rsquo;s identity, we reshaped the visual
-            narrative around Haveli&rsquo;s culinary offerings. The cuisine draws inspiration from
-            two distinct sides of Purani Dilli: the rich, regal Mughlai flavors of Jama Masjid and
-            the vibrant, nostalgic street chaats of Chandni Chowk. We refocused the brand&rsquo;s
-            imagery to spotlight this duality &ndash; positioning the food, curated cocktails, and
-            the royal tables as an essential cultural destination. The result doesn&rsquo;t just
-            document, but invites you into an experience, effortlessly poised between ancestral
-            grandeur and the warmth of a modern welcome.
+            <StreamText enabled>
+              Through our deep dive into the property&rsquo;s identity, we reshaped the visual
+              narrative around Haveli&rsquo;s culinary offerings. The cuisine draws inspiration from
+              two distinct sides of Purani Dilli: the rich, regal Mughlai flavors of Jama Masjid and
+              the vibrant, nostalgic street chaats of Chandni Chowk. We refocused the brand&rsquo;s
+              imagery to spotlight this duality &ndash; positioning the food, curated cocktails, and
+              the royal tables as an essential cultural destination. The result doesn&rsquo;t just
+              document, but invites you into an experience, effortlessly poised between ancestral
+              grandeur and the warmth of a modern welcome.
+            </StreamText>
           </p>
         </>
       ) : (
@@ -78,7 +84,7 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="font-helvetica relative mt-[calc(16*var(--u))] block cursor-pointer bg-[rgba(253,251,244,0.66)] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+        className="group/readmore font-helvetica relative mt-[calc(16*var(--u))] block cursor-pointer bg-[rgba(253,251,244,0.66)] text-left text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] text-[#9b9484]"
         style={{
           width: u(747),
           marginLeft: u(-35),
@@ -87,7 +93,7 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
           paddingLeft: u(35),
         }}
       >
-        {expanded ? "Read less" : "Read more"}
+        <ReadMoreLabel expanded={expanded} />
       </button>
     </div>
   );

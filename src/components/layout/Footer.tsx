@@ -44,6 +44,7 @@ export function Footer() {
           {/* Canvas starts 2.5px above the headings' line box, as in Figma. */}
           <ScriptCycle
             align="start"
+            intervalMs={1500}
             style={{ width: fig(228, "8.5rem"), marginTop: fig(-3, "-3px") }}
           />
           <div

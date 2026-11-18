@@ -8,6 +8,7 @@ import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
 import { FarmersHouseCafePage } from "@/components/work/FarmersHouseCafePage";
+import { HaveliDharampuraPage } from "@/components/work/HaveliDharampuraPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
 import { HillTribePage } from "@/components/work/HillTribePage";
 import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
@@ -33,6 +34,7 @@ type Params = { slug: string };
  * components there would pull every case study into its bundle.
  */
 const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
+  "haveli-dharampura": HaveliDharampuraPage, // AJC-17
   "haveli-experiences": HaveliExperiencesPage, // AJC-22
   "neemrana-hotels": NeemranaHotelsPage, // AJC-23
   "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)

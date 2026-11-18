@@ -1,23 +1,24 @@
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import { AlchiIllustrationCycle } from "@/components/work/AlchiIllustrationCycle";
 import { VirsaExpandableIntro } from "@/components/work/VirsaExpandableIntro";
-import { assetPath, u } from "@/lib/utils";
+import { assetPath, at, cn, u } from "@/lib/utils";
 
 /*
   Alchi Kitchen — project page at /work/alchi-kitchen (AJC-19), from the Figma
   frame "Alchi Kitchen" (node 2823:2994, 1920px wide). Opened from the project
   card on Our Work.
 
-  Same technique as the Virsa Baltistan / Haveli / Neemrana pages: inside a
-  1920-wide `@container`, `--u` = 1 Figma px = 100cqw / 1920, so every Figma
-  coordinate is written `calc(<px>*var(--u))` (via u()) and the layout scales
-  with the viewport (exact at 1920px wide, proportionally smaller on mobile).
+  Same technique as Hospitality and Lahé Life: from xl up the frame is a scaled
+  canvas where `--u` = 1 Figma px = 100cqw / 1920 and each element sits at its
+  Figma coordinates (`at(x, y, w)` + `xl:left-(--x) xl:top-(--y)`). Below xl the
+  same elements stack in normal flow (the design has no mobile frame).
   Palette: background #fdfbf4, headings #7d7062, body #9b9484.
 
   Layout: four stacked blocks. The two "Read more" intros expand in normal flow
-  and push the content below them down, so the page is split at them:
+  and push the content below them down, so the canvas is split at them:
     A. Hero, title and intro        Figma y 0–1962   (flow)
     B. Identity … The Menu title    Figma y 1962–9611 (absolute, rebased by b())
     C. The Menu intro               Figma y 9611–10196 (flow)
@@ -31,18 +32,56 @@ const IMG = assetPath("/images/projects/alchi-kitchen");
 
 const B_TOP = 1962;
 const D_TOP = 10196;
-// Last element: the "The Silk Route Atelier" label at y17063, plus breathing room.
-const END = 17330;
 const b = (y: number) => y - B_TOP;
 const d = (y: number) => y - D_TOP;
 
-const H2 =
-  "font-cormorant absolute text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] text-[#7d7062]";
-const BODY =
-  "font-helvetica-regular absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]";
-const FILL = "[&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover";
+/** Section title (Cormorant 97 / 76, tracking -6%) at a Figma coordinate; `small` = 76 / 60. */
+function Heading({
+  children,
+  x,
+  y,
+  level = 2,
+  small,
+}: {
+  children: ReactNode;
+  x: number;
+  y: number;
+  level?: 1 | 2;
+  small?: boolean;
+}) {
+  const Tag = level === 1 ? "h1" : "h2";
+  return (
+    <Tag
+      className={cn(
+        "font-cormorant px-6 text-5xl leading-none tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0",
+        small
+          ? "xl:text-[length:calc(76*var(--u))] xl:leading-[calc(60*var(--u))] xl:tracking-[calc(-4.56*var(--u))]"
+          : "xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]",
+      )}
+      style={at(x, y, 1088)}
+    >
+      {children}
+    </Tag>
+  );
+}
 
-/** A photo placed at Figma (x, y) with its Figma size; `top` is already rebased. */
+/** Body copy (Helvetica 20, tracking +2%, #9b9484) at a Figma coordinate. */
+function Copy({ children, x, y, w }: { children: ReactNode; x: number; y: number; w: number }) {
+  return (
+    <p
+      className="font-helvetica-regular px-6 text-base leading-[1.45] tracking-[0.02em] text-[#9b9484] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
+      style={at(x, y, w)}
+    >
+      {children}
+    </p>
+  );
+}
+
+/**
+ * A photo at Figma (x, y) with its Figma size; `top` is already rebased.
+ * Below xl it fills the width at its own aspect ratio. `overlay` leaves the placement below xl to `className`, and
+ * `children` render on top of the photo.
+ */
 function Pic({
   file,
   alt,
@@ -52,6 +91,9 @@ function Pic({
   h,
   priority,
   contain,
+  overlay,
+  className,
+  children,
 }: {
   file: string;
   alt: string;
@@ -61,11 +103,21 @@ function Pic({
   h: number;
   priority?: boolean;
   contain?: boolean;
+  overlay?: boolean;
+  className?: string;
+  children?: ReactNode;
 }) {
   return (
     <div
-      className={contain ? "absolute" : `absolute overflow-hidden ${FILL}`}
-      style={{ left: u(x), top: u(top), width: u(w), height: u(h) }}
+      className={cn(
+        "xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)",
+        !overlay && "relative w-full",
+        "aspect-(--ar) xl:aspect-auto",
+        !contain &&
+          "overflow-hidden [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover",
+        className,
+      )}
+      style={{ ...at(x, top, w), "--h": u(h), "--ar": `${w} / ${h}` } as CSSProperties}
     >
       <OptimizedImage
         src={`${IMG}/${file}`}
@@ -73,10 +125,40 @@ function Pic({
         width={w}
         height={h}
         priority={priority}
-        sizes={`(min-width: 1920px) ${w}px, ${+((w / 1920) * 100).toFixed(2)}vw`}
+        sizes={`(min-width: 1920px) ${w}px, (min-width: 1280px) ${+((w / 1920) * 100).toFixed(2)}vw, 100vw`}
         className={contain ? "h-full w-full object-contain" : undefined}
       />
+      {children}
     </div>
+  );
+}
+
+/** Colour tiles laid over a photo, placed by percentage so they follow it at any size. */
+function Swatches({
+  pic,
+  tiles,
+}: {
+  pic: { x: number; y: number; w: number; h: number };
+  tiles: [number, number, string][];
+}) {
+  return (
+    <>
+      {tiles.map(([x, y, color]) => (
+        <div
+          key={`${x}-${y}`}
+          role="img"
+          aria-label={`Palette colour ${color}`}
+          className="absolute"
+          style={{
+            left: `${(((x - pic.x) / pic.w) * 100).toFixed(3)}%`,
+            top: `${(((y - pic.y) / pic.h) * 100).toFixed(3)}%`,
+            width: `${((165 / pic.w) * 100).toFixed(3)}%`,
+            height: `${((78 / pic.h) * 100).toFixed(3)}%`,
+            backgroundColor: color,
+          }}
+        />
+      ))}
+    </>
   );
 }
 
@@ -122,9 +204,9 @@ const ABOUT_SECTIONS: { heading?: string; paragraphs: string[] }[] = [
 
 /** Paragraphs with a blank line between them, and bold sub-headings. */
 const aboutFull = (
-  <div className="flex flex-col" style={{ gap: u(20) }}>
+  <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
     {ABOUT_SECTIONS.map(({ heading, paragraphs }) => (
-      <section key={heading ?? "story"} className="flex flex-col" style={{ gap: u(20) }}>
+      <section key={heading ?? "story"} className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
         {heading ? (
           <h3 className="font-helvetica font-bold tracking-[calc(0.4*var(--u))] text-[#7d7062] uppercase">
             {heading}
@@ -247,35 +329,38 @@ export function AlchiKitchenPage() {
       <HeroHeader menuOnly />
 
       {/* ============ A. HERO + INTRO (Figma y 0–1962) ============ */}
-      <section className="relative" style={{ minHeight: u(B_TOP) }}>
-        <Pic
-          file="1.png"
-          alt="A hand holding an Alchi Kitchen menu card, ‘Ladakhi through cuisine’, over a spread of cards"
-          x={0}
-          top={0}
-          w={1920}
-          h={1080}
-          priority
-        />
-        <p
-          className="font-helvetica absolute text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80"
-          style={{ left: u(103), top: u(507), width: u(348) }}
-        >
-          2025 / ۲۰۲۵
-        </p>
-        <p
-          className="font-helvetica absolute text-right text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80"
-          style={{ left: u(1469), top: u(507), width: u(348) }}
-        >
-          AJC in Ladakh / لداخ
-        </p>
+      <section className="relative flex flex-col gap-8 xl:block xl:min-h-[calc(1962*var(--u))] xl:gap-0">
+        {/* Wrapper holds the photo and its labels; at xl it dissolves so both sit on the canvas. */}
+        <div className="relative xl:contents">
+          <Pic
+            file="1.png"
+            alt="A hand holding an Alchi Kitchen menu card, ‘Ladakhi through cuisine’, over a spread of cards"
+            x={0}
+            top={0}
+            w={1920}
+            h={1080}
+            priority
+          />
+          <p
+            className="font-helvetica absolute bottom-6 left-6 text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            style={at(103, 507, 348)}
+          >
+            2025 / ۲۰۲۵
+          </p>
+          <p
+            className="font-helvetica absolute right-6 bottom-6 text-right text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:right-auto xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            style={at(1469, 507, 348)}
+          >
+            AJC in Ladakh / لداخ
+          </p>
+        </div>
 
-        <h1 className={H2} style={{ left: u(109), top: u(1230), width: u(868) }}>
+        <Heading level={1} x={109} y={1230}>
           Alchi Kitchen
-        </h1>
+        </Heading>
         <ul
-          className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[calc(32*var(--u))] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
-          style={{ left: u(109), top: u(1390), width: u(348) }}
+          className="font-helvetica-regular px-6 text-lg tracking-[0.02em] text-[#7d7062] uppercase opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+          style={at(109, 1390, 348)}
         >
           {SERVICES.map((service) => (
             <li key={service}>{service}</li>
@@ -283,11 +368,12 @@ export function AlchiKitchenPage() {
         </ul>
 
         <VirsaExpandableIntro
+          responsive
           x={981}
           y={1350}
           width={677}
           preview={
-            <div className="flex flex-col" style={{ gap: u(20) }}>
+            <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
               {ABOUT_PREVIEW.map((text) => (
                 <p key={text.slice(0, 24)}>{text}</p>
               ))}
@@ -302,7 +388,7 @@ export function AlchiKitchenPage() {
       </section>
 
       {/* ============ B. IDENTITY … THE MENU (Figma y 1962–9611) ============ */}
-      <div className="relative" style={{ height: u(9611 - B_TOP) }}>
+      <div className="relative flex flex-col gap-10 pb-10 xl:block xl:h-[calc(7649*var(--u))] xl:gap-0 xl:pb-0">
         <Pic
           file="2.png"
           alt="An Alchi Kitchen brass-toned card resting on tree bark"
@@ -313,9 +399,9 @@ export function AlchiKitchenPage() {
         />
 
         {/* ---- Identity ---- */}
-        <h2 className={H2} style={{ left: u(109), top: u(b(3196)), width: u(1088) }}>
+        <Heading x={109} y={b(3196)}>
           Identity
-        </h2>
+        </Heading>
         <Pic
           file="3.png"
           alt="The Alchi wordmark and its Tibetan-script companion on a construction grid"
@@ -323,6 +409,7 @@ export function AlchiKitchenPage() {
           top={b(3423)}
           w={517}
           h={289}
+          className="mx-auto max-w-xs px-6 xl:max-w-none xl:px-0"
         />
         <Pic
           file="4.png"
@@ -340,19 +427,20 @@ export function AlchiKitchenPage() {
           w={492}
           h={82}
           contain
+          className="mx-auto max-w-xs px-6 xl:max-w-none xl:px-0"
         />
-        <p className={BODY} style={{ left: u(981), top: u(b(4993)), width: u(584) }}>
+        <Copy x={981} y={b(4993)} w={584}>
           The Alchi wordmark is crafted in a custom ink-pen script, directly inspired by the lines
           and curves found in the calligraphy of ancient regional literature and Buddhist
           manuscripts. In contrast, Kitchen is typeset in a structured, locally adapted script. This
           pairing grounds the logo, balancing a reverence for ancient history with a sharp, modern
           clarity.
-        </p>
+        </Copy>
 
         {/* ---- Colour palette ---- */}
-        <h2 className={H2} style={{ left: u(109), top: u(b(5245)), width: u(1088) }}>
+        <Heading x={109} y={b(5245)}>
           Colour Palette
-        </h2>
+        </Heading>
         <Pic
           file="5-1.png"
           alt="A sheet of dark brown leather"
@@ -360,7 +448,9 @@ export function AlchiKitchenPage() {
           top={b(5438)}
           w={915}
           h={697}
-        />
+        >
+          <Swatches pic={{ x: 40, y: 5438, w: 915, h: 697 }} tiles={SWATCHES_LEATHER} />
+        </Pic>
         <Pic
           file="5-2.png"
           alt="A brushed brass bar on a pale surface"
@@ -368,28 +458,15 @@ export function AlchiKitchenPage() {
           top={b(5438)}
           w={915}
           h={697}
-        />
-        {[...SWATCHES_LEATHER, ...SWATCHES_BRASS].map(([x, y, color]) => (
-          <div
-            key={`${x}-${y}`}
-            role="img"
-            aria-label={`Palette colour ${color}`}
-            className="absolute"
-            style={{
-              left: u(x),
-              top: u(b(y)),
-              width: u(165),
-              height: u(78),
-              backgroundColor: color,
-            }}
-          />
-        ))}
+        >
+          <Swatches pic={{ x: 979, y: 5438, w: 915, h: 697 }} tiles={SWATCHES_BRASS} />
+        </Pic>
 
         {/* ---- Iconography ---- */}
-        <h2 className={H2} style={{ left: u(109), top: u(b(6393)), width: u(1088) }}>
+        <Heading x={109} y={b(6393)}>
           Iconography
-        </h2>
-        <p className={BODY} style={{ left: u(981), top: u(b(6467)), width: u(712) }}>
+        </Heading>
+        <Copy x={981} y={b(6467)} w={712}>
           The building structure embedded in the identity is more than an icon; it is the living
           heart of Alchi Kitchen. This house represents the literal home of Chef Nilza, framing the
           restaurant as an intimate extension of her hearth where every dish carries the memory of
@@ -399,29 +476,34 @@ export function AlchiKitchenPage() {
           lit. Just as every traditional Ladakhi home is adorned with prayer flags fluttering in the
           wind at its threshold, the logo mimics this visual entryway, welcoming every traveling
           guest into the space like family.
-        </p>
-        <Pic
-          file="6-1.png"
-          alt="The flat rooftops of Ladakhi homes in sepia"
-          x={0}
-          top={b(7106)}
-          w={1920}
-          h={1073}
-        />
-        <Pic
-          file="6-Layer.png"
-          alt="The Alchi Kitchen logo: a Ladakhi house with the morning sun above it"
-          x={816}
-          top={b(7508)}
-          w={326}
-          h={269}
-          contain
-        />
+        </Copy>
+        {/* Photo and logo share a wrapper below xl so the logo sits on the photo, as in the design. */}
+        <div className="relative xl:contents">
+          <Pic
+            file="6-1.png"
+            alt="The flat rooftops of Ladakhi homes in sepia"
+            x={0}
+            top={b(7106)}
+            w={1920}
+            h={1073}
+          />
+          <Pic
+            file="6-Layer.png"
+            alt="The Alchi Kitchen logo: a Ladakhi house with the morning sun above it"
+            x={816}
+            top={b(7508)}
+            w={326}
+            h={269}
+            contain
+            className="absolute top-1/2 left-1/2 w-2/5 -translate-x-1/2 -translate-y-1/2 xl:translate-x-0 xl:translate-y-0"
+            overlay
+          />
+        </div>
 
         {/* ---- The Menu: illustrations (0.5s cycle) beside the card spread ---- */}
         <div
-          className="absolute"
-          style={{ left: u(170), top: u(b(8420)), width: u(600), height: u(520) }}
+          className="relative mx-6 aspect-[600/520] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:aspect-auto xl:h-(--h) xl:w-(--w)"
+          style={{ ...at(170, b(8420), 600), "--h": u(520) } as CSSProperties}
         >
           <AlchiIllustrationCycle images={ILLUSTRATIONS} />
         </div>
@@ -433,19 +515,20 @@ export function AlchiKitchenPage() {
           w={939}
           h={1075}
         />
-        <h2 className={H2} style={{ left: u(109), top: u(b(9397)), width: u(1088) }}>
+        <Heading x={109} y={b(9397)}>
           The Menu
-        </h2>
+        </Heading>
       </div>
 
       {/* ============ C. THE MENU INTRO (Figma y 9611–10196) ============ */}
       <VirsaExpandableIntro
+        responsive
         x={981}
         y={0}
         width={748}
         preview={<p>{MENU_PREVIEW}</p>}
         full={
-          <div className="flex flex-col" style={{ gap: u(20) }}>
+          <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
             {MENU_PARAGRAPHS.map((text) => (
               <p key={text.slice(0, 24)}>{text}</p>
             ))}
@@ -458,27 +541,29 @@ export function AlchiKitchenPage() {
       />
 
       {/* ============ D. MENU DESIGN … NEXT PROJECT (Figma y 10196–END) ============ */}
-      <div className="relative" style={{ height: u(END - D_TOP) }}>
-        <Pic
-          file="9-1.png"
-          alt="Menu cards with illustrated dishes among autumn leaves"
-          x={23}
-          top={d(10196)}
-          w={913}
-          h={1061}
-        />
-        <Pic
-          file="9-2.png"
-          alt="Menu cards with illustrated dishes among autumn leaves, seen from above"
-          x={972}
-          top={d(10196)}
-          w={913}
-          h={1061}
-        />
+      <div className="relative flex flex-col gap-10 pt-10 pb-20 xl:block xl:h-[calc(7134*var(--u))] xl:gap-0 xl:p-0">
+        <div className="grid grid-cols-2 gap-3 px-6 xl:contents">
+          <Pic
+            file="9-1.png"
+            alt="Menu cards with illustrated dishes among autumn leaves"
+            x={23}
+            top={d(10196)}
+            w={913}
+            h={1061}
+          />
+          <Pic
+            file="9-2.png"
+            alt="Menu cards with illustrated dishes among autumn leaves, seen from above"
+            x={972}
+            top={d(10196)}
+            w={913}
+            h={1061}
+          />
+        </div>
 
-        <h2 className={H2} style={{ left: u(109), top: u(d(11394)), width: u(1088) }}>
+        <Heading x={109} y={d(11394)}>
           Design &amp; Illustrations
-        </h2>
+        </Heading>
         <Pic
           file="10.png"
           alt="An archival black-and-white photograph of a Ladakhi kitchen"
@@ -488,39 +573,43 @@ export function AlchiKitchenPage() {
           h={1120}
         />
         <p
-          className="font-cormorant absolute text-[length:calc(48*var(--u))] leading-[calc(46*var(--u))] tracking-[calc(-2.88*var(--u))] text-[#7d7062]"
-          style={{ left: u(1123), top: u(d(12097)), width: u(610) }}
+          className="font-cormorant px-6 text-3xl leading-[1.05] tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(48*var(--u))] xl:leading-[calc(46*var(--u))] xl:tracking-[calc(-2.88*var(--u))]"
+          style={at(1123, d(12097), 610)}
         >
           Inspired from the Ancient Kitchens of Ladakh
         </p>
 
-        {(
-          [
-            ["11-1.png", "The Alchi Kitchen digital menu cover", 350],
-            ["11-2.png", "A digital menu page of soups", 659],
-            ["11-3.png", "A digital menu page with Thukpa", 968],
-            ["11-4.png", "A digital menu page with Tain Tain and Khambir", 1277],
-          ] as [string, string, number][]
-        ).map(([file, alt, x]) => (
-          <Pic key={file} file={file} alt={alt} x={x} top={d(13099)} w={292} h={413} />
-        ))}
+        <div className="grid grid-cols-2 gap-3 px-6 xl:contents">
+          {(
+            [
+              ["11-1.png", "The Alchi Kitchen digital menu cover", 350],
+              ["11-2.png", "A digital menu page of soups", 659],
+              ["11-3.png", "A digital menu page with Thukpa", 968],
+              ["11-4.png", "A digital menu page with Tain Tain and Khambir", 1277],
+            ] as [string, string, number][]
+          ).map(([file, alt, x]) => (
+            <Pic key={file} file={file} alt={alt} x={x} top={d(13099)} w={292} h={413} />
+          ))}
+        </div>
 
-        <Pic
-          file="12-1.png"
-          alt="A hand holding the printed Alchi Kitchen menu in an autumn orchard"
-          x={23}
-          top={d(13888)}
-          w={913}
-          h={1061}
-        />
-        <Pic
-          file="12-2.png"
-          alt="An open Alchi Kitchen menu showing Mok Mok, Skyu, Chutagi and O-Skyu"
-          x={972}
-          top={d(13888)}
-          w={913}
-          h={1061}
-        />
+        <div className="grid grid-cols-2 gap-3 px-6 xl:contents">
+          <Pic
+            file="12-1.png"
+            alt="A hand holding the printed Alchi Kitchen menu in an autumn orchard"
+            x={23}
+            top={d(13888)}
+            w={913}
+            h={1061}
+          />
+          <Pic
+            file="12-2.png"
+            alt="An open Alchi Kitchen menu showing Mok Mok, Skyu, Chutagi and O-Skyu"
+            x={972}
+            top={d(13888)}
+            w={913}
+            h={1061}
+          />
+        </div>
 
         <Pic
           file="14.png"
@@ -530,101 +619,102 @@ export function AlchiKitchenPage() {
           w={913}
           h={1061}
         />
-        <Pic
-          file="13-1.png"
-          alt="The illustrated menu cover showing Chef Nilza at the stove"
-          x={161}
-          top={d(15182)}
-          w={357}
-          h={505}
-          contain
-        />
-        <Pic
-          file="13-2.png"
-          alt="The printed welcome note and QR code for the menu"
-          x={438}
-          top={d(15330)}
-          w={359}
-          h={505}
-          contain
-        />
+        <div className="grid grid-cols-2 gap-3 px-6 xl:contents">
+          <Pic
+            file="13-1.png"
+            alt="The illustrated menu cover showing Chef Nilza at the stove"
+            x={161}
+            top={d(15182)}
+            w={357}
+            h={505}
+            contain
+          />
+          <Pic
+            file="13-2.png"
+            alt="The printed welcome note and QR code for the menu"
+            x={438}
+            top={d(15330)}
+            w={359}
+            h={505}
+            contain
+          />
+        </div>
 
         {/* ---- Features ---- */}
-        <h2 className={H2} style={{ left: u(109), top: u(d(16162)), width: u(1088) }}>
+        <Heading x={109} y={d(16162)}>
           Features
-        </h2>
-        {FEATURES.map(({ file, alt, href, x: fx, y: fy, w: fw, h: fh }) => {
-          // Shown smaller than the Figma size, kept centred on the same spot.
-          const w = Math.round(fw * FEATURE_SCALE);
-          const h = Math.round(fh * FEATURE_SCALE);
-          const x = Math.round(fx + (fw - w) / 2);
-          const y = Math.round(fy + (fh - h) / 2);
-          return (
-            <a
-              key={file}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute block transition-opacity duration-300 hover:opacity-70"
-              style={{ left: u(x), top: u(d(y)), width: u(w), height: u(h) }}
-            >
-              <OptimizedImage
-                src={`${IMG}/press/${file}`}
-                alt={alt}
-                width={w}
-                height={h}
-                sizes={`(min-width: 1920px) ${w}px, ${+((w / 1920) * 100).toFixed(2)}vw`}
-                className="h-full w-full object-contain"
-              />
-            </a>
-          );
-        })}
+        </Heading>
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 px-6 xl:contents">
+          {FEATURES.map(({ file, alt, href, x: fx, y: fy, w: fw, h: fh }) => {
+            // Shown smaller than the Figma size, kept centred on the same spot.
+            const w = Math.round(fw * FEATURE_SCALE);
+            const h = Math.round(fh * FEATURE_SCALE);
+            const x = Math.round(fx + (fw - w) / 2);
+            const y = Math.round(fy + (fh - h) / 2);
+            return (
+              <a
+                key={file}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block h-12 w-32 transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)"
+                style={{ ...at(x, d(y), w), "--h": u(h) } as CSSProperties}
+              >
+                <OptimizedImage
+                  src={`${IMG}/press/${file}`}
+                  alt={alt}
+                  width={w}
+                  height={h}
+                  sizes={`(min-width: 1920px) ${w}px, 128px`}
+                  className="h-full w-full object-contain"
+                />
+              </a>
+            );
+          })}
+        </div>
 
         {/* ---- Team ---- */}
-        <h2
-          className="font-cormorant absolute text-[length:calc(76*var(--u))] leading-[calc(60*var(--u))] tracking-[calc(-4.56*var(--u))] text-[#7d7062]"
-          style={{ left: u(109), top: u(d(16552)), width: u(1088) }}
-        >
+        <Heading x={109} y={d(16552)} small>
           Team
-        </h2>
-        {TEAM.map(([role, name], i) => (
-          <div key={role} className="contents">
+        </Heading>
+        <div className="flex flex-col gap-2 px-6 xl:contents">
+          {TEAM.map(([role, name], i) => (
             <p
-              className="font-helvetica absolute text-[length:calc(16*var(--u))] leading-[calc(20*var(--u))] font-bold tracking-[calc(0.32*var(--u))] text-[#9b9484] uppercase"
-              style={{ left: u(499), top: u(d(16561) + i * 30) }}
+              key={role}
+              className="text-sm tracking-[0.02em] text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:text-[length:calc(16*var(--u))] xl:leading-[calc(20*var(--u))] xl:tracking-[calc(0.32*var(--u))] xl:whitespace-nowrap"
+              style={at(499, d(16561) + i * 30, 241)}
             >
-              {role}
+              <span className="font-helvetica mr-3 font-bold xl:mr-0 xl:inline-block xl:w-(--w)">
+                {role}
+              </span>
+              <span className="font-helvetica-regular">{name}</span>
             </p>
-            <p
-              className="font-helvetica-regular absolute text-[length:calc(16*var(--u))] leading-[calc(20*var(--u))] tracking-[calc(0.32*var(--u))] text-[#9b9484] uppercase"
-              style={{ left: u(740), top: u(d(16561) + i * 30) }}
-            >
-              {name}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
 
         {/* ---- Next project ---- */}
-        <div
-          aria-hidden
-          className="font-cormorant absolute text-center text-[length:calc(80*var(--u))] leading-none font-bold text-[#7d7062]"
-          style={{ left: u(900), top: u(d(16869)), width: u(110) }}
-        >
-          &gt;
+        <div className="mt-6 flex flex-col items-center text-center xl:contents">
+          <div
+            aria-hidden
+            className="font-cormorant text-5xl leading-none font-bold text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))]"
+            style={at(900, d(16869), 110)}
+          >
+            &gt;
+          </div>
+          <Link
+            href="/work/silk-route-atelier"
+            className="font-cormorant block text-5xl leading-none tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
+            style={at(654, d(16957), 612)}
+          >
+            Next Project
+          </Link>
+          <p
+            className="font-helvetica-regular mt-3 text-sm tracking-[0.02em] whitespace-nowrap text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+            style={at(830, d(17063), 260)}
+          >
+            The Silk Route Atelier
+          </p>
         </div>
-        <Link
-          href="/work/silk-route-atelier"
-          className="font-cormorant absolute block text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))] text-[#7d7062]"
-          style={{ left: u(654), top: u(d(16957)), width: u(612) }}
-        >
-          Next Project
-        </Link>
-        <p
-          className="font-helvetica-regular absolute text-center text-[length:calc(20*var(--u))] leading-[calc(23*var(--u))] tracking-[calc(0.4*var(--u))] whitespace-nowrap text-[#9b9484] uppercase"
-          style={{ left: u(830), top: u(d(17063)), width: u(260) }}
-        >
-          The Silk Route Atelier
-        </p>
       </div>
     </div>
   );
