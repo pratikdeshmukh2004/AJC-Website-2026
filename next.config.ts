@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
 
   reactStrictMode: true,
+
+  // Only take security patches when an agent upgrades Next.js.
+  experimental: {
+    agentUpgrade: "security",
+  },
 };
 
 export default nextConfig;
