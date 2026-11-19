@@ -1,10 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { ProjectCard } from "./ProjectCard";
 import { cn } from "@/lib/utils";
-import { getProjectsByCategory, workCategories, type WorkCategory } from "@/config/projects";
+import {
+  WORK_CATEGORY_EVENT,
+  categoryFromHash,
+  categoryHash,
+  getProjectsByCategory,
+  workCategories,
+  type WorkCategory,
+} from "@/config/projects";
 
 /**
  * Filterable portfolio grid for the /our-work route.
@@ -15,6 +22,19 @@ import { getProjectsByCategory, workCategories, type WorkCategory } from "@/conf
  */
 export function WorkGallery() {
   const [active, setActive] = useState<WorkCategory>("All Projects");
+
+  // The filter lives in the URL hash so the menu's submenu can open it, from
+  // this page (event) or from another page (hash read on arrival).
+  useEffect(() => {
+    // Deferred a frame: state is set from a callback, not during the effect.
+    const frame = requestAnimationFrame(() => setActive(categoryFromHash(window.location.hash)));
+    const onPick = (e: Event) => setActive((e as CustomEvent<WorkCategory>).detail);
+    window.addEventListener(WORK_CATEGORY_EVENT, onPick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener(WORK_CATEGORY_EVENT, onPick);
+    };
+  }, []);
 
   const visible = useMemo(() => getProjectsByCategory(active), [active]);
 
@@ -31,7 +51,10 @@ export function WorkGallery() {
               <li key={category}>
                 <button
                   type="button"
-                  onClick={() => setActive(category)}
+                  onClick={() => {
+                    setActive(category);
+                    window.history.replaceState(null, "", `#${categoryHash(category)}`);
+                  }}
                   aria-pressed={isActive}
                   className={cn(
                     // Figma shows Helvetica Bold 20px; dialed the weight back to
