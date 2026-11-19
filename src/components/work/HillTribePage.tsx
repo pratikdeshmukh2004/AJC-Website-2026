@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy, useExpandReflow } from "@/components/work/ReadMoreCopy";
 import { assetPath, cn, u } from "@/lib/utils";
@@ -90,8 +89,6 @@ export function HillTribePage() {
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), same as About/home */}
-      <HeroHeader menuOnly />
 
       <div className="relative w-full" style={{ height: u(12757 + totalShift) }}>
         {/* ============ HERO ============ */}

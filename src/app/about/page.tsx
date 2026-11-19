@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { BandDots } from "@/components/home/BandDots";
 import { assetPath, u } from "@/lib/utils";
 
@@ -76,8 +75,6 @@ const DOT_TOPS = [5883, 6966, 8049, 9132, 10215, 11298, 12255, 13356].map(
 export default function AboutPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] bg-[#f8f7f2] [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (APEKSHA JAIN · AJC · menu), same as the home hero */}
-      <HeroHeader menuOnly />
 
       {/* ---- Top slice: Figma y 0..2397 (tops unchanged) ---- */}
       <div className="relative w-full h-[calc(2397*var(--u))]">

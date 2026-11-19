@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { HeroHeader } from "@/components/home/HeroHeader";
 
 /**
  * Layout for long-form legal copy (Terms of Use, Privacy Policy).
@@ -19,7 +18,6 @@ import { HeroHeader } from "@/components/home/HeroHeader";
 export function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="relative min-h-screen bg-[#f8f7f2]">
-      <HeroHeader tone="dark" />
 
       <main className="font-helvetica-regular mx-auto w-full max-w-[1088px] px-6 pt-[clamp(9rem,23vw,447px)] pb-[clamp(6rem,10vw,200px)] md:w-[56.67vw] md:px-0">
         <h1 className="font-cormorant text-taupe text-[clamp(2.25rem,3.23vw,62px)] leading-[1.15] tracking-[-0.06em] md:leading-[1.53]">

@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
 import { assetPath, cn, u } from "@/lib/utils";
@@ -200,8 +199,6 @@ export function AssamBengalNavigationPage() {
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), same as About/home */}
-      <HeroHeader menuOnly />
 
       {/* Canvas ends at the "Alchi Kitchen" label (y28011) plus breathing room. */}
       <div className="relative h-[calc(28250*var(--u))] w-full">

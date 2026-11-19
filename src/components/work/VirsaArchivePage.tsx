@@ -1,6 +1,5 @@
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { VirsaExpandableIntro } from "@/components/work/VirsaExpandableIntro";
 import {
   VirsaExperienceCarousel,
@@ -220,8 +219,6 @@ const INTRO = [
 export function VirsaArchivePage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), as on the other project pages */}
-      <HeroHeader menuOnly />
 
       {/* ============ HERO + INTRO (Figma y 0–1991) ============ */}
       <section className="relative" style={{ minHeight: u(SPLIT) }}>
