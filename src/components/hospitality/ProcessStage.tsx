@@ -2,7 +2,6 @@
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
-import { StreamText } from "@/components/ui/StreamText";
 import { at, cn, u } from "@/lib/utils";
 
 export type ProcessStageProps = {
@@ -59,7 +58,7 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
           )}
           style={open ? undefined : { maxHeight: `${lines}lh` }}
         >
-          <StreamText enabled={open}>{children}</StreamText>
+          {children}
         </p>
         {open ? null : (
           // Canvas only: the design's wash is a 523 x 62 cream rectangle at 68%.
