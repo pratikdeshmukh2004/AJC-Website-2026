@@ -18,6 +18,7 @@ import { LahekeCafePage } from "@/components/work/LahekeCafePage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
 import { SilkRouteAtelierPage } from "@/components/work/SilkRouteAtelierPage";
 import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
+import { VirsaExperiencesPage } from "@/components/work/VirsaExperiencesPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
@@ -38,6 +39,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "haveli-experiences": HaveliExperiencesPage, // AJC-22
   "neemrana-hotels": NeemranaHotelsPage, // AJC-23
   "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
+  "virsa-experiences": VirsaExperiencesPage, // AJC-21
   "alchi-kitchen": AlchiKitchenPage, // AJC-19
   "balti-kitchen": BaltiKitchenPage, // AJC-30
   "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
