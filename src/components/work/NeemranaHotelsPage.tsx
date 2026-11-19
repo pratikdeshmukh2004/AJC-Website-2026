@@ -1,6 +1,5 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { assetPath, u } from "@/lib/utils";
 
 /*
@@ -126,8 +125,6 @@ function PressLogo({
 export function NeemranaHotelsPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), same as About/home */}
-      <HeroHeader menuOnly />
 
       {/* Canvas height ends at the "Ranjit's Svaasa" label (y4915) plus breathing room. */}
       <div className="relative h-[calc(5150*var(--u))] w-full">

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { VirsaExpandableIntro } from "@/components/work/VirsaExpandableIntro";
 import { assetPath } from "@/lib/utils";
@@ -29,7 +28,6 @@ const IMG = assetPath("/images/projects/the-silk-route-atelier");
 export function SilkRouteAtelierPage() {
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-      <HeroHeader menuOnly />
 
       {/* ============ A. HERO + INTRO (Figma y 0–2018) ============ */}
       <section className="relative h-[calc(2018*var(--u))]">

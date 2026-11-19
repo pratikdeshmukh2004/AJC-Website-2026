@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { AudioToggle } from "@/components/work/AudioToggle";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
@@ -72,7 +71,6 @@ export function RanjitsSvaasaPage() {
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-      <HeroHeader menuOnly />
 
       {track && (
         <audio

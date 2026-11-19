@@ -1,7 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { AlchiIllustrationCycle } from "@/components/work/AlchiIllustrationCycle";
 import { VirsaExpandableIntro } from "@/components/work/VirsaExpandableIntro";
 import { assetPath, at, cn, u } from "@/lib/utils";
@@ -325,8 +324,6 @@ const SWATCHES_BRASS: [number, number, string][] = [
 export function AlchiKitchenPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), as on the other project pages */}
-      <HeroHeader menuOnly />
 
       {/* ============ A. HERO + INTRO (Figma y 0–1962) ============ */}
       <section className="relative flex flex-col gap-8 xl:block xl:min-h-[calc(1962*var(--u))] xl:gap-0">

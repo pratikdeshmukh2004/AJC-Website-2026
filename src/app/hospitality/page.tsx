@@ -3,7 +3,6 @@ import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { AjcLogo, ApekshaJainWordmark, ScriptCycle } from "@/components/brand";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { EnquiryForm } from "@/components/hospitality/EnquiryForm";
 import { ProcessStage } from "@/components/hospitality/ProcessStage";
 import { WhatWeDo } from "@/components/hospitality/WhatWeDo";
@@ -130,8 +129,6 @@ export default function HospitalityPage() {
           </p>
         </section>
 
-        {/* Shared overlay chrome (Apeksha Jain · AJC · menu), same as Philosophy. */}
-        <HeroHeader />
 
         {/* ---- Who We Are: three columns at x 209 / 753 / 1266, y 1338 ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">

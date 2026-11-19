@@ -2,7 +2,6 @@
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, at, cn } from "@/lib/utils";
@@ -84,8 +83,6 @@ export function LaheLifePage() {
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), same as About/home */}
-      <HeroHeader menuOnly />
 
       <div className="relative flex flex-col gap-6 pb-20 xl:block xl:h-[calc(11500*var(--u))] xl:pb-0">
         {/* ============ HERO (1920 x 1104) ============ */}

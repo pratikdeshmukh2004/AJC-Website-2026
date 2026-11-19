@@ -57,7 +57,8 @@ Read this before changing code. Match what already exists; do not introduce new 
 - Server components by default. Add `"use client"` only for state, effects or event
   handlers. A page that exports `metadata` stays a server component.
 - Reuse before creating. Search `src/components` first. Existing pieces include:
-  `HeroHeader` (+ `MenuPanel`), `Footer` (rendered in the root layout, hides itself on
+  `SiteHeader` (+ `MenuPanel`; the single transparent header, rendered once in the root
+  layout, so pages never render their own), `Footer` (root layout, hides itself on
   `/`), `ScriptCycle`, the brand SVGs in `@/components/brand`, `OptimizedImage`,
   `ReadMoreCopy`. Do not make a page-specific copy of one of these.
 - If the same piece of UI appears more than once (on one page or across pages) and no
@@ -94,6 +95,9 @@ Read this before changing code. Match what already exists; do not introduce new 
 - Project case studies: build the page in `src/components/work/` and register its
   slug in `CASE_STUDIES` in `src/app/work/[slug]/page.tsx`. Do not add `if (slug === ...)`
   chains. Unregistered slugs fall back to the generic scaffold.
+- The header is global (`SiteHeader` in the root layout); do not add a header to a page.
+  Its marks are white by default. A page on a paper/cream background must be added to the
+  taupe route list in `SiteHeader`, or its header will be white on cream.
 - Project data lives in `src/config/projects.ts`; site info in `src/config/site.ts`.
   Do not import page components into config files (the gallery is a client bundle).
 

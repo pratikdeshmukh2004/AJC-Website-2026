@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { WorkHeader } from "@/components/work/WorkHeader";
 import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
 import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
 import { FarmersHouseCafePage } from "@/components/work/FarmersHouseCafePage";
@@ -84,8 +83,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
  * Project case-study page at /work/<slug> — opened from a card on Our Work.
  *
  * The Figma file has no dedicated frame for these project pages yet (see
- * AJC-22), so this is an on-brand editorial scaffold: the design-specific
- * WorkHeader chrome, a back link to Our Work, the project's hero image, its
+ * AJC-22), so this is an on-brand editorial scaffold: a back link to Our Work, the project's hero image, its
  * serif title, category tags, and the narrative from the portfolio data.
  * The detailed project sections drop in here once the design lands.
  */
@@ -97,15 +95,10 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const CaseStudy = CASE_STUDIES[slug];
   if (CaseStudy) return <CaseStudy />;
 
-  // Assam Bengal Navigation case study (AJC-24), from its Figma frame.
-  if (slug === "assam-bengal-navigation") {
-    return <AssamBengalNavigationPage />;
-  }
-
+  // The site header floats over the top; the padding keeps the room the old
+  // in-flow header took.
   return (
-    <div className="bg-cream flex min-h-screen flex-col">
-      <WorkHeader />
-
+    <div className="bg-cream flex min-h-screen flex-col pt-[6.75rem] md:pt-[9.75rem]">
       <main className="flex-1">
         <Container className="pt-16 pb-16 md:pt-28 md:pb-24">
           {/* Back to the portfolio grid */}

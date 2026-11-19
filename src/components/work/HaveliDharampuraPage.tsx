@@ -3,7 +3,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { HaveliIntro } from "@/components/work/HaveliIntro";
 import { VirsaFilmPlayer } from "@/components/work/VirsaFilmPlayer";
 import { assetPath, u } from "@/lib/utils";
@@ -131,8 +130,6 @@ export function HaveliDharampuraPage() {
 
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-      {/* Overlay chrome (menu toggle), same as About/home */}
-      <HeroHeader menuOnly />
 
       {/* Canvas height trimmed to the last element (Team / Next Project)
           plus breathing room. */}
