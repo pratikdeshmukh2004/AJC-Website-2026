@@ -2,7 +2,6 @@
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
-import { StreamText } from "@/components/ui/StreamText";
 import { cn, u } from "@/lib/utils";
 
 /*
@@ -80,7 +79,7 @@ export function VirsaExpandableIntro({
               : "max-h-[17em] overflow-hidden xl:h-(--ty) xl:max-h-none",
           )}
         >
-          <StreamText enabled={expanded}>{expanded ? full : preview}</StreamText>
+          {expanded ? full : preview}
           {expanded ? null : (
             <div
               aria-hidden
@@ -114,7 +113,7 @@ export function VirsaExpandableIntro({
         // Collapsed: the copy box ends where the design puts "Read more".
         style={expanded ? { paddingBottom: u(32) } : { height: u(toggle.y) }}
       >
-        <StreamText enabled={expanded}>{expanded ? full : preview}</StreamText>
+        {expanded ? full : preview}
         {expanded ? null : (
           <div
             aria-hidden

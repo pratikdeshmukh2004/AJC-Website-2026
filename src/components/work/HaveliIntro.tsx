@@ -2,7 +2,6 @@
 
 import { forwardRef } from "react";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
-import { StreamText } from "@/components/ui/StreamText";
 import { u } from "@/lib/utils";
 
 /*
@@ -50,25 +49,21 @@ export const HaveliIntro = forwardRef<HTMLDivElement, Props>(function HaveliIntr
       {expanded ? (
         <>
           <p className="mt-[1em]">
-            <StreamText enabled>
-              We began with a comprehensive photography and videography overhaul, archiving the
-              daily movement of the space through a deeply immersive lens. From the exact emotion a
-              guest experiences upon entering into the courtyard, to the thoughtfully curated
-              heritage rituals, every visual asset was built to showcase the paradox of past and
-              present sharing the same room.
-            </StreamText>
+            We began with a comprehensive photography and videography overhaul, archiving the daily
+            movement of the space through a deeply immersive lens. From the exact emotion a guest
+            experiences upon entering into the courtyard, to the thoughtfully curated heritage
+            rituals, every visual asset was built to showcase the paradox of past and present
+            sharing the same room.
           </p>
           <p className="mt-[1em]">
-            <StreamText enabled>
-              Through our deep dive into the property&rsquo;s identity, we reshaped the visual
-              narrative around Haveli&rsquo;s culinary offerings. The cuisine draws inspiration from
-              two distinct sides of Purani Dilli: the rich, regal Mughlai flavors of Jama Masjid and
-              the vibrant, nostalgic street chaats of Chandni Chowk. We refocused the brand&rsquo;s
-              imagery to spotlight this duality &ndash; positioning the food, curated cocktails, and
-              the royal tables as an essential cultural destination. The result doesn&rsquo;t just
-              document, but invites you into an experience, effortlessly poised between ancestral
-              grandeur and the warmth of a modern welcome.
-            </StreamText>
+            Through our deep dive into the property&rsquo;s identity, we reshaped the visual
+            narrative around Haveli&rsquo;s culinary offerings. The cuisine draws inspiration from
+            two distinct sides of Purani Dilli: the rich, regal Mughlai flavors of Jama Masjid and
+            the vibrant, nostalgic street chaats of Chandni Chowk. We refocused the brand&rsquo;s
+            imagery to spotlight this duality &ndash; positioning the food, curated cocktails, and
+            the royal tables as an essential cultural destination. The result doesn&rsquo;t just
+            document, but invites you into an experience, effortlessly poised between ancestral
+            grandeur and the warmth of a modern welcome.
           </p>
         </>
       ) : (

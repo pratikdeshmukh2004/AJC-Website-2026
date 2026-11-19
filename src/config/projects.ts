@@ -20,6 +20,20 @@ export const workCategories = [
 
 export type WorkCategory = (typeof workCategories)[number];
 
+/** URL hash for a filter (`/our-work#identity-design`), shared by the menu and the gallery. */
+export function categoryHash(category: WorkCategory): string {
+  return category.toLowerCase().replace(/[^a-z]+/g, "-");
+}
+
+/** The filter named by a URL hash; "All Projects" for an empty or unknown hash. */
+export function categoryFromHash(hash: string): WorkCategory {
+  const wanted = hash.replace(/^#/, "");
+  return workCategories.find((c) => categoryHash(c) === wanted) ?? "All Projects";
+}
+
+/** Fired on `window` (detail: the category) when the menu picks a filter while /our-work is open. */
+export const WORK_CATEGORY_EVENT = "ajc:work-category";
+
 /** A single photo with its intrinsic pixel dimensions (drives next/image). */
 export type ProjectImage = {
   /** Path under /public — resolved through next/image (prefix via assetPath). */

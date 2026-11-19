@@ -275,21 +275,6 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
   }
 }
 
-/* ---- Text revealed by "Read more": each word fades in (see StreamText) ----
-   Per-word delays are set inline. `backwards`, not `both`: afterwards the word
-   keeps its own opacity. */
-.ajc-stream {
-  animation: ajc-stream 350ms ease-out backwards;
-}
-@keyframes ajc-stream {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 /* ---- Carousels: slides really move, the old one out and the new one in ----
    Direction and distance come from two custom properties set on the element:
    --slide-from (where the new slide starts) and --slide-to (where the old one

@@ -2,7 +2,6 @@
 
 import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
-import { StreamText } from "@/components/ui/StreamText";
 import { cn } from "@/lib/utils";
 
 /**
@@ -93,7 +92,7 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
     >
       {paragraphs.map((text, i) => (
         <p key={i} className={cn(i > 0 && "mt-[1em]")}>
-          <StreamText enabled={expanded && i >= lead.length}>{text}</StreamText>
+          {text}
         </p>
       ))}
       <button

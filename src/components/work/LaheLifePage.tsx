@@ -5,7 +5,6 @@ import Link from "next/link";
 import { HeroHeader } from "@/components/home/HeroHeader";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
-import { StreamText } from "@/components/ui/StreamText";
 import { assetPath, at, cn } from "@/lib/utils";
 
 /*
@@ -139,20 +138,16 @@ export function LaheLifePage() {
             {introExpanded && (
               <>
                 <p>
-                  <StreamText enabled>
-                    This culture of presence is carried forward by Jungle Travels India through
-                    decades of regional knowledge, and preserved by Lahé Looms through a
-                    contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
-                    rhythm is brought into an urban setting, bridging the local supply chain with a
-                    refined, considered aesthetic.
-                  </StreamText>
+                  This culture of presence is carried forward by Jungle Travels India through
+                  decades of regional knowledge, and preserved by Lahé Looms through a contemporary
+                  approach to sustainable craft. In spaces like Laheké Cafe, this rhythm is brought
+                  into an urban setting, bridging the local supply chain with a refined, considered
+                  aesthetic.
                 </p>
                 <p>
-                  <StreamText enabled>
-                    The best experiences of Lahé are the ones that are rooted; they offer a way of
-                    experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
-                    place.
-                  </StreamText>
+                  The best experiences of Lahé are the ones that are rooted; they offer a way of
+                  experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
+                  place.
                 </p>
               </>
             )}
