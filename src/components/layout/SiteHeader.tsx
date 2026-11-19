@@ -14,7 +14,9 @@ import { cn, fig } from "@/lib/utils";
     left   "APEKSHA JAIN" wordmark (x101, 42px tall)
     centre "AJC" logo (42px tall)
     right  two-circle menu toggle, hollow + filled (49px each, 10px apart, ends x1811)
-  Sizes use fig(px): exact at 1920px wide, scaled down below it.
+  Sizes use fig(px): exact at 1920px wide, scaled down below it. The marks are drawn
+  a little smaller than the frame (38px / 45px instead of 42px / 50px) by request;
+  positions and the 141px bar are unchanged.
 
   Rendered once from the root layout, so every page has it, Home included. It
   sits at the top of the page (not fixed) and has no background: the marks are
@@ -60,7 +62,7 @@ export function SiteHeader() {
           <ApekshaJainWordmark
             title="Apeksha Jain"
             className="md:justify-self-start"
-            style={{ height: fig(42, "1rem") }}
+            style={{ height: fig(38, "0.9375rem") }}
           />
 
           <Link
@@ -68,7 +70,7 @@ export function SiteHeader() {
             aria-label={`${siteConfig.name} — home`}
             className="pointer-events-auto flex md:justify-self-center"
           >
-            <AjcLogo style={{ height: fig(42, "1.5rem") }} />
+            <AjcLogo style={{ height: fig(38, "1.375rem") }} />
           </Link>
 
           <button
@@ -78,21 +80,21 @@ export function SiteHeader() {
             aria-expanded={menuOpen}
             aria-label="Open menu"
             className="pointer-events-auto flex cursor-pointer items-center transition-opacity hover:opacity-80 md:justify-self-end"
-            style={{ gap: fig(10, "0.5rem") }}
+            style={{ gap: fig(9, "0.45rem") }}
           >
             <span
               aria-hidden
               className="rounded-full border border-solid border-current"
               style={{
-                width: fig(50, "0.875rem"),
-                height: fig(50, "0.875rem"),
-                borderWidth: fig(3, "1px"),
+                width: fig(45, "0.8125rem"),
+                height: fig(45, "0.8125rem"),
+                borderWidth: fig(2.75, "1px"),
               }}
             />
             <span
               aria-hidden
               className="rounded-full bg-current"
-              style={{ width: fig(50, "0.875rem"), height: fig(50, "0.875rem") }}
+              style={{ width: fig(45, "0.8125rem"), height: fig(45, "0.8125rem") }}
             />
           </button>
         </div>
