@@ -20,6 +20,20 @@ export const workCategories = [
 
 export type WorkCategory = (typeof workCategories)[number];
 
+/** URL hash for a filter (`/our-work#identity-design`), shared by the menu and the gallery. */
+export function categoryHash(category: WorkCategory): string {
+  return category.toLowerCase().replace(/[^a-z]+/g, "-");
+}
+
+/** The filter named by a URL hash; "All Projects" for an empty or unknown hash. */
+export function categoryFromHash(hash: string): WorkCategory {
+  const wanted = hash.replace(/^#/, "");
+  return workCategories.find((c) => categoryHash(c) === wanted) ?? "All Projects";
+}
+
+/** Fired on `window` (detail: the category) when the menu picks a filter while /our-work is open. */
+export const WORK_CATEGORY_EVENT = "ajc:work-category";
+
 /** A single photo with its intrinsic pixel dimensions (drives next/image). */
 export type ProjectImage = {
   /** Path under /public — resolved through next/image (prefix via assetPath). */
@@ -27,6 +41,11 @@ export type ProjectImage = {
   /** Intrinsic pixel size, so next/image reserves the right ratio (uncropped). */
   width: number;
   height: number;
+  /**
+   * Page this photo opens from the Our Work card, when it isn't the project's
+   * own /work/<slug> page. `title` names that page for screen readers.
+   */
+  link?: { href: string; title: string };
 };
 
 export type Project = {
@@ -49,7 +68,15 @@ export const projects: Project[] = [
     description:
       "Launch identity for a boutique luxury hotel in India. Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and royal legacy of Baltistan.",
     images: {
-      left: { src: "/images/our_work/1-left.png", width: 851, height: 880 },
+      // Per AJC-16: the left photo opens the visual-archive page (Figma node
+      // 2823:865); the right photo and the text open /work/virsa-baltistan
+      // (Figma node 2823:1389).
+      left: {
+        src: "/images/our_work/1-left.png",
+        width: 851,
+        height: 880,
+        link: { href: "/work/virsa-baltistan/archive", title: "Archive of Virsa Baltistan" },
+      },
       right: { src: "/images/our_work/1-right.png", width: 850, height: 880 },
     },
   },
@@ -193,6 +220,34 @@ export const projects: Project[] = [
       right: { src: "/images/our_work/15-right.png", width: 850, height: 905 },
     },
   },
+];
+
+/** A track in a case-study music player. `cover` is a path under /public. */
+export type PlaylistTrack = {
+  title: string;
+  artist: string;
+  duration: string;
+  cover?: string;
+};
+
+/**
+ * Farmers' House Cafe "Music Curation" playlist (Figma 2823:1543, AJC-25).
+ * Only the first album cover was supplied; the others fall back to a typeset
+ * sleeve until their art is exported. Full playlist:
+ * https://open.spotify.com/playlist/41rdexJ91isMLneg1KbX3F
+ */
+export const farmersHousePlaylist: PlaylistTrack[] = [
+  {
+    title: "People Talking",
+    artist: "Robert John Ardiff",
+    duration: "03:54",
+    cover: "/images/projects/farmers-house-cafe/cover-people-talking.png",
+  },
+  { title: "Vagabond", artist: "Caamp", duration: "02:09" },
+  { title: "Blackbird", artist: "The Beatles", duration: "02:18" },
+  { title: "Cheek to Cheek", artist: "Fred Astaire", duration: "03:18" },
+  { title: "Sunrise", artist: "Norah Jones", duration: "03:21" },
+  { title: "Like a River", artist: "Ocie Elliott", duration: "03:35" },
 ];
 
 /** Look up a single project by its slug. Returns undefined when not found. */

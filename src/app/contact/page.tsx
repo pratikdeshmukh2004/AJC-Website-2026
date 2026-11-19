@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { AjcLogo, ApekshaJainWordmark, ScriptCycle } from "@/components/brand";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { fig } from "@/lib/utils";
@@ -27,7 +26,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-[#f8f7f2]">
-      <HeroHeader tone="dark" />
 
       <main>
         {/* Intro: chair, headline, eyebrow */}

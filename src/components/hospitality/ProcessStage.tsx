@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { at, cn, u } from "@/lib/utils";
 
 export type ProcessStageProps = {
@@ -38,7 +39,7 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
   const bodyId = useId();
 
   return (
-    <div className="xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y)" style={at(g.x, g.y)}>
+    <div className="xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0" style={at(g.x, g.y)}>
       <h3 className="font-cormorant text-taupe text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))] xl:whitespace-nowrap">
         {title}
       </h3>
@@ -76,12 +77,12 @@ export function ProcessStage({ title, children, lines, geometry: g }: ProcessSta
         onClick={() => setOpen((o) => !o)}
         className={cn(
           "font-helvetica-ui text-[0.8125rem] leading-[1.6] tracking-[0.01em] uppercase xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]",
-          "mt-3 block cursor-pointer border-0 bg-transparent p-0 text-left text-[#8b7f73] opacity-[0.79] transition-opacity hover:opacity-100",
+          "group/readmore mt-3 block cursor-pointer border-0 bg-transparent p-0 text-left text-[#8b7f73] opacity-[0.79] transition-opacity hover:opacity-100",
           "xl:mt-(--gap) xl:ml-(--dx)",
         )}
         style={vars({ "--gap": u(g.more.gap), "--dx": u(g.more.dx) })}
       >
-        {open ? "Read less" : "Read more"}
+        <ReadMoreLabel expanded={open} />
       </button>
     </div>
   );

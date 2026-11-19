@@ -7,6 +7,8 @@ type Stage = {
   label: string;
   /** Pinned lines (as broken in the design) or free text that wraps. */
   description?: string | string[];
+  /** Optional second paragraph under the description (Overview). */
+  detail?: string;
   services: string[];
 };
 
@@ -17,14 +19,11 @@ type Stage = {
 const STAGES: Stage[] = [
   {
     label: "Overview",
-    // PLACEHOLDER: the ticket has no Overview copy yet, so this indexes the stages.
-    services: [
-      "Launch Identity System",
-      "Guest Journey Foundation",
-      "Visual Direction",
-      "Digital & Physical Assets",
-      "Global Launch Strategy",
-    ],
+    description:
+      "We partner with founders, and creative directors of small luxury hotels to build the launch, or re-brand fabric across every phase of the property’s life cycle.",
+    detail:
+      "We step into the critical window after physical construction ends and before operational launch begins – defining the core narrative, digital and design identity, global perception, and guest experience journey to ensure memorable guest delight while maximising long-term asset valuation.",
+    services: [],
   },
   {
     label: "Launch Identity System",
@@ -32,29 +31,32 @@ const STAGES: Stage[] = [
       "Establishing the foundational narrative",
       "and strategic positioning of the property.",
     ],
-    services: ["Naming", "Hotel Visual Identity", "Storytelling & Narrative"],
-  },
-  {
-    label: "Guest Journey Foundation",
-    description: "AJC builds within the local community, with in-house culinary and GEM teams.",
     services: [
-      "Guest Arrival to Departure Rituals & Journey",
-      "Flagship Experience Program Design",
-      "F&B Curation",
+      "Positioning",
+      "Name & Nomenclature",
+      "Hotel Visual Identity",
+      "Storytelling & Narrative",
     ],
   },
   {
+    label: "Guest Journey Foundation",
+    description: "Designing the emotional, culinary, and sensory touch points across the stay.",
+    services: ["Arrival to Departure Journey", "Flagship Experiences Design", "F&B Curation"],
+  },
+  {
     label: "Visual Direction",
-    description: "AJC matches the right talent within the required style and approach of a hotel.",
-    services: ["Creative Direction & Visual Language", "Photography", "Film & Video Production"],
+    description: "Setting the creative standard across lens, visual storytelling, and media.",
+    services: ["Creative Direction", "Photography", "Film Production"],
   },
   {
     label: "Digital & Physical assets",
+    description: "Bringing the brand to life across digital platforms and physical touch points.",
     services: ["Flagship Website", "Communication Assets", "Print Support"],
   },
   {
     label: "Global Launch Strategy",
-    services: ["Social Media Strategy and Setup", "PR Guidelines & Direction", "Launch Experience"],
+    description: "Positioning and unveiling the property to a curated international audience.",
+    services: ["Social Media Strategy", "PR Guidelines & Direction", "Launch Experience"],
   },
 ];
 const DEFAULT_STAGE = 1;
@@ -99,7 +101,7 @@ export function WhatWeDo() {
         role="tablist"
         aria-orientation="vertical"
         aria-label="What we do"
-        className="mt-8 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+        className="mt-8 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w)"
         style={at(209, 2254, 523)}
       >
         {STAGES.map((s, i) => {
@@ -120,7 +122,7 @@ export function WhatWeDo() {
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
                 // Uppercase list type (Helvetica 27 / +4%, taupe) on the design's 44px row pitch.
-                "font-helvetica-ui text-taupe text-[0.875rem] tracking-[0.04em] uppercase xl:text-[length:calc(27*var(--u))] leading-[1.9] xl:leading-[calc(44*var(--u))]",
+                "font-helvetica-ui text-taupe text-[0.875rem] leading-[1.9] tracking-[0.04em] uppercase xl:text-[length:calc(27*var(--u))] xl:leading-[calc(44*var(--u))]",
                 "block w-full cursor-pointer border-0 bg-transparent p-0 text-left transition-opacity",
                 selected ? "opacity-100" : "opacity-[0.59] hover:opacity-90",
               )}
@@ -136,7 +138,7 @@ export function WhatWeDo() {
         id={panelId}
         aria-labelledby={tabId(active)}
         tabIndex={0}
-        className="mt-8 min-h-48 xl:min-h-0 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+        className="mt-8 min-h-48 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:min-h-0 xl:w-(--w)"
         style={at(1159, 2254, 564)}
       >
         {typeof stage.description === "string" ? (
@@ -152,6 +154,11 @@ export function WhatWeDo() {
             ))}
           </p>
         ) : null}
+        {stage.detail && (
+          <p className="font-helvetica-ui text-sage mt-4 text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:mt-[calc(25*var(--u))] xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]">
+            {stage.detail}
+          </p>
+        )}
         <ul
           className={cn(
             "list-none p-0",
@@ -164,7 +171,7 @@ export function WhatWeDo() {
             // items, while a long item that wraps stays visibly one item.
             <li
               key={service}
-              className="font-helvetica-ui text-taupe text-[0.875rem] tracking-[0.04em] uppercase xl:text-[length:calc(27*var(--u))] py-1 leading-[1.4] opacity-[0.59] xl:py-[calc(7*var(--u))] xl:leading-[calc(30*var(--u))]"
+              className="font-helvetica-ui text-taupe py-1 text-[0.875rem] leading-[1.4] tracking-[0.04em] uppercase opacity-[0.59] xl:py-[calc(7*var(--u))] xl:text-[length:calc(27*var(--u))] xl:leading-[calc(30*var(--u))]"
             >
               {service}
             </li>

@@ -4,77 +4,65 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AjcLogo, ApekshaJainWordmark, ScriptCycle } from "@/components/brand";
 import { siteConfig } from "@/config/site";
-import { fig } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 /*
-  Site footer — Figma: Footer (node 3279:1082), 1920 x 649.
-  Sizes use fig(px): exact at 1920px wide, scaled down below it.
-    - band #9b9484; headings, body and icons #f8f7f2; links #e2dfd8
-    - left column x239: cycling script, Apeksha Jain + AJC marks, tagline
-    - right columns x1232 (Discover) and x1456 (Resources), social icons
+  Site footer, two layouts in one DOM.
+    - md and up: Figma Footer (node 3279:1082), 1920 x 649. Values are
+      `clamp(min, px / 19.2 vw, px)` written as classes: exact at 1920px wide,
+      scaled down below it.
+        band #9b9484; headings, body and icons #f8f7f2; links #e2dfd8
+        left column x239: cycling script, Apeksha Jain + AJC marks, tagline
+        right columns x1232 (Discover) and x1456 (Resources), social icons
+    - below md: Figma Footer mobile (node 4101:980), 390 x 679. One centred
+      column: marks row (wordmark | script | AJC), the two link groups (label
+      left, links from x199), social icons, tagline. Horizontal measures are in
+      vw so it holds from 320px to 430px; type and vertical rhythm are fixed px.
+  The left/right wrappers and the marks row are `display: contents` below md so
+  their children can sit on the mobile grid in the Figma order.
   Rendered from the root layout on every page except Home, whose full-screen
   film has no footer.
 */
-
-const CREAM = "#f8f7f2";
-const LINK = "#e2dfd8";
-
-/** 20px Helvetica on a 41px line, +2% tracking (all footer text). */
-const text = {
-  fontSize: fig(20, "0.875rem"),
-  lineHeight: fig(41, "1.9rem"),
-  letterSpacing: "0.02em",
-};
-
 export function Footer() {
   const pathname = usePathname();
   if (pathname === "/") return null;
 
   return (
-    <footer
-      className="bg-[#9b9484] uppercase"
-      style={{ color: CREAM, paddingBlock: `${fig(200, "3.5rem")} ${fig(117, "3rem")}` }}
-    >
-      <div
-        className="mx-auto flex max-w-[1920px] flex-col gap-14 md:flex-row md:justify-between md:gap-10"
-        style={{ paddingLeft: fig(237, "1.5rem"), paddingRight: fig(234, "1.5rem") }}
-      >
+    <footer className="bg-[#9b9484] pt-[calc(70*var(--u))] pb-[calc(55*var(--u))] text-[#f8f7f2] uppercase [--u:clamp(0.95px,calc(100vw/390),1.5px)] md:pt-[clamp(3.5rem,10.4167vw,200px)] md:pb-[clamp(3rem,6.0938vw,117px)]">
+      <div className="mx-auto grid max-w-[1920px] grid-cols-[1fr_auto_1fr] items-center px-[11vw] md:flex md:items-stretch md:justify-between md:gap-10 md:pr-[clamp(1.5rem,12.1875vw,234px)] md:pl-[clamp(1.5rem,12.3438vw,237px)]">
         {/* Left: marks and tagline */}
-        <div>
-          {/* Canvas starts 2.5px above the headings' line box, as in Figma. */}
+        <div className="contents md:block">
+          {/* Desktop canvas starts 2.5px above the headings' line box, as in Figma. */}
           <ScriptCycle
-            align="start"
-            style={{ width: fig(228, "8.5rem"), marginTop: fig(-3, "-3px") }}
+            align="start-md"
+            intervalMs={1500}
+            className="col-start-2 row-start-1 w-[min(calc(96*var(--u)),26vw)] md:-mt-[3px] md:w-[clamp(8.5rem,11.875vw,228px)]"
           />
-          <div
-            aria-hidden
-            className="flex items-center"
-            style={{ marginTop: fig(50, "1.25rem"), gap: fig(113, "2.5rem") }}
-          >
-            <ApekshaJainWordmark style={{ height: fig(19, "0.8rem") }} />
-            <AjcLogo style={{ height: fig(21, "0.9rem") }} />
+          <div className="contents md:mt-[clamp(1.25rem,2.6042vw,50px)] md:flex md:items-center md:gap-[clamp(2.5rem,5.8854vw,113px)]">
+            <ApekshaJainWordmark className="col-start-1 row-start-1 h-[calc(9*var(--u))] justify-self-start md:h-[clamp(0.8rem,0.9896vw,19px)]" />
+            <AjcLogo className="col-start-3 row-start-1 mr-[2.3vw] h-[calc(11*var(--u))] justify-self-end md:mr-0 md:h-[clamp(0.9rem,1.0938vw,21px)]" />
           </div>
-          <p className="font-helvetica-regular" style={{ ...text, marginTop: fig(80, "1.75rem") }}>
+          <p className="font-helvetica-regular col-span-3 row-start-4 -mx-[4vw] mt-[calc(49*var(--u))] text-center text-[length:calc(11*var(--u))] leading-[calc(22*var(--u))] tracking-[0.02em] md:mx-0 md:mt-[clamp(1.75rem,4.1667vw,80px)] md:text-left md:text-[length:clamp(0.875rem,1.0417vw,20px)] md:leading-[clamp(1.9rem,2.1354vw,41px)]">
             A creative consultancy based in India
             <br />© Apeksha Jain {new Date().getFullYear()}
           </p>
         </div>
 
         {/* Right: link columns and social icons */}
-        <div>
-          <nav aria-label="Footer" className="font-helvetica flex font-bold">
+        <div className="contents md:block">
+          <nav
+            aria-label="Footer"
+            className="font-helvetica col-span-3 row-start-2 mt-[calc(91*var(--u))] flex flex-col font-bold md:mt-0 md:flex-row"
+          >
             <FooterColumn
               title="Discover"
               links={siteConfig.footer.discover}
-              width={fig(224, "9rem")}
+              className="md:w-[clamp(9rem,11.6667vw,224px)]"
             />
             <FooterColumn title="Resources" links={siteConfig.footer.resources} />
           </nav>
 
-          <ul
-            className="flex items-center"
-            style={{ marginTop: fig(44, "1.25rem"), gap: fig(38, "1.25rem") }}
-          >
+          <ul className="col-span-3 row-start-3 mt-[calc(68*var(--u))] flex items-center justify-center gap-[calc(18*var(--u))] md:mt-[clamp(1.25rem,2.2917vw,44px)] md:justify-start md:gap-[clamp(1.25rem,1.9792vw,38px)]">
             <SocialLink href={siteConfig.social.linkedin} label="Apeksha Jain on LinkedIn">
               <LinkedInIcon />
             </SocialLink>
@@ -91,28 +79,34 @@ export function Footer() {
   );
 }
 
+/**
+ * One link group. Mobile: the label on the left and the links in a column
+ * starting at x199 (40vw of 390), groups 51px apart. Desktop: the label stacked
+ * above its links. Line metrics sit on each `li` so every row is a full line.
+ */
 function FooterColumn({
   title,
   links,
-  width,
+  className,
 }: {
   title: string;
   links: readonly { label: string; href: string }[];
-  width?: string;
+  className?: string;
 }) {
   return (
-    <div style={{ width }}>
-      <h2 className="font-helvetica font-bold" style={text}>
+    <div className={cn("mt-[calc(51*var(--u))] flex first:mt-0 md:mt-0 md:block", className)}>
+      <h2 className="font-helvetica w-[40vw] shrink-0 text-[length:calc(12*var(--u))] leading-[calc(25*var(--u))] font-bold tracking-[0.02em] md:w-auto md:text-[length:clamp(0.875rem,1.0417vw,20px)] md:leading-[clamp(1.9rem,2.1354vw,41px)]">
         {title}
       </h2>
-      <ul style={{ marginTop: fig(45, "1rem") }}>
+      <ul className="md:mt-[clamp(1rem,2.3438vw,45px)]">
         {links.map((l) => (
-          // Line metrics on the <li> so each row is the full 41px line.
-          <li key={l.href} style={text}>
+          <li
+            key={l.href}
+            className="text-[length:calc(12*var(--u))] leading-[calc(25*var(--u))] tracking-[0.02em] md:text-[length:clamp(0.875rem,1.0417vw,20px)] md:leading-[clamp(1.9rem,2.1354vw,41px)]"
+          >
             <Link
               href={l.href}
-              className="whitespace-nowrap transition-colors hover:text-[#f8f7f2]"
-              style={{ color: LINK }}
+              className="whitespace-nowrap text-[#e2dfd8] transition-colors hover:text-[#f8f7f2]"
             >
               {l.label}
             </Link>
@@ -139,8 +133,7 @@ function SocialLink({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="block transition-opacity hover:opacity-80"
-        style={{ width: fig(38, "1.75rem"), height: fig(38, "1.75rem") }}
+        className="block size-[calc(18*var(--u))] transition-opacity hover:opacity-80 md:size-[clamp(1.75rem,1.9792vw,38px)]"
       >
         {children}
       </a>

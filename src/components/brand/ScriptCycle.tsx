@@ -35,7 +35,8 @@ export const BRAND_SCRIPTS: BrandScript[] = [
  * Swaps the primary mark and script signatures every `intervalMs` (Figma: "The
  * scripts will change as a GIF with a gap of 0.5 seconds"). Size it with a
  * width class; `align="start"` lines every mark up on its left edge instead of
- * centring it (e.g. in the footer).
+ * centring it (e.g. in the footer), and `align="start-md"` does that from the
+ * `md` breakpoint up while staying centred below it.
  *
  * Purely decorative: the name is already in the page header, so the whole
  * block is hidden from assistive tech. With a single script, or when the
@@ -50,7 +51,7 @@ export function ScriptCycle({
 }: {
   scripts?: BrandScript[];
   intervalMs?: number;
-  align?: "center" | "start";
+  align?: "center" | "start" | "start-md";
   className?: string;
   style?: React.CSSProperties;
 }) {
@@ -76,14 +77,16 @@ export function ScriptCycle({
             "h-auto w-full max-w-none",
             i === 0 ? "relative" : "absolute inset-0",
             i === index ? "opacity-100" : "opacity-0",
+            align === "start" && "translate-x-(--script-shift)",
+            align === "start-md" && "md:translate-x-(--script-shift)",
           )}
           style={
-            align === "start"
-              ? // Shift left by the empty margin either side of the ink.
-                {
-                  translate: `-${(((CANVAS_WIDTH - inkWidth) / 2 / CANVAS_WIDTH) * 100).toFixed(2)}%`,
-                }
-              : undefined
+            align === "center"
+              ? undefined
+              : ({
+                  // Shift left by the empty margin either side of the ink.
+                  "--script-shift": `-${(((CANVAS_WIDTH - inkWidth) / 2 / CANVAS_WIDTH) * 100).toFixed(2)}%`,
+                } as React.CSSProperties)
           }
         />
       ))}

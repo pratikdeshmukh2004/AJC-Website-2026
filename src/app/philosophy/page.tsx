@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { HeroHeader } from "@/components/home/HeroHeader";
 import { CopyEmail } from "@/components/philosophy/CopyEmail";
 import { PhotoCarousel } from "@/components/philosophy/PhotoCarousel";
 import { StagedPanel, type Stage } from "@/components/philosophy/StagedPanel";
@@ -121,7 +120,6 @@ const STAGES: Stage[] = [
 export default function PhilosophyPage() {
   return (
     <div className="relative bg-[#f8f7f2]">
-      <HeroHeader />
 
       <main>
         {/* Hero: valley photo with the quote */}

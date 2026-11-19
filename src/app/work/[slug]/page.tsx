@@ -1,16 +1,54 @@
 import type { Metadata } from "next";
+import type { ComponentType } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { WorkHeader } from "@/components/work/WorkHeader";
+import { AlchiKitchenPage } from "@/components/work/AlchiKitchenPage";
+import { BaltiKitchenPage } from "@/components/work/BaltiKitchenPage";
+import { FarmersHouseCafePage } from "@/components/work/FarmersHouseCafePage";
+import { HaveliDharampuraPage } from "@/components/work/HaveliDharampuraPage";
 import { HaveliExperiencesPage } from "@/components/work/HaveliExperiencesPage";
+import { HillTribePage } from "@/components/work/HillTribePage";
+import { AssamBengalNavigationPage } from "@/components/work/AssamBengalNavigationPage";
+import { RanjitsSvaasaPage } from "@/components/work/RanjitsSvaasaPage";
+import { LaheLifePage } from "@/components/work/LaheLifePage";
+import { LahekeCafePage } from "@/components/work/LahekeCafePage";
 import { NeemranaHotelsPage } from "@/components/work/NeemranaHotelsPage";
+import { SilkRouteAtelierPage } from "@/components/work/SilkRouteAtelierPage";
+import { VirsaBaltistanPage } from "@/components/work/VirsaBaltistanPage";
+import { VirsaExperiencesPage } from "@/components/work/VirsaExperiencesPage";
 import { getCategoriesForProject, getProjectBySlug, projects } from "@/config/projects";
 import { optimizedPath } from "@/lib/image-paths";
 import { assetPath } from "@/lib/utils";
 
 type Params = { slug: string };
+
+/**
+ * Projects with a dedicated, pixel-faithful case-study page, keyed by slug.
+ * Any project not listed here falls back to the editorial scaffold below. To
+ * add one: build the page in components/work and register it here.
+ *
+ * Kept in this file rather than config/projects.ts on purpose: that config is
+ * imported by the client-side Our Work gallery, and referencing the page
+ * components there would pull every case study into its bundle.
+ */
+const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
+  "haveli-dharampura": HaveliDharampuraPage, // AJC-17
+  "haveli-experiences": HaveliExperiencesPage, // AJC-22
+  "neemrana-hotels": NeemranaHotelsPage, // AJC-23
+  "virsa-baltistan": VirsaBaltistanPage, // AJC-16 (archive lives at /work/virsa-baltistan/archive)
+  "virsa-experiences": VirsaExperiencesPage, // AJC-21
+  "alchi-kitchen": AlchiKitchenPage, // AJC-19
+  "balti-kitchen": BaltiKitchenPage, // AJC-30
+  "assam-bengal-navigation": AssamBengalNavigationPage, // AJC-24
+  "hill-tribe": HillTribePage, // AJC-27
+  "silk-route-atelier": SilkRouteAtelierPage, // AJC-18
+  "ranjits-svaasa": RanjitsSvaasaPage, // AJC-20
+  "lahe-life": LaheLifePage, // AJC-29
+  "laheke-cafe": LahekeCafePage, // AJC-26
+  "farmers-house-cafe": FarmersHouseCafePage, // AJC-25
+};
 
 /**
  * Pre-render one static page per project at build time. Required under
@@ -20,11 +58,7 @@ export function generateStaticParams(): Params[] {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
@@ -38,8 +72,7 @@ export async function generateMetadata({
       // The original PNGs are pruned from the deployed output; share the WebP.
       images: [
         {
-          url:
-            optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
+          url: optimizedPath(project.images.left.src, 1280) ?? project.images.left.src,
         },
       ],
     },
@@ -50,8 +83,7 @@ export async function generateMetadata({
  * Project case-study page at /work/<slug> — opened from a card on Our Work.
  *
  * The Figma file has no dedicated frame for these project pages yet (see
- * AJC-22), so this is an on-brand editorial scaffold: the design-specific
- * WorkHeader chrome, a back link to Our Work, the project's hero image, its
+ * AJC-22), so this is an on-brand editorial scaffold: a back link to Our Work, the project's hero image, its
  * serif title, category tags, and the narrative from the portfolio data.
  * The detailed project sections drop in here once the design lands.
  */
@@ -60,22 +92,13 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
-  // Haveli Experiences has a full, pixel-faithful case-study design (AJC-22),
-  // reproduced from the Figma project-page frame. Other projects fall back to
-  // the editorial scaffold below until their own designs land.
-  if (slug === "haveli-experiences") {
-    return <HaveliExperiencesPage />;
-  }
+  const CaseStudy = CASE_STUDIES[slug];
+  if (CaseStudy) return <CaseStudy />;
 
-  // Neemrana Hotels case study (AJC-23), from the Figma "Neemrana" frame.
-  if (slug === "neemrana-hotels") {
-    return <NeemranaHotelsPage />;
-  }
-
+  // The site header floats over the top; the padding keeps the room the old
+  // in-flow header took.
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
-      <WorkHeader />
-
+    <div className="bg-cream flex min-h-screen flex-col pt-[6.75rem] md:pt-[9.75rem]">
       <main className="flex-1">
         <Container className="pt-16 pb-16 md:pt-28 md:pb-24">
           {/* Back to the portfolio grid */}

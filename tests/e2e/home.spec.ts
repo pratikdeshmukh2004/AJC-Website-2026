@@ -281,7 +281,7 @@ test.describe("scroll to About", () => {
     expect(new URL(page.url()).pathname).toBe("/");
   });
 
-  test("a firm scroll slides to About, landing at the top with the menu-only header", async ({
+  test("a firm scroll slides to About, landing at the top with the site header", async ({
     page,
   }) => {
     await firmScroll(page);
@@ -298,8 +298,8 @@ test.describe("scroll to About", () => {
     const header = page.locator("header");
     expect((await header.boundingBox())!.y).toBe(0);
     await expect(header.getByRole("button", { name: "Open menu" })).toBeVisible();
-    await expect(header.getByRole("img", { name: "Apeksha Jain" })).toHaveCount(0);
-    await expect(header.getByRole("link", { name: /AJC — home/ })).toHaveCount(0);
+    await expect(header.getByRole("img", { name: "Apeksha Jain" })).toBeVisible();
+    await expect(header.getByRole("link", { name: /AJC — home/ })).toBeVisible();
 
     // About scrolls normally once the lock is released.
     await page.mouse.move(700, 450);

@@ -1,19 +1,46 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  WORK_CATEGORY_EVENT,
+  categoryFromHash,
+  categoryHash,
+  workCategories,
+  type WorkCategory,
+} from "@/config/projects";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 /**
  * Slide-in menu panel (from the design): a cream side panel that enters from
  * the right over the hero. It holds a close (×) button top-right, a quote at
- * the top, and the nav links in the lower portion. "Our Work" shows a ">"
- * submenu affordance.
+ * the top, and the nav links in the lower portion. "Our Work" is the only item
+ * with a ">" and opens a submenu (the project filters) on hover or focus: a
+ * column right beside the links (md and up). The panel is a fixed 31rem wide
+ * on md and up: just enough for the links and the column.
  */
 export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
+  const [workOpen, setWorkOpen] = useState(false);
+  // The filter currently open on /our-work, read from the URL hash each time the menu opens.
+  const [category, setCategory] = useState<WorkCategory>("All Projects");
+  const closeTimer = useRef<number | undefined>(undefined);
+
+  // Short delay on leaving, so the pointer can cross from "Our Work" to the submenu.
+  const openWork = () => {
+    window.clearTimeout(closeTimer.current);
+    setCategory(categoryFromHash(window.location.hash));
+    setWorkOpen(true);
+  };
+  const closeWork = () => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setWorkOpen(false), 150);
+  };
+
+  // The submenu only shows while the menu itself is open.
+  const showWork = open && workOpen;
 
   // Close on Escape and lock body scroll while open.
   useEffect(() => {
@@ -56,7 +83,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
         aria-modal="true"
         aria-label="Site menu"
         className={cn(
-          "from-cream to-cream-dark ease-editorial absolute inset-y-0 right-0 flex w-full flex-col bg-gradient-to-b transition-transform duration-500 sm:w-[62%] md:w-[42%] lg:w-[34%]",
+          "from-cream to-cream-dark ease-editorial absolute inset-y-0 right-0 flex w-full flex-col bg-gradient-to-b transition-transform duration-500 sm:w-[62%] md:w-[31rem]",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
@@ -91,17 +118,24 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Nav — anchored toward the lower portion, as in the design */}
-        <nav aria-label="Primary" className="mt-auto px-8 pb-12 md:px-12 md:pb-16">
+        <nav
+          aria-label="Primary"
+          className="mt-auto flex items-center gap-10 px-8 pb-12 md:px-12 md:pb-16"
+        >
           <ul className="space-y-1.5">
             {siteConfig.nav.map((item) => {
               const isActive =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               const hasSubmenu = "hasSubmenu" in item && item.hasSubmenu;
-              // The arrow shows for the active item, and always for submenu items.
-              const showArrow = isActive || hasSubmenu;
 
               return (
-                <li key={item.href}>
+                <li
+                  key={item.href}
+                  onMouseEnter={hasSubmenu ? openWork : undefined}
+                  onMouseLeave={hasSubmenu ? closeWork : undefined}
+                  onFocus={hasSubmenu ? openWork : undefined}
+                  onBlur={hasSubmenu ? closeWork : undefined}
+                >
                   <Link
                     href={item.href}
                     onClick={onClose}
@@ -112,7 +146,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                     )}
                   >
                     {item.label}
-                    {showArrow ? (
+                    {hasSubmenu ? (
                       <span
                         className={cn(
                           "font-helvetica text-lg",
@@ -127,6 +161,48 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
               );
             })}
           </ul>
+
+          {/* Submenu: the project filters, right beside the links (md and up), bottom-aligned. */}
+          <div
+            onMouseEnter={openWork}
+            onMouseLeave={closeWork}
+            onFocus={openWork}
+            onBlur={closeWork}
+            className={cn(
+              "ease-editorial hidden transition-[opacity,translate] duration-300 md:block",
+              showWork
+                ? "pointer-events-auto translate-x-0 opacity-100"
+                : "pointer-events-none -translate-x-3 opacity-0",
+            )}
+          >
+            <ul aria-label="Our Work" className="space-y-1.5">
+              {workCategories.map((c) => {
+                const isCurrent = pathname.startsWith("/our-work") && c === category;
+                return (
+                  <li key={c}>
+                    <Link
+                      href={`/our-work#${categoryHash(c)}`}
+                      tabIndex={showWork ? 0 : -1}
+                      aria-current={isCurrent ? "page" : undefined}
+                      onClick={() => {
+                        // Already on /our-work the gallery stays mounted: tell it directly.
+                        window.dispatchEvent(new CustomEvent(WORK_CATEGORY_EVENT, { detail: c }));
+                        onClose();
+                      }}
+                      className={cn(
+                        "font-cormorant block text-xl whitespace-nowrap transition-colors md:text-2xl",
+                        isCurrent
+                          ? "text-brown-dark [-webkit-text-stroke:0.5px_currentColor]"
+                          : "text-brown hover:text-brown-dark",
+                      )}
+                    >
+                      {c}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </nav>
       </aside>
     </div>

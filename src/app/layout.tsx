@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { RouteTransitionListener } from "@/components/layout/RouteTransitionListener";
 import { Footer } from "@/components/layout/Footer";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -27,10 +28,8 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout — owns <html>/<body> and global metadata only. Fonts are
- * self-hosted via @font-face in globals.css (files in /public/fonts).
- * Shared chrome (Header/Footer) lives in the (site) route group so the
- * full-bleed home hero can opt out of it.
+ * Root layout — owns <html>/<body>, global metadata and the shared chrome.
+ * Fonts are self-hosted via @font-face in globals.css (files in /public/fonts).
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={siteConfig.locale} data-scroll-behavior="smooth">
       <body className="min-h-screen">
         <RouteTransitionListener />
+        {/* On every page, Home included (it waits for the landing gate). */}
+        <SiteHeader />
         {children}
         {/* On every page except Home (the footer hides itself on "/"). */}
         <Footer />
