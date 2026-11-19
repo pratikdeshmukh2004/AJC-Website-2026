@@ -1,7 +1,7 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/35il0cm8o7j4l.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/3ui3b62yv76je.css","style"]
 :HC["/",""]
 :HL["/AJC-Website-2026/preview/images/projects/neemrana-hotels/play-ring.svg","image"]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"neemrana-hotels","s":["virsa-baltistan"]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"wv6uZtSOgtlzyt9uidzw5","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"vGYlHodLCDNlQBYatvpXR","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
