@@ -38,10 +38,13 @@ import { u } from "@/lib/utils";
  * ----------------------------------------------------------------------------
  * `active` = progress has reached the lined-up end state (progress >= 0.999).
  *
+ * HEADLINE: the "worlds within worlds" headline hides as soon as the dots start
+ * coming together (progress > HEADLINE_HIDE_AT), not once they have finished. It
+ * fades OUT (opacity → 0; never display:none, never a color/weight change, so
+ * the cream/semibold spec stays green at scroll top) and fades back IN when the
+ * visitor scrolls back to the start of the band.
+ *
  * ON ACTIVATE (progress reaches 1 → active flips true):
- *   - the "worlds within worlds" headline fades OUT (opacity → 0; never
- *     display:none, never a color/weight change, so the cream/semibold spec
- *     stays green when inactive at scroll top).
  *   - the base intro 3.png stays mounted as the cross-fade BASE layer; tile
  *     `index` (0-based → 3-1.png..3-8.png) fades IN over it (opacity 0 → 1).
  *   - that slide's caption (the BandSlide's title + description) fades IN on the
@@ -58,7 +61,6 @@ import { u } from "@/lib/utils";
  *   - autoplay timer is cleared and `index` resets to 0.
  *   - every tile and caption fades to opacity 0 so the base intro 3.png shows
  *     through.
- *   - the headline fades back IN.
  *   - the dots return to their scroll-interpolated scatter (cursor-crosshair).
  *
  * `prefers-reduced-motion: reduce` → no scroll listeners, no autoplay timer;
@@ -109,6 +111,10 @@ const ROW_DIAMETER = 16;
 // travel, so the completed line is readable for a beat before the pin releases.
 const CONVERGE_FRACTION = 0.85;
 
+// The headline hides once progress passes this: the dots have visibly started
+// moving. Just above 0 so a pixel of scroll jitter at the top doesn't hide it.
+const HEADLINE_HIDE_AT = 0.01;
+
 // Autoplay cadence.
 const AUTOPLAY_MS = 3000;
 
@@ -144,6 +150,8 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
 
   // Carousel is active once the dots have finished lining up.
   const active = progress >= 0.999;
+  // The headline leaves as soon as they start coming together.
+  const converging = progress > HEADLINE_HIDE_AT;
 
   // --- Scroll progress wiring (unchanged pin model) -----------------------
   useEffect(() => {
@@ -326,13 +334,14 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
         </>
       )}
 
-      {/* Band headline — fades out and hides once the carousel activates. The
-          cream color / semibold weight are untouched (opacity-only fade). */}
+      {/* Band headline — fades out as soon as the dots start coming together,
+          and back in at the start of the band. The cream color / semibold
+          weight are untouched (opacity-only fade). */}
       <p
         className={`absolute ${headlineClass} transition-opacity duration-500 ${
-          active ? "opacity-0" : "opacity-100"
+          converging ? "opacity-0" : "opacity-100"
         }`}
-        aria-hidden={active}
+        aria-hidden={converging}
       >
         worlds within worlds
       </p>
