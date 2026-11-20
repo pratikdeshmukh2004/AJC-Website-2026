@@ -10,9 +10,7 @@ import { assetPath } from "@/lib/utils";
  * aspect ratio (uncropped). Beneath the pair sits a top-aligned row with the
  * serif title on the left and the narrative on the right.
  *
- * The whole card opens the project's page at /work/<slug>. When a photo has
- * its own `link` (Virsa Baltistan's left photo opens its archive page), each
- * photo and the text become separate links instead, since links can't nest.
+ * The whole card opens the project's page at /work/<slug>.
  */
 export function ProjectCard({
   project,
@@ -25,32 +23,6 @@ export function ProjectCard({
   const { left, right } = project.images;
   const href = `/work/${project.slug}`;
   const label = `View project: ${project.title}`;
-
-  if (left.link || right.link) {
-    return (
-      <article className="flex flex-col">
-        <div className="grid grid-cols-2 gap-2 md:gap-3">
-          {[left, right].map((image) => (
-            <Link
-              key={image.src}
-              href={image.link?.href ?? href}
-              aria-label={`View project: ${image.link?.title ?? project.title}`}
-              className="group focus-visible:ring-ink/40 outline-none focus-visible:ring-2"
-            >
-              <Photo image={image} alt={project.title} priority={priority} />
-            </Link>
-          ))}
-        </div>
-        <Link
-          href={href}
-          aria-label={label}
-          className="focus-visible:ring-ink/40 outline-none focus-visible:ring-2"
-        >
-          <CardText project={project} />
-        </Link>
-      </article>
-    );
-  }
 
   return (
     <article className="group flex flex-col">
