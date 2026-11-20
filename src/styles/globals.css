@@ -113,6 +113,10 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Themed scrollbar: taupe thumb on a faint cream track. Inherited, so the
+       menu panel and any inner scroll areas match. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-taupe) var(--color-cream-dark);
   }
 
   body {
@@ -137,6 +141,27 @@
   :focus-visible {
     outline: 2px solid var(--color-brand);
     outline-offset: 3px;
+  }
+
+  /* Same scrollbar for browsers without the standard properties above (older
+     Safari). Where `scrollbar-color` works, these pseudo-elements are ignored
+     anyway, so they are gated to avoid fighting it. */
+  @supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-cream-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-taupe);
+      border-radius: 999px;
+      border: 2px solid var(--color-cream-dark);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-taupe-dark);
+    }
   }
 
   /* Respect reduced-motion preferences */

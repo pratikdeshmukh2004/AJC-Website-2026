@@ -170,12 +170,15 @@ test.describe("header and menu", () => {
     await expect(menu).toBeInViewport();
     await expect(menu.getByText(/Living in India means living/)).toBeVisible();
 
-    const links = menu.getByRole("navigation", { name: "Primary" }).getByRole("link");
-    // Only the current page (Home) carries the ">" active arrow.
+    const nav = menu.getByRole("navigation", { name: "Primary" });
+    // Top-level items only: the folded filter links are inert, which browsers skip but
+    // Playwright's role queries still count.
+    const links = nav.locator(":scope > ul > li > a");
+    // "Our Work" is a button that opens the project filters on click, so it is not a link.
+    await expect(nav.getByRole("button", { name: "Our Work" })).toBeVisible();
     await expect(links).toHaveText([
-      "Home>",
+      "Home",
       "About Us",
-      "Our Work",
       "Philosophy",
       "AJC Hospitality",
       "Contact Us",

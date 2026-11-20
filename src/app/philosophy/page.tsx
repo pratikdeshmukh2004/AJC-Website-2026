@@ -119,8 +119,9 @@ const STAGES: Stage[] = [
 
 export default function PhilosophyPage() {
   return (
-    <div className="relative bg-[#f8f7f2]">
-
+    // Bottom padding is the paper-coloured gap between the family photo and the
+    // site footer (the photo is full-bleed, so it would otherwise sit on it).
+    <div className="relative bg-[#f8f7f2]" style={{ paddingBottom: fig(160, "4rem") }}>
       <main>
         {/* Hero: valley photo with the quote */}
         <section className="relative flex min-h-[70svh] w-full items-center justify-center overflow-hidden md:aspect-[1920/903] md:min-h-0">

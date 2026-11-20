@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -15,34 +15,35 @@ import { cn } from "@/lib/utils";
 
 /**
  * Slide-in menu panel (from the design): a cream side panel that enters from
- * the right over the hero. It holds a close (×) button top-right, a quote at
- * the top, and the nav links in the lower portion. "Our Work" is the only item
- * with a ">" and opens a submenu (the project filters) on hover or focus: a
- * column right beside the links (md and up). The panel is a fixed 31rem wide
- * on md and up: just enough for the links and the column.
+ * the right over the page. It holds a quote at the top and the nav links
+ * below. "Our Work" is the only item with a submenu (the project filters). It
+ * opens when "Our Work" is clicked (not on hover) and closes on a second click.
+ *
+ * Two layouts in one DOM:
+ *   - md and up: a fixed 31rem panel with a close (×) row on top; the submenu
+ *     is a column beside the links.
+ *   - below md: Figma mobile menu (node 4091:371, 390 wide). A solid panel 60% of
+ *     the screen wide; the submenu opens inline under "Our Work" and pushes the
+ *     rest of the links down. Sizes scale with the screen width via --u (1
+ *     design px). The × is tucked top-right, in the gap beside the quote (the
+ *     frame doesn't draw one, but a dialog needs a visible way to close).
  */
 export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const [workOpen, setWorkOpen] = useState(false);
-  // The filter currently open on /our-work, read from the URL hash each time the menu opens.
+  // The filter currently open on /our-work, read from the URL hash each time the submenu opens.
   const [category, setCategory] = useState<WorkCategory>("All Projects");
-  const closeTimer = useRef<number | undefined>(undefined);
 
-  // Short delay on leaving, so the pointer can cross from "Our Work" to the submenu.
-  const openWork = () => {
-    window.clearTimeout(closeTimer.current);
-    setCategory(categoryFromHash(window.location.hash));
-    setWorkOpen(true);
-  };
-  const closeWork = () => {
-    window.clearTimeout(closeTimer.current);
-    closeTimer.current = window.setTimeout(() => setWorkOpen(false), 150);
+  const toggleWork = () => {
+    if (!workOpen) setCategory(categoryFromHash(window.location.hash));
+    setWorkOpen((v) => !v);
   };
 
   // The submenu only shows while the menu itself is open.
   const showWork = open && workOpen;
 
-  // Close on Escape and lock body scroll while open.
+  // Close on Escape and lock body scroll while open. Closing the menu, however
+  // it happens, also folds the submenu so it reopens collapsed.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -54,6 +55,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      setWorkOpen(false);
     };
   }, [open, onClose]);
 
@@ -65,7 +67,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
       // focusable or announced.
       inert={!open}
     >
-      {/* Click-away backdrop (transparent — video stays visible) */}
+      {/* Click-away backdrop (transparent — the page stays visible) */}
       <button
         type="button"
         aria-label="Close menu"
@@ -83,21 +85,21 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
         aria-modal="true"
         aria-label="Site menu"
         className={cn(
-          "from-cream to-cream-dark ease-editorial absolute inset-y-0 right-0 flex w-full flex-col bg-gradient-to-b transition-transform duration-500 sm:w-[62%] md:w-[31rem]",
+          "ease-editorial md:from-cream md:to-cream-dark absolute inset-y-0 right-0 flex w-[60%] flex-col overflow-y-auto bg-[#f8f7f2] transition-transform duration-500 [--u:clamp(1px,calc(100vw/390),1.5px)] md:w-[31rem] md:overflow-visible md:bg-gradient-to-b",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
-        {/* Close button (top-right) */}
-        <div className="flex justify-end p-6 md:p-8">
+        {/* Close button */}
+        <div className="absolute top-[calc(36*var(--u))] right-[calc(6*var(--u))] md:static md:flex md:justify-end md:p-8">
           <button
             type="button"
             onClick={onClose}
             aria-label="Close menu"
-            className="text-brown-dark cursor-pointer transition-opacity hover:opacity-60"
+            className="text-brown-dark block cursor-pointer p-[calc(8*var(--u))] transition-opacity hover:opacity-60 md:p-0"
           >
             <svg
               viewBox="0 0 24 24"
-              className="h-6 w-6"
+              className="size-[calc(16*var(--u))] md:size-6"
               fill="none"
               stroke="currentColor"
               aria-hidden
@@ -108,101 +110,112 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
         </div>
 
         {/* Quote */}
-        <div className="px-8 md:px-12">
-          <blockquote className="font-cormorant text-brown-dark max-w-md text-xl leading-snug md:text-2xl">
+        <div className="pt-[calc(42*var(--u))] pr-[calc(32*var(--u))] pl-[calc(43*var(--u))] md:px-12 md:pt-0">
+          <blockquote className="font-cormorant text-sage md:text-brown-dark text-[length:calc(15*var(--u))] leading-[calc(20*var(--u))] tracking-[-0.03em] md:max-w-md md:text-2xl md:leading-snug md:tracking-normal">
             &ldquo;{siteConfig.menuQuote.text}&rdquo;
           </blockquote>
-          <p className="text-ink-muted mt-4 text-[11px] tracking-[0.18em] uppercase">
+          <p className="text-ink-muted mt-[calc(15*var(--u))] text-[length:calc(7*var(--u))] leading-[calc(8*var(--u))] tracking-[0.02em] uppercase md:mt-4 md:text-[11px] md:leading-normal md:tracking-[0.18em]">
             {siteConfig.menuQuote.author}
           </p>
         </div>
 
-        {/* Nav — anchored toward the lower portion, as in the design */}
+        {/* Nav — below the quote on mobile, anchored toward the lower portion on desktop */}
         <nav
           aria-label="Primary"
-          className="mt-auto flex items-center gap-10 px-8 pb-12 md:px-12 md:pb-16"
+          className="mt-[calc(49*var(--u))] pr-[calc(32*var(--u))] pb-[calc(48*var(--u))] pl-[calc(43*var(--u))] md:mt-auto md:px-12 md:pb-16"
         >
-          <ul className="space-y-1.5">
+          <ul className="space-y-[calc(17*var(--u))] md:relative md:w-fit md:space-y-1.5">
             {siteConfig.nav.map((item) => {
               const isActive =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               const hasSubmenu = "hasSubmenu" in item && item.hasSubmenu;
+              // "Our Work" stays emphasised while its submenu is open.
+              const emphasised = isActive || (hasSubmenu && showWork);
+              const itemClass = cn(
+                "font-cormorant flex w-fit items-center gap-2 text-[length:calc(20*var(--u))] leading-[calc(17*var(--u))] tracking-[-0.03em] transition-colors md:inline-flex md:text-[1.75rem] md:leading-8 md:tracking-normal",
+                emphasised
+                  ? "text-taupe md:text-brown-dark"
+                  : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
+              );
 
               return (
-                <li
-                  key={item.href}
-                  onMouseEnter={hasSubmenu ? openWork : undefined}
-                  onMouseLeave={hasSubmenu ? closeWork : undefined}
-                  onFocus={hasSubmenu ? openWork : undefined}
-                  onBlur={hasSubmenu ? closeWork : undefined}
-                >
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    aria-current={isActive ? "page" : undefined}
-                    className={cn(
-                      "font-cormorant inline-flex items-center gap-2 text-2xl transition-colors md:text-[1.75rem]",
-                      isActive ? "text-brown-dark" : "text-brown hover:text-brown-dark",
-                    )}
-                  >
-                    {item.label}
-                    {hasSubmenu ? (
-                      <span
-                        className={cn(
-                          "font-helvetica text-lg",
-                          isActive ? "text-brown-dark" : "text-brown",
-                        )}
-                      >
+                <li key={item.href}>
+                  {hasSubmenu ? (
+                    <button
+                      type="button"
+                      onClick={toggleWork}
+                      aria-expanded={showWork}
+                      aria-controls="menu-work-submenu"
+                      className={cn(itemClass, "cursor-pointer")}
+                    >
+                      {item.label}
+                      <span aria-hidden className="font-helvetica hidden text-lg md:inline">
                         &gt;
                       </span>
-                    ) : null}
-                  </Link>
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      aria-current={isActive ? "page" : undefined}
+                      className={itemClass}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+
+                  {/* Submenu: the project filters. Below md it folds open inline under
+                      "Our Work"; from md up it is a column beside the links. */}
+                  {hasSubmenu ? (
+                    <div
+                      id="menu-work-submenu"
+                      inert={!showWork}
+                      className={cn(
+                        "ease-editorial grid transition-[grid-template-rows,opacity] duration-300 md:absolute md:top-1/2 md:left-full md:ml-10 md:block md:-translate-y-1/2 md:transition-[opacity,translate]",
+                        showWork
+                          ? "grid-rows-[1fr] opacity-100 md:translate-x-0"
+                          : "grid-rows-[0fr] opacity-0 md:-translate-x-3",
+                      )}
+                    >
+                      <div className="min-h-0 overflow-hidden md:overflow-visible">
+                        <ul
+                          aria-label="Our Work"
+                          className="pt-[calc(18*var(--u))] pb-[calc(5*var(--u))] pl-[calc(13*var(--u))] md:space-y-1.5 md:p-0"
+                        >
+                          {workCategories.map((c) => {
+                            const isCurrent = pathname.startsWith("/our-work") && c === category;
+                            return (
+                              <li key={c}>
+                                <Link
+                                  href={`/our-work#${categoryHash(c)}`}
+                                  aria-current={isCurrent ? "page" : undefined}
+                                  onClick={() => {
+                                    // Already on /our-work the gallery stays mounted: tell it directly.
+                                    window.dispatchEvent(
+                                      new CustomEvent(WORK_CATEGORY_EVENT, { detail: c }),
+                                    );
+                                    onClose();
+                                  }}
+                                  className={cn(
+                                    "font-cormorant block text-[length:calc(15*var(--u))] leading-[calc(26*var(--u))] tracking-[-0.03em] whitespace-nowrap transition-colors md:text-2xl md:leading-8 md:tracking-normal",
+                                    isCurrent
+                                      ? "text-taupe md:text-brown-dark [-webkit-text-stroke:0.5px_currentColor]"
+                                      : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
+                                  )}
+                                >
+                                  {c}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
           </ul>
-
-          {/* Submenu: the project filters, right beside the links (md and up), bottom-aligned. */}
-          <div
-            onMouseEnter={openWork}
-            onMouseLeave={closeWork}
-            onFocus={openWork}
-            onBlur={closeWork}
-            className={cn(
-              "ease-editorial hidden transition-[opacity,translate] duration-300 md:block",
-              showWork
-                ? "pointer-events-auto translate-x-0 opacity-100"
-                : "pointer-events-none -translate-x-3 opacity-0",
-            )}
-          >
-            <ul aria-label="Our Work" className="space-y-1.5">
-              {workCategories.map((c) => {
-                const isCurrent = pathname.startsWith("/our-work") && c === category;
-                return (
-                  <li key={c}>
-                    <Link
-                      href={`/our-work#${categoryHash(c)}`}
-                      tabIndex={showWork ? 0 : -1}
-                      aria-current={isCurrent ? "page" : undefined}
-                      onClick={() => {
-                        // Already on /our-work the gallery stays mounted: tell it directly.
-                        window.dispatchEvent(new CustomEvent(WORK_CATEGORY_EVENT, { detail: c }));
-                        onClose();
-                      }}
-                      className={cn(
-                        "font-cormorant block text-xl whitespace-nowrap transition-colors md:text-2xl",
-                        isCurrent
-                          ? "text-brown-dark [-webkit-text-stroke:0.5px_currentColor]"
-                          : "text-brown hover:text-brown-dark",
-                      )}
-                    >
-                      {c}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
         </nav>
       </aside>
     </div>
