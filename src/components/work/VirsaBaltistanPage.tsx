@@ -45,7 +45,7 @@ const IMG = assetPath("/images/projects/virsa-baltistan");
 /** Every "Discover" link on the experience tiles opens this page. */
 const EXPERIENCES_HREF = "/work/virsa-experiences";
 /** "View Image Gallery" opens the visual-archive (creative direction) page. */
-const ARCHIVE_HREF = "/work/virsa-baltistan/archive";
+const ARCHIVE_HREF = "/work/virsa-archive";
 
 const SPLIT = 1966;
 // Last element: the "Virsa Experiences" label at y25115, plus breathing room.
@@ -126,7 +126,6 @@ const INTRO = [
 export function VirsaBaltistanPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-
       {/* ============ HERO + INTRO (Figma y 0–1966) ============ */}
       <section className="relative" style={{ minHeight: u(SPLIT) }}>
         <div
