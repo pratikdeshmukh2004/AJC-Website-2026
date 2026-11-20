@@ -37,10 +37,11 @@ export function SiteHeader() {
   if (pathname === "/" && !entered) return null;
 
   // Paper-coloured pages need taupe marks; everything else has a photo or film
-  // behind the header and takes white. `/work/virsa-archive` is the project
-  // scaffold (no case study yet), which is paper too.
-  const onPaper = ["/contact", "/terms", "/privacy", "/our-work", "/work/virsa-archive"].some(
-    (route) => pathname.startsWith(route),
+  // behind the header and takes white. Every project now has its own case-study
+  // page with a photo hero; a project added to config/projects.ts without one
+  // falls back to a paper scaffold, which would need adding here.
+  const onPaper = ["/contact", "/terms", "/privacy", "/our-work"].some((route) =>
+    pathname.startsWith(route),
   );
 
   return (

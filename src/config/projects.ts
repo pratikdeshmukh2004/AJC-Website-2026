@@ -75,7 +75,7 @@ export const projects: Project[] = [
         src: "/images/our_work/1-left.png",
         width: 851,
         height: 880,
-        link: { href: "/work/virsa-baltistan/archive", title: "Archive of Virsa Baltistan" },
+        link: { href: "/work/virsa-archive", title: "Archive of Virsa Baltistan" },
       },
       right: { src: "/images/our_work/1-right.png", width: 850, height: 880 },
     },

@@ -189,7 +189,6 @@ function TeamRow({
 export function VirsaExperiencesPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-
       {/* ============ A. HERO + INTRO (Figma y 0–1920) ============ */}
       <section className="relative flex flex-col gap-8 xl:block xl:min-h-[calc(1920*var(--u))] xl:gap-0">
         {/* Wrapper holds the photo and its labels; at xl it dissolves so both sit on the canvas. */}
@@ -910,7 +909,7 @@ export function VirsaExperiencesPage() {
             &gt;
           </div>
           <Link
-            href="/work/virsa-baltistan/archive"
+            href="/work/virsa-archive"
             className="font-cormorant block text-5xl leading-none tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
             style={at(654, d(28969), 612)}
           >

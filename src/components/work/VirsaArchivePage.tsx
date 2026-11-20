@@ -9,7 +9,7 @@ import { assetPath, u } from "@/lib/utils";
 
 /*
   Archive of Virsa Baltistan — the visual archive (creative direction) page
-  at /work/virsa-baltistan/archive (AJC-16), from the Figma frame "Virsa
+  at /work/virsa-archive (AJC-16), from the Figma frame "Virsa
   Baltistan" (node 2823:865, 1920px wide). Opened from the left photo of the
   Virsa Baltistan card on Our Work, and from "View Image Gallery" on the
   Virsa Baltistan page.
@@ -219,7 +219,6 @@ const INTRO = [
 export function VirsaArchivePage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-
       {/* ============ HERO + INTRO (Figma y 0–1991) ============ */}
       <section className="relative" style={{ minHeight: u(SPLIT) }}>
         <div
