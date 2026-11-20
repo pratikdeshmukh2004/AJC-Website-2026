@@ -2,6 +2,6 @@
 :HC["/",""]
 :HL["/AJC-Website-2026/preview/images/projects/neemrana-hotels/play-ring.svg","image"]
 3:[["children",{"s":"__PAGE__","h":160}]]
-2:[["children",{"s":{"n":"slug","t":"d","k":"neemrana-hotels","s":["virsa-baltistan"]},"h":96,"c":"$Q3"}]]
+2:[["children",{"s":{"n":"slug","t":"d","k":"neemrana-hotels","s":[]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"vCBC44srRnTT4W_59K0B0","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"OVVr9-8fSdJdqhsmiAPnO","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
