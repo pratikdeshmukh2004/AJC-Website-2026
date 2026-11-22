@@ -34,6 +34,10 @@ jobs:
         env:
           # Served from /preview -> repo subpath + /preview.
           NEXT_PUBLIC_BASE_PATH: /AJC-Website-2026/preview
+          # Apps Script web app for the Contact and Hospitality forms. Set it under
+          # Settings > Secrets and variables > Actions > Variables. Without it the
+          # forms fall back to opening the visitor's mail app.
+          NEXT_PUBLIC_CONTACT_FORM_ENDPOINT: ${{ vars.CONTACT_FORM_ENDPOINT }}
         run: npm run build
 
       - name: Publish to gh-pages (/preview)

@@ -2,22 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore, type FormEvent } from "react";
 import { siteConfig } from "@/config/site";
-import { cn, fig } from "@/lib/utils";
-
-/**
- * "Say Hello!" enquiry form (Figma: CONTACT US, node 2823:3089).
- *
- * The site is a static export, so there is no server of our own. Submissions
- * are POSTed to `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT` (a Google Apps Script web
- * app that appends a row to a Google Sheet and emails apeksha@apekshajain.in;
- * see README → Contact form). It's sent as a text/plain "no-cors" request:
- * Apps Script can't answer a CORS preflight, and its redirect response has no
- * CORS headers, so the reply can't be read (see onSubmit).
- *
- * If the endpoint isn't configured, the form falls back to opening the
- * visitor's mail app with the message pre-filled.
- */
-const ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT ?? "";
+import { ENQUIRY_ENDPOINT, cn, fig, submitEnquiry } from "@/lib/utils";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -34,6 +19,19 @@ const SENT_MESSAGE_MS = 6000;
 
 const noopSubscribe = () => () => {};
 
+/**
+ * "Say Hello!" enquiry form (Figma: CONTACT US, node 2823:3089).
+ *
+ * The site is a static export, so there is no server of our own. Submissions
+ * are POSTed to `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT` (a Google Apps Script web
+ * app that appends a row to a Google Sheet and emails apeksha@apekshajain.in;
+ * see README → Contact form). It's sent as a text/plain "no-cors" request:
+ * Apps Script can't answer a CORS preflight, and its redirect response has no
+ * CORS headers, so the reply can't be read (see submitEnquiry in lib/utils).
+ *
+ * If the endpoint isn't configured, the form falls back to opening the
+ * visitor's mail app with the message pre-filled.
+ */
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   // False in the server HTML, true once React has hydrated. Until then Send is
@@ -65,7 +63,7 @@ export function ContactForm() {
       FIELDS.map((f) => [f.name, String(data.get(f.name) ?? "").trim()]),
     ) as Record<FieldName, string>;
 
-    if (!ENDPOINT) {
+    if (!ENQUIRY_ENDPOINT) {
       const subject = `Hello from ${values.name}`;
       const body = `${values.message}\n\nContact: ${values.contact}`;
       window.location.href = `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(
@@ -76,17 +74,8 @@ export function ContactForm() {
 
     setStatus("sending");
     try {
-      // Apps Script answers a POST with a 302 to script.googleusercontent.com,
-      // and that redirect carries no CORS headers, so a normal fetch is
-      // blocked even though the script ran. "no-cors" sends the same request
-      // (text/plain keeps it a simple request) and skips reading the reply.
-      // The response is opaque, so only a network failure lands in catch.
-      await fetch(ENDPOINT, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ ...values, page: window.location.href }),
-      });
+      // The reply is opaque, so only a network failure lands in catch.
+      await submitEnquiry(values);
       setStatus("sent");
       form.reset();
     } catch {
