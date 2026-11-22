@@ -78,3 +78,29 @@ export function u(px: number): string {
 export function at(x: number, y: number, w?: number): CSSProperties {
   return { "--x": u(x), "--y": u(y), ...(w !== undefined && { "--w": u(w) }) } as CSSProperties;
 }
+
+/**
+ * Where site enquiries are sent: a Google Apps Script web app that appends a
+ * row to a Google Sheet and emails the studio. Empty when not configured, in
+ * which case the forms fall back to opening the visitor's mail app.
+ */
+export const ENQUIRY_ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT ?? "";
+
+/**
+ * POST an enquiry (plus the page it came from) to {@link ENQUIRY_ENDPOINT}.
+ * Shared by the Contact and Hospitality forms.
+ *
+ * Apps Script answers a POST with a 302 to script.googleusercontent.com, and
+ * that redirect carries no CORS headers, so a normal fetch is blocked even
+ * though the script ran. "no-cors" sends the same request (text/plain keeps it a
+ * simple request, so there is no preflight) and skips reading the reply. The
+ * response is opaque, so only a network failure rejects.
+ */
+export async function submitEnquiry(values: Record<string, string>): Promise<void> {
+  await fetch(ENQUIRY_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ ...values, page: window.location.href }),
+  });
+}
