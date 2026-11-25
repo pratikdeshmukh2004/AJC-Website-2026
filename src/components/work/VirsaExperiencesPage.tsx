@@ -43,6 +43,8 @@ function Heading({
   level = 2,
   id,
   w = 868,
+  mobile = "text-5xl leading-none",
+  className,
 }: {
   children: ReactNode;
   x: number;
@@ -50,12 +52,19 @@ function Heading({
   level?: 1 | 2;
   id?: string;
   w?: number;
+  /** Size below xl (the mobile frame sets section titles smaller, beside the copy). */
+  mobile?: string;
+  className?: string;
 }) {
   const Tag = level === 1 ? "h1" : "h2";
   return (
     <Tag
       id={id}
-      className="font-cormorant scroll-mt-6 text-5xl leading-none tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+      className={cn(
+        "font-cormorant scroll-mt-6 tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]",
+        mobile,
+        className,
+      )}
       style={at(x, y, w)}
     >
       {children}
@@ -67,7 +76,7 @@ function Heading({
 function Copy({ children, x, y, w }: { children: ReactNode; x: number; y: number; w: number }) {
   return (
     <p
-      className="font-helvetica-regular text-base leading-[1.45] tracking-[0.02em] text-[#9b9484] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
+      className="font-helvetica-regular pt-4 pb-6 text-xs leading-[1.6] tracking-[0.02em] text-[#9b9484] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
       style={at(x, y, w)}
     >
       {children}
@@ -88,6 +97,8 @@ function Pic({
   h,
   priority,
   className,
+  lead,
+  mobileAspect,
 }: {
   file: string;
   alt: string;
@@ -97,14 +108,21 @@ function Pic({
   h: number;
   priority?: boolean;
   className?: string;
+  /** First photo of a section: sits beside the title and copy below xl (two columns). */
+  lead?: boolean;
+  /** Crop below xl (the mobile frame shows the full-width photos as portraits). */
+  mobileAspect?: string;
 }) {
   return (
     <div
       className={cn(
+        lead ? "col-start-2 row-span-2 row-start-1 self-start" : "col-span-2",
         "relative aspect-(--ar) w-full overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:aspect-auto xl:h-(--h) xl:w-(--w) [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover",
         className,
       )}
-      style={{ ...at(x, top, w), "--h": u(h), "--ar": `${w} / ${h}` } as CSSProperties}
+      style={
+        { ...at(x, top, w), "--h": u(h), "--ar": mobileAspect ?? `${w} / ${h}` } as CSSProperties
+      }
     >
       <OptimizedImage
         src={`${IMG}/${file}`}
@@ -114,6 +132,21 @@ function Pic({
         priority={priority}
         sizes={`(min-width: 1920px) ${w}px, (min-width: 1280px) ${+((w / 1920) * 100).toFixed(2)}vw, 100vw`}
       />
+    </div>
+  );
+}
+
+/**
+ * Photos side by side below xl, widths in the Figma ratio (e.g. 896 : 458), with
+ * the thin gutter the mobile frame uses. Dissolves at xl, where each sits on the canvas.
+ */
+function Row({ cols, children }: { cols: number[]; children: ReactNode }) {
+  return (
+    <div
+      className="col-span-2 grid gap-0.5 xl:contents [&>div]:col-span-1"
+      style={{ gridTemplateColumns: cols.map((c) => `${c}fr`).join(" ") }}
+    >
+      {children}
     </div>
   );
 }
@@ -144,7 +177,7 @@ function PressLogo({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="block h-12 w-32 transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)"
+      className="block h-10 w-24 transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)"
       style={{ ...at(x, d(y), w), "--h": u(h) } as CSSProperties}
     >
       <OptimizedImage
@@ -152,7 +185,7 @@ function PressLogo({
         alt={alt}
         width={w}
         height={h}
-        sizes={`(min-width: 1920px) ${w}px, 128px`}
+        sizes={`(min-width: 1920px) ${w}px, 96px`}
         className={cn("h-full w-full", cover ? "object-cover" : "object-contain")}
       />
     </a>
@@ -200,16 +233,17 @@ export function VirsaExperiencesPage() {
             top={0}
             w={1920}
             h={1080}
+            mobileAspect="9 / 16"
             priority
           />
           <p
-            className="font-helvetica absolute bottom-6 left-6 text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica absolute bottom-10 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-left xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(103, 507, 348)}
           >
             2025 / ۲۰۲۵
           </p>
           <p
-            className="font-helvetica absolute right-6 bottom-6 text-right text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:right-auto xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica absolute top-24 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:right-auto xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-right xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(1469, 507, 348)}
           >
             AJC in Ladakh / لداخ
@@ -217,11 +251,13 @@ export function VirsaExperiencesPage() {
         </div>
 
         <div className="px-6 xl:contents">
-          <Heading level={1} x={113} y={1231} w={600}>
-            Experiences at Virsa Baltistan
+          <Heading level={1} x={113} y={1231} w={600} mobile="text-4xl leading-none">
+            Experiences at
+            <br />
+            Virsa Baltistan
           </Heading>
           <ul
-            className="font-helvetica-regular mt-6 text-lg tracking-[0.02em] text-[#7d7062] uppercase opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica-regular mt-6 text-xs leading-[1.5] tracking-[0.02em] text-[#7d7062] uppercase opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(109, 1576, 523)}
           >
             <li>Strategy</li>
@@ -294,6 +330,7 @@ export function VirsaExperiencesPage() {
           top={0}
           w={1920}
           h={1080}
+          mobileAspect="3 / 5"
         />
       </div>
 
@@ -350,7 +387,7 @@ export function VirsaExperiencesPage() {
         />
         <nav
           aria-label="The experiences"
-          className="font-helvetica-regular px-6 text-lg leading-[1.6] tracking-[0.02em] text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[calc(33*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+          className="font-helvetica-regular -order-1 px-6 text-xs leading-[1.9] tracking-[0.02em] text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:order-none xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[calc(33*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
           style={at(1096, 0, 862)}
         >
           <a href="#royal-welcome" className="block transition-opacity hover:opacity-70">
@@ -386,8 +423,8 @@ export function VirsaExperiencesPage() {
         style={{ "--end": u(END - D_TOP) } as CSSProperties}
       >
         {/* ---- The Royal Welcome ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="royal-welcome" x={269} y={d(3629)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading id="royal-welcome" mobile="text-3xl leading-[1.05]" x={269} y={d(3629)}>
             The Royal Welcome
           </Heading>
           <Copy x={273} y={d(4183)} w={501}>
@@ -398,14 +435,23 @@ export function VirsaExperiencesPage() {
             land itself. With drums that beat to culture, our horse mascot and a Virsa flag, we
             welcome guests with a salaam in the hotel.
           </Copy>
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Pic
+            lead
+            file="royal-welcome-1.png"
+            alt="A Balti man on horseback in traditional dress, among poplar trees"
+            x={1193}
+            top={d(3719)}
+            w={458}
+            h={712}
+          />
+          <Row cols={[896, 458]}>
             <Pic
-              file="royal-welcome-1.png"
-              alt="A Balti man on horseback in traditional dress, among poplar trees"
-              x={1193}
-              top={d(3719)}
-              w={458}
-              h={712}
+              file="royal-welcome-2.png"
+              alt="The Royal Welcome at Virsa Baltistan, guests greeted at the hotel"
+              x={273}
+              top={d(4487)}
+              w={896}
+              h={716}
             />
             <Pic
               file="royal-welcome-3.png"
@@ -415,16 +461,8 @@ export function VirsaExperiencesPage() {
               w={458}
               h={716}
             />
-          </div>
-          <Pic
-            file="royal-welcome-2.png"
-            alt="The Royal Welcome at Virsa Baltistan, guests greeted at the hotel"
-            x={273}
-            top={d(4487)}
-            w={896}
-            h={716}
-          />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          </Row>
+          <Row cols={[1, 1]}>
             <Pic
               file="royal-welcome-4.png"
               alt="The Royal Welcome at Virsa Baltistan, drummers and the Virsa flag"
@@ -441,7 +479,7 @@ export function VirsaExperiencesPage() {
               w={678}
               h={955}
             />
-          </div>
+          </Row>
           <Pic
             file="royal-welcome-6.png"
             alt="The Royal Welcome at Virsa Baltistan, the welcome within the fortress"
@@ -450,19 +488,21 @@ export function VirsaExperiencesPage() {
             w={1378}
             h={777}
           />
-          <VirsaFilmPlayer
-            responsive
-            src={`${VIDEO}/royal-welcome.mp4`}
-            poster={`${IMG}/royal-welcome-video-poster.jpg`}
-            title="the Royal Welcome film"
-            box={{ x: 273, y: d(7140), w: 1378, h: 777 }}
-            triangle={{ x: 0, y: 0, size: 65 }}
-          />
+          <div className="col-span-2 xl:contents">
+            <VirsaFilmPlayer
+              responsive
+              src={`${VIDEO}/royal-welcome.mp4`}
+              poster={`${IMG}/royal-welcome-video-poster.jpg`}
+              title="the Royal Welcome film"
+              box={{ x: 273, y: d(7140), w: 1378, h: 777 }}
+              triangle={{ x: 0, y: 0, size: 65 }}
+            />
+          </div>
         </section>
 
         {/* ---- The Mountain-Beach Picnic ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="mountain-beach-picnic" x={269} y={d(8057)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading id="mountain-beach-picnic" mobile="text-3xl leading-[1.05]" x={269} y={d(8057)}>
             The Mountain-Beach Picnic
           </Heading>
           <Copy x={270} y={d(8642)} w={501}>
@@ -471,6 +511,7 @@ export function VirsaExperiencesPage() {
             the river, and an intimate picnic is quietly shared, away from city life.
           </Copy>
           <Pic
+            lead
             file="beach-picnic-1.png"
             alt="The Mountain-Beach Picnic on the banks of the Shyok"
             x={1177}
@@ -486,7 +527,7 @@ export function VirsaExperiencesPage() {
             w={1382}
             h={706}
           />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Row cols={[681, 679]}>
             <Pic
               file="beach-picnic-3.png"
               alt="Food and drink served at the beach picnic"
@@ -503,7 +544,7 @@ export function VirsaExperiencesPage() {
               w={679}
               h={955}
             />
-          </div>
+          </Row>
           <Pic
             file="beach-picnic-5.png"
             alt="The Shyok riverbank at the Mountain-Beach Picnic"
@@ -515,8 +556,8 @@ export function VirsaExperiencesPage() {
         </section>
 
         {/* ---- Dine with Dynasty ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="dine-with-dynasty" x={269} y={d(11353)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading id="dine-with-dynasty" mobile="text-3xl leading-[1.05]" x={269} y={d(11353)}>
             Dine With Dynasty
           </Heading>
           <Copy x={264} y={d(11963)} w={501}>
@@ -524,14 +565,23 @@ export function VirsaExperiencesPage() {
             dynasty in the courtyard of their summer palace. A multi-course local-menu reveals with
             it the conversations that span centuries. The Virsa Flagship experience!
           </Copy>
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Pic
+            lead
+            file="dine-with-dynasty-1.png"
+            alt="Dine with Dynasty, the royal descendant at the summer palace"
+            x={1184}
+            top={d(11353)}
+            w={458}
+            h={722}
+          />
+          <Row cols={[896, 458]}>
             <Pic
-              file="dine-with-dynasty-1.png"
-              alt="Dine with Dynasty, the royal descendant at the summer palace"
-              x={1184}
-              top={d(11353)}
-              w={458}
-              h={722}
+              file="dine-with-dynasty-2.png"
+              alt="Dine with Dynasty, the courtyard of the summer palace"
+              x={264}
+              top={d(12126)}
+              w={896}
+              h={716}
             />
             <Pic
               file="dine-with-dynasty-3.png"
@@ -541,44 +591,40 @@ export function VirsaExperiencesPage() {
               w={458}
               h={716}
             />
+          </Row>
+          <Row cols={[458, 896]}>
+            <Pic
+              file="dine-with-dynasty-4.png"
+              alt="Dine with Dynasty, a multi-course local menu"
+              x={264}
+              top={d(12863)}
+              w={458}
+              h={716}
+            />
+            <Pic
+              file="dine-with-dynasty-5.png"
+              alt="Dine with Dynasty, conversations across the table"
+              x={746}
+              top={d(12863)}
+              w={896}
+              h={716}
+            />
+          </Row>
+          <div className="col-span-2 xl:contents">
+            <VirsaFilmPlayer
+              responsive
+              src={`${VIDEO}/dine-with-dynasty.mp4`}
+              poster={`${IMG}/dine-with-dynasty-video-poster.jpg`}
+              title="the Dine with Dynasty film"
+              box={{ x: 268, y: d(13713), w: 1383, h: 706 }}
+              triangle={{ x: 0, y: 0, size: 65 }}
+            />
           </div>
-          <Pic
-            file="dine-with-dynasty-2.png"
-            alt="Dine with Dynasty, the courtyard of the summer palace"
-            x={264}
-            top={d(12126)}
-            w={896}
-            h={716}
-          />
-          <Pic
-            file="dine-with-dynasty-4.png"
-            alt="Dine with Dynasty, a multi-course local menu"
-            x={264}
-            top={d(12863)}
-            w={458}
-            h={716}
-          />
-          <Pic
-            file="dine-with-dynasty-5.png"
-            alt="Dine with Dynasty, conversations across the table"
-            x={746}
-            top={d(12863)}
-            w={896}
-            h={716}
-          />
-          <VirsaFilmPlayer
-            responsive
-            src={`${VIDEO}/dine-with-dynasty.mp4`}
-            poster={`${IMG}/dine-with-dynasty-video-poster.jpg`}
-            title="the Dine with Dynasty film"
-            box={{ x: 268, y: d(13713), w: 1383, h: 706 }}
-            triangle={{ x: 0, y: 0, size: 65 }}
-          />
         </section>
 
         {/* ---- Dinner on the Dunes ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="dinner-on-the-dunes" x={269} y={d(14553)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading id="dinner-on-the-dunes" mobile="text-3xl leading-[1.05]" x={269} y={d(14553)}>
             Dinner On The Dunes
           </Heading>
           <Copy x={268} y={d(15178)} w={501}>
@@ -587,6 +633,7 @@ export function VirsaExperiencesPage() {
             meal.
           </Copy>
           <Pic
+            lead
             file="dune-dinner-1.png"
             alt="Dinner on the Dunes, torches burning on the sand"
             x={1179}
@@ -602,7 +649,7 @@ export function VirsaExperiencesPage() {
             w={1383}
             h={706}
           />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Row cols={[1, 1]}>
             <Pic
               file="dune-dinner-3.png"
               alt="Dinner on the Dunes, a plated course"
@@ -619,12 +666,17 @@ export function VirsaExperiencesPage() {
               w={678}
               h={955}
             />
-          </div>
+          </Row>
         </section>
 
         {/* ---- Recreation in Baltistan ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="recreation-in-baltistan" x={269} y={d(17078)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading
+            id="recreation-in-baltistan"
+            mobile="text-3xl leading-[1.05]"
+            x={269}
+            y={d(17078)}
+          >
             Recreation In Baltistan
           </Heading>
           <Copy x={271} y={d(17663)} w={501}>
@@ -633,14 +685,23 @@ export function VirsaExperiencesPage() {
             wood-carving, and loom-weaving.. feeling the raw weight of ancestral tools and deep
             patience, keeping these traditions alive.
           </Copy>
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Pic
+            lead
+            file="recreation-1.png"
+            alt="Recreation in Baltistan, an artisan’s workshop in Turtuk"
+            x={1191}
+            top={d(17078)}
+            w={455}
+            h={722}
+          />
+          <Row cols={[896, 458]}>
             <Pic
-              file="recreation-1.png"
-              alt="Recreation in Baltistan, an artisan’s workshop in Turtuk"
-              x={1191}
-              top={d(17078)}
-              w={455}
-              h={722}
+              file="recreation-2.png"
+              alt="Recreation in Baltistan, learning beside a master artisan"
+              x={271}
+              top={d(17851)}
+              w={896}
+              h={716}
             />
             <Pic
               file="recreation-3.png"
@@ -650,16 +711,8 @@ export function VirsaExperiencesPage() {
               w={458}
               h={716}
             />
-          </div>
-          <Pic
-            file="recreation-2.png"
-            alt="Recreation in Baltistan, learning beside a master artisan"
-            x={271}
-            top={d(17851)}
-            w={896}
-            h={716}
-          />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          </Row>
+          <Row cols={[1, 1]}>
             <VirsaFilmPlayer
               responsive
               src={`${VIDEO}/recreation.mp4`}
@@ -676,7 +729,7 @@ export function VirsaExperiencesPage() {
               w={678}
               h={955}
             />
-          </div>
+          </Row>
           <Pic
             file="recreation-6.png"
             alt="Recreation in Baltistan, stone-masonry and loom-weaving"
@@ -688,8 +741,13 @@ export function VirsaExperiencesPage() {
         </section>
 
         {/* ---- Lunch with a Local Family ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="lunch-with-a-local-family" x={269} y={d(20484)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading
+            id="lunch-with-a-local-family"
+            mobile="text-3xl leading-[1.05]"
+            x={269}
+            y={d(20484)}
+          >
             Lunch With A Local Family
           </Heading>
           <Copy x={278} y={d(21041)} w={501}>
@@ -699,6 +757,7 @@ export function VirsaExperiencesPage() {
             traditional carpets, break bread together, and enter the fabric of local hospitality.
           </Copy>
           <Pic
+            lead
             file="local-family-1.png"
             alt="Lunch with a Local Family, a couple at breakfast"
             x={1189}
@@ -714,7 +773,7 @@ export function VirsaExperiencesPage() {
             w={1378}
             h={705}
           />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Row cols={[669, 679]}>
             <Pic
               file="local-family-3.png"
               alt="Lunch with a Local Family, bread shared on traditional carpets"
@@ -731,7 +790,7 @@ export function VirsaExperiencesPage() {
               w={679}
               h={958}
             />
-          </div>
+          </Row>
           <Pic
             file="local-family-5.png"
             alt="Lunch with a Local Family, the table in a Turtuk home"
@@ -743,8 +802,8 @@ export function VirsaExperiencesPage() {
         </section>
 
         {/* ---- Ramdan Glacier Trek ---- */}
-        <section className="flex flex-col gap-6 xl:contents">
-          <Heading id="ramdan-glacier-trek" x={269} y={d(23768)}>
+        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+          <Heading id="ramdan-glacier-trek" mobile="text-3xl leading-[1.05]" x={269} y={d(23768)}>
             Ramdan Glacier Trek
           </Heading>
           <Copy x={274} y={d(24369)} w={471}>
@@ -752,14 +811,23 @@ export function VirsaExperiencesPage() {
             simply there. A journey that stops being yours alone, alongside a 3 hour trail of water
             channels &amp; wildflowers, that now runs quietly through your soul.
           </Copy>
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Pic
+            lead
+            file="glacier-trek-1.png"
+            alt="Ramdan Glacier Trek, the start of the trail"
+            x={1194}
+            top={d(23784)}
+            w={458}
+            h={722}
+          />
+          <Row cols={[896, 458]}>
             <Pic
-              file="glacier-trek-1.png"
-              alt="Ramdan Glacier Trek, the start of the trail"
-              x={1194}
-              top={d(23784)}
-              w={458}
-              h={722}
+              file="glacier-trek-2.png"
+              alt="Ramdan Glacier Trek, a path along the glacial stream"
+              x={274}
+              top={d(24557)}
+              w={896}
+              h={716}
             />
             <Pic
               file="glacier-trek-3.png"
@@ -769,15 +837,7 @@ export function VirsaExperiencesPage() {
               w={458}
               h={716}
             />
-          </div>
-          <Pic
-            file="glacier-trek-2.png"
-            alt="Ramdan Glacier Trek, a path along the glacial stream"
-            x={274}
-            top={d(24557)}
-            w={896}
-            h={716}
-          />
+          </Row>
           <Pic
             file="glacier-trek-4.png"
             alt="Ramdan Glacier Trek, under a clear blue sky"
@@ -786,7 +846,7 @@ export function VirsaExperiencesPage() {
             w={1383}
             h={706}
           />
-          <div className="grid grid-cols-2 gap-3 xl:contents">
+          <Row cols={[669, 679]}>
             <Pic
               file="glacier-trek-5.png"
               alt="Ramdan Glacier Trek, the canyon leading to the glacier"
@@ -803,14 +863,18 @@ export function VirsaExperiencesPage() {
               w={679}
               h={958}
             />
-          </div>
+          </Row>
         </section>
 
         {/* ---- Features ---- */}
         <section className="flex flex-col gap-8 xl:contents">
-          <Heading x={102} y={d(27148)}>
+          {/* The mobile frame splits this in two: "PR & Media" over the banner, "Features" over the logos. */}
+          <Heading x={102} y={d(27148)} className="hidden xl:block">
             Features
           </Heading>
+          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] xl:hidden">
+            PR &amp; Media
+          </h2>
           {/* Award banner (Figma y27322), linked to the Travel + Leisure award story. */}
           <a
             href="https://www.travelandleisureasia.com/in/news/best-domestic-hotels-iba-2025/"
@@ -825,9 +889,13 @@ export function VirsaExperiencesPage() {
               top={d(27322)}
               w={1920}
               h={1080}
+              mobileAspect="3 / 5"
             />
           </a>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 xl:contents">
+          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] xl:hidden">
+            Features
+          </h2>
+          <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-5 xl:contents">
             <PressLogo
               src={assetPath("/images/projects/virsa-baltistan/press/architectural-digest.png")}
               alt="Read about Virsa Baltistan in Architectural Digest"
@@ -880,10 +948,33 @@ export function VirsaExperiencesPage() {
 
         {/* ---- Team ---- */}
         <section className="flex flex-col gap-4 xl:contents">
-          <Heading x={106} y={d(28714)}>
+          <Heading x={106} y={d(28714)} mobile="text-3xl leading-none">
             Team
           </Heading>
-          <div className="flex flex-col gap-2 xl:contents">
+          {/* Mobile frame: roles grouped, names stacked beside them. */}
+          <dl className="font-helvetica-regular grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-xs tracking-[0.02em] text-[#9b9484] uppercase xl:hidden">
+            <dt className="font-helvetica font-bold">Concept</dt>
+            <dd>Rashidullah Khan</dd>
+            <dt className="font-helvetica font-bold">Community</dt>
+            <dd>Turtuk Village</dd>
+            <dt className="font-helvetica font-bold">Photography</dt>
+            <dd>
+              Alex Buzolic
+              <br />
+              Marie-Eve
+              <br />
+              Ansen Antony
+            </dd>
+            <dt className="font-helvetica font-bold">Visual Design</dt>
+            <dd>
+              Beth
+              <br />
+              Praneet Selva
+            </dd>
+            <dt className="font-helvetica font-bold">Cinematography</dt>
+            <dd>Shivanshu Negi</dd>
+          </dl>
+          <div className="hidden xl:contents">
             <TeamRow role="Cinematography" name="Shivanshu Negi" x={384} nameX={631} y={28730} />
             <TeamRow role="Photography" name="Ansen Antony" x={384} nameX={631} y={28766} />
             <TeamRow role="Photography" name="Alex Buzolic" x={900} nameX={1111} y={28730} />
