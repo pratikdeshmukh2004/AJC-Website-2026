@@ -29,6 +29,7 @@ export function VirsaExpandableIntro({
   toggle,
   gapBelow,
   responsive = false,
+  compact = false,
 }: {
   /** Figma position and width of the intro copy within its section. */
   x: number;
@@ -49,6 +50,12 @@ export function VirsaExpandableIntro({
    * are still canvas-only scale the whole frame instead.
    */
   responsive?: boolean;
+  /**
+   * With `responsive`: the small mobile type of a page that has its own
+   * mobile frame (Virsa Baltistan, node 3995:1393: Helvetica 11). The page
+   * sets the side padding around it.
+   */
+  compact?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const copyId = useId();
@@ -69,11 +76,18 @@ export function VirsaExpandableIntro({
     } as CSSProperties;
 
     return (
-      <div className="px-6 xl:ml-(--ix) xl:w-(--iw) xl:px-0 xl:pt-(--iy) xl:pb-(--ib)" style={vars}>
+      <div
+        className={cn(
+          !compact && "px-6",
+          "xl:ml-(--ix) xl:w-(--iw) xl:px-0 xl:pt-(--iy) xl:pb-(--ib)",
+        )}
+        style={vars}
+      >
         <div
           id={copyId}
           className={cn(
-            "font-helvetica-regular relative text-base leading-[1.45] tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
+            compact ? "text-[11px] leading-[1.18]" : "text-base leading-[1.45]",
+            "font-helvetica-regular relative tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
             expanded
               ? "xl:pb-[calc(32*var(--u))]"
               : "max-h-[17em] overflow-hidden xl:h-(--ty) xl:max-h-none",
@@ -92,7 +106,10 @@ export function VirsaExpandableIntro({
           aria-expanded={expanded}
           aria-controls={copyId}
           onClick={() => setExpanded((open) => !open)}
-          className="group/readmore font-helvetica mt-3 block cursor-pointer text-left text-base font-bold text-[#9b9484] transition-opacity hover:opacity-70 xl:mt-0 xl:ml-(--tx) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className={cn(
+            compact ? "mt-[10px] text-[11px]" : "mt-3 text-base",
+            "group/readmore font-helvetica block cursor-pointer text-left font-bold text-[#9b9484] transition-opacity hover:opacity-70 xl:mt-0 xl:ml-(--tx) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]",
+          )}
         >
           <ReadMoreLabel expanded={expanded} />
         </button>

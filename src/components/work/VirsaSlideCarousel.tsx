@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { VirsaFilmPlayer } from "@/components/work/VirsaFilmPlayer";
 import { cn, place, u } from "@/lib/utils";
@@ -12,7 +12,8 @@ import { cn, place, u } from "@/lib/utils";
   `--u` = 1 Figma px (see the Virsa page files).
 
   Pages with a 390px mobile Figma frame (Haveli Dharampura, AJC-17) also pass
-  `mobile`: the box and arrows in that frame, used below xl.
+  `mobile`: the box and arrows in that frame, used below xl. Virsa Baltistan
+  (AJC-16) passes `responsive` instead: below xl it sits in normal flow.
 */
 
 type Box = { x: number; y: number; w: number; h: number };
@@ -39,6 +40,8 @@ export function VirsaSlideCarousel({
   arrows,
   fit = "cover",
   mobile,
+  responsive = false,
+  start = 0,
 }: {
   label: string;
   slides: Slide[];
@@ -54,8 +57,16 @@ export function VirsaSlideCarousel({
    * for frames that place them over the photo.
    */
   mobile?: { box: Box; arrows: Arrows; play: number; arrowsOnImage?: boolean };
+  /**
+   * Below xl: in normal flow, full width at the box's aspect ratio, with the
+   * arrows over its sides (Virsa Baltistan mobile frame, node 3995:1393).
+   * From xl up: the Figma canvas geometry. Off by default.
+   */
+  responsive?: boolean;
+  /** Index of the slide shown first. */
+  start?: number;
 }) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(start);
   // Which way the last step went, and the slide that is still sliding out.
   const [direction, setDirection] = useState(1);
   const [leaving, setLeaving] = useState<number | null>(null);
@@ -67,20 +78,34 @@ export function VirsaSlideCarousel({
   };
   const slide = slides[index];
   const fitClass = fit === "contain" ? "object-contain object-top" : "object-cover";
-  const sizes = mobile ? sizesForBoth(box.w, mobile.box.w) : sizesFor(box.w);
+  const sizes = mobile
+    ? sizesForBoth(box.w, mobile.box.w)
+    : responsive
+      ? sizesForBoth(box.w, 390)
+      : sizesFor(box.w);
 
   return (
     <section
       aria-roledescription="carousel"
       aria-label={label}
       className={cn(
-        "absolute left-0 w-full",
+        responsive
+          ? "relative aspect-(--ar) w-full xl:absolute xl:top-(--y) xl:left-0 xl:aspect-auto xl:h-(--h)"
+          : "absolute left-0 w-full",
         mobile && "top-(--my) h-(--mh) xl:top-(--y) xl:h-(--h)",
       )}
       style={
-        mobile
-          ? place({ x: 0, y: box.y, h: box.h }, { x: 0, y: mobile.box.y, h: mobile.box.h })
-          : { top: u(box.y), height: u(box.h) }
+        responsive
+          ? ({
+              "--y": u(box.y),
+              "--h": u(box.h),
+              "--ar": `${box.w} / ${box.h}`,
+              "--bx": u(box.x),
+              "--bw": u(box.w),
+            } as CSSProperties)
+          : mobile
+            ? place({ x: 0, y: box.y, h: box.h }, { x: 0, y: mobile.box.y, h: mobile.box.h })
+            : { top: u(box.y), height: u(box.h) }
       }
     >
       <div
@@ -89,15 +114,18 @@ export function VirsaSlideCarousel({
         aria-label={`${index + 1} of ${n}`}
         className={cn(
           "absolute overflow-hidden",
+          responsive && "inset-0 xl:right-auto xl:left-(--bx) xl:w-(--bw)",
           mobile && "top-0 left-(--mx) h-(--mh) w-(--mw) xl:left-(--x) xl:h-(--h) xl:w-(--w)",
         )}
         style={
-          mobile
-            ? place(
-                { x: box.x, y: 0, w: box.w, h: box.h },
-                { x: mobile.box.x, y: 0, w: mobile.box.w, h: mobile.box.h },
-              )
-            : { left: u(box.x), top: 0, width: u(box.w), height: u(box.h) }
+          responsive
+            ? undefined
+            : mobile
+              ? place(
+                  { x: box.x, y: 0, w: box.w, h: box.h },
+                  { x: mobile.box.x, y: 0, w: mobile.box.w, h: mobile.box.h },
+                )
+              : { left: u(box.x), top: 0, width: u(box.w), height: u(box.h) }
         }
       >
         {leaving !== null && leaving !== index ? (
@@ -165,6 +193,7 @@ export function VirsaSlideCarousel({
             onImage: mobile.arrowsOnImage,
           }
         }
+        responsive={responsive && "left"}
         onClick={() => step(-1)}
       >
         &lt;
@@ -180,6 +209,7 @@ export function VirsaSlideCarousel({
             onImage: mobile.arrowsOnImage,
           }
         }
+        responsive={responsive && "right"}
         onClick={() => step(1)}
       >
         &gt;
@@ -197,6 +227,8 @@ export function ArrowButton({
   x,
   y,
   mobile,
+  responsive = false,
+  light = false,
   onClick,
   children,
 }: {
@@ -204,6 +236,12 @@ export function ArrowButton({
   x: number;
   y: number;
   mobile?: { x: number; y: number; onImage?: boolean };
+  /**
+   * Below xl: over that side of its carousel, vertically centred (Virsa
+   * Baltistan). `light` makes it white there, for arrows over a photo.
+   */
+  responsive?: false | "left" | "right";
+  light?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -214,15 +252,22 @@ export function ArrowButton({
       onClick={onClick}
       className={cn(
         "group font-helvetica hover:text-taupe absolute cursor-pointer text-center font-bold text-[#9b9484] transition-colors",
-        mobile
-          ? "top-(--my) left-(--mx) size-[calc(28*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(28*var(--u))] xl:top-(--y) xl:left-(--x) xl:h-[calc(63*var(--u))] xl:w-[calc(73*var(--u))] xl:text-[length:calc(46*var(--u))] xl:leading-[calc(63*var(--u))]"
-          : "text-[length:calc(46*var(--u))] leading-[calc(63*var(--u))]",
-        mobile?.onImage && "max-xl:text-white max-xl:hover:text-white",
+        responsive
+          ? cn(
+              "top-1/2 h-[63px] w-[73px] -translate-y-1/2 text-[20px] leading-[63px] xl:top-(--ay) xl:right-auto xl:left-(--ax) xl:h-[calc(63*var(--u))] xl:w-[calc(73*var(--u))] xl:translate-y-0 xl:text-[length:calc(46*var(--u))] xl:leading-[calc(63*var(--u))]",
+              responsive === "left" ? "left-0" : "right-0",
+            )
+          : mobile
+            ? "top-(--my) left-(--mx) size-[calc(28*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(28*var(--u))] xl:top-(--y) xl:left-(--x) xl:h-[calc(63*var(--u))] xl:w-[calc(73*var(--u))] xl:text-[length:calc(46*var(--u))] xl:leading-[calc(63*var(--u))]"
+            : "text-[length:calc(46*var(--u))] leading-[calc(63*var(--u))]",
+        (mobile?.onImage || (responsive && light)) && "max-xl:text-white max-xl:hover:text-white",
       )}
       style={
-        mobile
-          ? place({ x, y }, { x: mobile.x, y: mobile.y })
-          : { left: u(x), top: u(y), width: u(73), height: u(63) }
+        responsive
+          ? ({ "--ax": u(x), "--ay": u(y) } as CSSProperties)
+          : mobile
+            ? place({ x, y }, { x: mobile.x, y: mobile.y })
+            : { left: u(x), top: u(y), width: u(73), height: u(63) }
       }
     >
       <span
