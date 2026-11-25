@@ -30,6 +30,7 @@ export function VirsaExpandableIntro({
   gapBelow,
   responsive = false,
   compact = false,
+  clamp = "max-h-[17em]",
 }: {
   /** Figma position and width of the intro copy within its section. */
   x: number;
@@ -56,6 +57,8 @@ export function VirsaExpandableIntro({
    * sets the side padding around it.
    */
   compact?: boolean;
+  /** With `responsive`: the collapsed height below xl, as a max-h class. */
+  clamp?: string;
 }) {
   const [expanded, setExpanded] = useState(false);
   const copyId = useId();
@@ -90,7 +93,7 @@ export function VirsaExpandableIntro({
             "font-helvetica-regular relative tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
             expanded
               ? "xl:pb-[calc(32*var(--u))]"
-              : "max-h-[17em] overflow-hidden xl:h-(--ty) xl:max-h-none",
+              : cn(clamp, "overflow-hidden xl:h-(--ty) xl:max-h-none"),
           )}
         >
           {expanded ? full : preview}
