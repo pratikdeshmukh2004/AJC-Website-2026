@@ -3,7 +3,7 @@
 import { useRef, useState, type CSSProperties } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { optimizedPath } from "@/lib/image-paths";
-import { at, cn, u } from "@/lib/utils";
+import { at, cn, place, u } from "@/lib/utils";
 
 /*
   A film in a Figma box (AJC-16: the ibex mascot film). Shows the poster
@@ -25,6 +25,8 @@ export function VirsaFilmPlayer({
   box,
   triangle,
   responsive = false,
+  mobile,
+  fill = false,
 }: {
   src: string;
   /** Poster frame (an optimized image path). */
@@ -40,6 +42,13 @@ export function VirsaFilmPlayer({
    * canvas-only pages scale the whole frame instead.
    */
   responsive?: boolean;
+  /**
+   * For pages with a 390px mobile Figma frame (shown below xl): the box and
+   * play-triangle size in that frame. The triangle is then centred.
+   */
+  mobile?: { box: { x: number; y: number; w: number; h: number }; triangle: number };
+  /** Fill the positioned parent (a slider slide) instead of placing `box`. */
+  fill?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
@@ -51,22 +60,33 @@ export function VirsaFilmPlayer({
     void video.play().catch(() => setStarted(false));
   };
 
+  // Centred triangle (flow, mobile-frame and slide layouts) vs Figma offset.
+  const centred = responsive || fill || mobile !== undefined;
+
   return (
     <div
       className={cn(
         "overflow-hidden bg-[#9b9484]",
-        responsive
-          ? "relative aspect-(--ar) w-full xl:absolute xl:top-(--y) xl:left-(--x) xl:aspect-auto xl:h-(--h) xl:w-(--w)"
-          : "absolute",
+        fill
+          ? "absolute inset-0"
+          : mobile
+            ? "absolute top-(--my) left-(--mx) h-(--mh) w-(--mw) xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)"
+            : responsive
+              ? "relative aspect-(--ar) w-full xl:absolute xl:top-(--y) xl:left-(--x) xl:aspect-auto xl:h-(--h) xl:w-(--w)"
+              : "absolute",
       )}
       style={
-        responsive
-          ? ({
-              ...at(box.x, box.y, box.w),
-              "--h": u(box.h),
-              "--ar": `${box.w} / ${box.h}`,
-            } as CSSProperties)
-          : { left: u(box.x), top: u(box.y), width: u(box.w), height: u(box.h) }
+        fill
+          ? undefined
+          : mobile
+            ? place(box, mobile.box)
+            : responsive
+              ? ({
+                  ...at(box.x, box.y, box.w),
+                  "--h": u(box.h),
+                  "--ar": `${box.w} / ${box.h}`,
+                } as CSSProperties)
+              : { left: u(box.x), top: u(box.y), width: u(box.w), height: u(box.h) }
       }
     >
       <video
@@ -100,18 +120,24 @@ export function VirsaFilmPlayer({
             aria-hidden
             className={cn(
               "absolute rotate-90 transition-transform duration-300 group-hover:scale-110",
-              responsive &&
-                "top-1/2 left-1/2 size-12 -translate-x-1/2 -translate-y-1/2 xl:size-[calc(65*var(--u))]",
+              centred && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+              responsive && "size-12 xl:size-[calc(65*var(--u))]",
+              !responsive && centred && "size-(--tm) xl:size-(--t)",
             )}
             style={
               responsive
                 ? undefined
-                : {
-                    left: u(triangle.x),
-                    top: u(triangle.y),
-                    width: u(triangle.size),
-                    height: u(triangle.size),
-                  }
+                : centred
+                  ? ({
+                      "--t": u(triangle.size),
+                      "--tm": u(mobile?.triangle ?? triangle.size),
+                    } as CSSProperties)
+                  : {
+                      left: u(triangle.x),
+                      top: u(triangle.y),
+                      width: u(triangle.size),
+                      height: u(triangle.size),
+                    }
             }
           >
             <path d="M28.1458 0L56.2917 48.75H0L28.1458 0Z" />
