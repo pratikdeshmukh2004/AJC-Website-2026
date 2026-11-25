@@ -138,11 +138,11 @@ function Swatches({
   tiles,
 }: {
   pic: { x: number; y: number; w: number; h: number };
-  tiles: [number, number, string][];
+  tiles: Swatch[];
 }) {
   return (
     <>
-      {tiles.map(([x, y, color]) => (
+      {tiles.map(([x, y, color, outline]) => (
         <div
           key={`${x}-${y}`}
           role="img"
@@ -154,6 +154,7 @@ function Swatches({
             width: `${((165 / pic.w) * 100).toFixed(3)}%`,
             height: `${((78 / pic.h) * 100).toFixed(3)}%`,
             backgroundColor: color,
+            ...(outline && { border: `1px solid ${outline}` }),
           }}
         />
       ))}
@@ -310,21 +311,25 @@ const TEAM: [string, string][] = [
   ["Illustrations", "Guna M"],
 ];
 
-/** Colour-palette tiles laid over the two material photos (Figma 165 x 78). */
-const SWATCHES_LEATHER: [number, number, string][] = [
-  [249, 5748, "#3a260d"],
-  [414, 5748, "#53350f"],
-  [580, 5748, "#6e4a1c"],
+/**
+ * Colour-palette tiles laid over the two material photos (165 x 78 Figma px):
+ * x, y, fill and an optional outline. Fills are from Figma rectangles 29-31
+ * (leather) and 16 / 19 (brass); each pair sits centred on its photo.
+ */
+type Swatch = [x: number, y: number, fill: string, outline?: string];
+const SWATCHES_LEATHER: Swatch[] = [
+  [249, 5748, "#896a3d"],
+  [414, 5748, "#937f5f"],
+  [580, 5748, "#fbfbf9", "#836b43"],
 ];
-const SWATCHES_BRASS: [number, number, string][] = [
-  [1436, 5826, "#8d6c43"],
-  [1601, 5826, "#c9a45f"],
+const SWATCHES_BRASS: Swatch[] = [
+  [1271, 5748, "#c7c2b2"],
+  [1436, 5748, "#2c2b25"],
 ];
 
 export function AlchiKitchenPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-
       {/* ============ A. HERO + INTRO (Figma y 0–1962) ============ */}
       <section className="relative flex flex-col gap-8 xl:block xl:min-h-[calc(1962*var(--u))] xl:gap-0">
         {/* Wrapper holds the photo and its labels; at xl it dissolves so both sit on the canvas. */}
