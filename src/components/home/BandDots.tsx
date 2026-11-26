@@ -444,7 +444,7 @@ function BandSlide({
           <p className="font-cormorant text-[length:calc(55*var(--u))] leading-[calc(60*var(--u))] font-semibold tracking-[calc(1.1*var(--u))] text-[#f8f7f2]">
             {title}
           </p>
-          <p className="font-helvetica mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#f8f7f2]">
+          <p className="font-helvetica-regular mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#f8f7f2]">
             {description}
           </p>
         </div>

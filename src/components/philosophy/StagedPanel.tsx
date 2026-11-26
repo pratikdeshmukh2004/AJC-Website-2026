@@ -2,9 +2,17 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Image, { type StaticImageData } from "next/image";
-import { cn, fig } from "@/lib/utils";
+import { cn, fig, u } from "@/lib/utils";
 
-export type Stage = { image: StaticImageData; content: ReactNode };
+/**
+ * `mobile` is the stage's layout in the 390px frame (design px): image left
+ * edge and width, and the gaps above the image, between image and copy, and copy and dots.
+ */
+export type Stage = {
+  image: StaticImageData;
+  content: ReactNode;
+  mobile: { x: number; w: number; mt: number; textMt: number; dotsMt: number };
+};
 
 /**
  * One pinned panel that steps through stages as you scroll (Figma comment on
@@ -128,5 +136,48 @@ export function StagedPanel({ stages }: { stages: Stage[] }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Phone version: the four stages stacked, each with its own box, copy and
+ * progress dots (Figma PHILOSOPHY mobile frame). Needs `--u` from the page.
+ * The copy is the same content as the desktop panel; the overrides below
+ * restyle it to the mobile sizes.
+ */
+export function StagedPanelMobile({ stages }: { stages: Stage[] }) {
+  return (
+    <div className="pl-[calc(61*var(--u))]">
+      {stages.map((s, i) => (
+        <section key={i} style={{ paddingTop: u(s.mobile.mt) }}>
+          <Image
+            src={s.image}
+            alt=""
+            priority={i === 0}
+            className="h-auto max-w-none"
+            style={{ width: u(s.mobile.w), marginLeft: u(s.mobile.x - 61) }}
+          />
+          <div
+            className="[&_h2]:text-[length:calc(35.3*var(--u))]! [&_h2]:leading-[calc(37*var(--u))]! [&_h2]:whitespace-nowrap [&_h2+p]:mt-[calc(18*var(--u))]! [&_h2+p]:text-[length:calc(13.4*var(--u))]! [&_h2+p]:leading-[calc(17*var(--u))]! [&_p+p]:mt-[calc(14*var(--u))]! [&>div]:text-[length:calc(12*var(--u))]! [&>div]:leading-[calc(14*var(--u))]! [&>div]:tracking-[0.02em]!"
+            style={{ marginTop: u(s.mobile.textMt), width: u(270) }}
+          >
+            {s.content}
+          </div>
+          <div className="flex" style={{ marginTop: u(s.mobile.dotsMt), gap: u(24) }}>
+            {stages.map((_, d) => (
+              <span
+                key={d}
+                data-dot={d <= i ? "filled" : "empty"}
+                className={cn(
+                  "rounded-full border border-[#7d7062]",
+                  d <= i ? "bg-[#7d7062]" : "bg-transparent",
+                )}
+                style={{ width: u(12), height: u(12) }}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
   );
 }

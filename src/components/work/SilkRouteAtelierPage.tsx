@@ -37,13 +37,13 @@ export function SilkRouteAtelierPage() {
           style={at(0, 0, 1920)}
         />
         <h1
-          className="font-cormorant text-taupe mt-[87px] ml-[49px] w-[290px] text-[45px] leading-[1.05] tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+          className="font-cormorant text-taupe mt-[87px] ml-[49px] w-[290px] text-[45px] leading-[1.05] tracking-[-0.06em] max-md:text-[44.5px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
           style={at(109, 1215, 868)}
         >
           The Silk Route Atelier
         </h1>
         <ul
-          className="font-helvetica-regular text-taupe mt-[16px] ml-[55px] text-[12px] leading-[14px] tracking-[0.24px] uppercase opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+          className="font-helvetica-regular text-taupe mt-[18px] ml-[55px] text-[12px] leading-[14px] tracking-[0.24px] uppercase opacity-80 max-md:tracking-[0.5px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
           style={at(109, 1520, 560)}
         >
           <li>Cultural Research</li>
@@ -52,7 +52,7 @@ export function SilkRouteAtelierPage() {
           <li>Packaging Design</li>
         </ul>
         <div
-          className="font-helvetica-regular text-sage mt-[65px] mb-[93px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:mb-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className="font-helvetica-regular text-sage mt-[65px] mb-[93px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] max-md:w-[261px] max-md:tracking-[0.15px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:mb-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
           style={at(981, 1520, 677)}
         >
           <p>
@@ -111,7 +111,7 @@ export function SilkRouteAtelierPage() {
           The Myth of the Four Dignities
         </p>
         <div
-          className="font-helvetica-regular text-sage mt-[68px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className="font-helvetica-regular text-sage mt-[68px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] max-md:w-[261px] max-md:tracking-[0.15px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
           style={at(971, 2222, 677)}
         >
           <p>
@@ -148,7 +148,7 @@ export function SilkRouteAtelierPage() {
           />
         </div>
         <h2
-          className="font-cormorant text-taupe mt-[103px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+          className="font-cormorant text-taupe mt-[103px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] max-md:ml-[45px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
           style={at(109, 3702, 1088)}
         >
           Colour Palette
@@ -187,11 +187,11 @@ export function SilkRouteAtelierPage() {
         >
           Hues as old as the Himalayas
         </p>
-        <div className="mt-[76px] pr-[120px] pl-[59px] xl:contents">
+        <div className="mt-[74px] pr-[120px] pl-[59px] xl:contents">
           <VirsaExpandableIntro
             responsive
             compact
-            clamp="max-h-[9.5em]"
+            clamp="max-h-[9.5em] max-md:max-h-[11.2em]"
             x={971}
             y={0}
             width={677}
@@ -241,7 +241,7 @@ export function SilkRouteAtelierPage() {
       {/* ============ D. TYPOGRAPHY … PACKAGING ============ */}
       <section className="relative xl:h-[calc(3495*var(--u))]">
         <h2
-          className="font-cormorant text-taupe mt-[108px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+          className="font-cormorant text-taupe mt-[108px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] max-md:mt-[114px] max-md:ml-[45px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
           style={at(109, 0, 1088)}
         >
           Typography
@@ -252,10 +252,10 @@ export function SilkRouteAtelierPage() {
           width={498}
           height={153}
           sizes="(min-width: 1920px) 498px, 230px"
-          className="mx-auto mt-[70px] h-auto w-[230px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
+          className="mx-auto mt-[70px] h-auto w-[230px] max-md:mt-[71px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
           style={at(247, 227, 498)}
         />
-        <div className="mx-[49px] mt-[52px] flex items-start justify-between xl:contents">
+        <div className="mx-[49px] mt-[55px] flex items-start justify-between xl:contents">
           <p
             className="font-helvetica text-sage text-[11px] leading-[1.2] font-bold tracking-[0.22px] whitespace-nowrap uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
             style={at(126, 508)}
@@ -275,7 +275,7 @@ export function SilkRouteAtelierPage() {
           width={489}
           height={192}
           sizes="(min-width: 1920px) 489px, 230px"
-          className="mx-auto mt-[75px] h-auto w-[230px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
+          className="mx-auto mt-[75px] h-auto w-[230px] max-md:mt-[70px] max-md:w-[221px] max-md:-translate-x-[5px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
           style={at(1118, 200, 489)}
         />
         <div className="mx-[49px] mt-[39px] flex items-start justify-between xl:contents">
@@ -286,7 +286,7 @@ export function SilkRouteAtelierPage() {
             Script Umey
           </p>
           <p
-            className="font-helvetica-regular text-sage max-w-[135px] text-right text-[11px] leading-[1.2] tracking-[0.22px] whitespace-normal uppercase max-xl:whitespace-normal xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:max-w-none xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))] xl:whitespace-nowrap"
+            className="font-helvetica-regular text-sage max-w-[135px] text-right text-[11px] leading-[1.2] tracking-[0.22px] whitespace-normal uppercase max-xl:whitespace-normal max-md:max-w-[115px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:max-w-none xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))] xl:whitespace-nowrap"
             style={at(1248, 508, 500)}
           >
             Variation of Uchen, Cursive &amp; Headless
@@ -299,7 +299,7 @@ export function SilkRouteAtelierPage() {
           Script as sacred geometry
         </p>
         <div
-          className="font-helvetica-regular text-sage mt-[63px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:gap-[calc(22*var(--u))] xl:text-[length:calc(18*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))] xl:tracking-[calc(0.36*var(--u))]"
+          className="font-helvetica-regular text-sage mt-[63px] ml-[81px] flex w-[262px] flex-col gap-[11px] text-[11px] leading-[1.2] tracking-[0.11px] max-md:mt-[68px] max-md:w-[259px] max-md:gap-[13px] max-md:tracking-[0.2px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:gap-[calc(22*var(--u))] xl:text-[length:calc(18*var(--u))] xl:text-[length:calc(20*var(--u))] xl:tracking-[calc(0.4*var(--u))] xl:tracking-[calc(0.36*var(--u))]"
           style={at(954, 665, 677)}
         >
           <p>
@@ -315,13 +315,13 @@ export function SilkRouteAtelierPage() {
           </p>
         </div>
         <h2
-          className="font-cormorant text-taupe mt-[84px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+          className="font-cormorant text-taupe mt-[84px] ml-[50px] text-[44px] leading-none tracking-[-0.06em] max-md:mt-[75px] max-md:ml-[45px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
           style={at(109, 1075, 1088)}
         >
           Brand Assets
         </h2>
         <p
-          className="font-helvetica-regular text-sage mt-[38px] ml-[81px] text-[12px] leading-[1.2] tracking-[0.24px] whitespace-nowrap uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className="font-helvetica-regular text-sage mt-[38px] ml-[81px] text-[12px] leading-[1.2] tracking-[0.24px] whitespace-nowrap uppercase max-md:mt-[41px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
           style={at(971, 1120)}
         >
           Packaging
@@ -359,11 +359,11 @@ export function SilkRouteAtelierPage() {
 
       {/* ============ E. PACKAGING COPY (Read more) ============ */}
       <section className="relative">
-        <div className="mt-[49px] pr-[49px] pl-[81px] xl:contents">
+        <div className="mt-[49px] pr-[49px] pl-[81px] max-md:mt-[51px] xl:contents">
           <VirsaExpandableIntro
             responsive
             compact
-            clamp="max-h-[13.5em]"
+            clamp="max-h-[13.5em] max-md:max-h-[16.5em]"
             x={960}
             y={0}
             width={677}
@@ -421,16 +421,16 @@ export function SilkRouteAtelierPage() {
           width={1039}
           height={928}
           sizes="(min-width: 1920px) 1040px, 331px"
-          className="mt-[45px] ml-[29px] h-auto w-[331px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
+          className="mt-[45px] ml-[29px] h-auto w-[331px] max-md:mt-[64px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:h-auto xl:w-(--w)"
           style={at(450, 0, 1040)}
         />
         <h2
-          className="font-cormorant text-taupe mt-[64px] ml-[50px] ml-[52px] text-[44px] leading-none tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
+          className="font-cormorant text-taupe mt-[64px] ml-[50px] ml-[52px] text-[44px] leading-none tracking-[-0.06em] max-md:mt-[62px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]"
           style={at(109, 1300, 1088)}
         >
           Team
         </h2>
-        <div className="mt-[29px] ml-[64px] grid grid-cols-[139px_1fr] gap-y-[18px] pr-[40px] xl:contents">
+        <div className="mt-[29px] ml-[64px] grid grid-cols-[139px_1fr] gap-y-[18px] pr-[40px] max-md:mt-[35px] max-md:gap-y-[22px] xl:contents">
           <p
             className="font-helvetica text-sage text-[12px] leading-[1.2] font-bold tracking-[0.24px] whitespace-nowrap uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
             style={at(954, 1330)}
@@ -458,20 +458,20 @@ export function SilkRouteAtelierPage() {
         </div>
         <p
           aria-hidden
-          className="font-cormorant text-taupe mt-[40px] text-center text-[32px] leading-none font-bold xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))]"
+          className="font-cormorant text-taupe mt-[40px] text-center text-[32px] leading-none font-bold max-md:mt-[45px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))]"
           style={at(905, 1557, 110)}
         >
           &gt;
         </p>
         <Link
           href="/work/farmers-house-cafe"
-          className="font-cormorant text-taupe mt-[28px] block text-center text-[40px] leading-none tracking-[-0.06em] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
+          className="font-cormorant text-taupe mt-[28px] block text-center text-[40px] leading-none tracking-[-0.06em] max-md:mt-[27px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
           style={at(654, 1645, 612)}
         >
           Next Project
         </Link>
         <p
-          className="font-helvetica-regular text-sage mt-[26px] text-center text-[11.5px] leading-[1.2] tracking-[0.26px] whitespace-nowrap uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className="font-helvetica-regular text-sage mt-[26px] text-center text-[11.5px] leading-[1.2] tracking-[0.26px] whitespace-nowrap uppercase max-md:mt-[24px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
           style={at(830, 1751, 260)}
         >
           Farmers’ House Cafe

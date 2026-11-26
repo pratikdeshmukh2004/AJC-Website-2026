@@ -6,7 +6,7 @@ import { AjcLogo, ApekshaJainWordmark, ScriptCycle } from "@/components/brand";
 import { EnquiryForm } from "@/components/hospitality/EnquiryForm";
 import { ProcessStage } from "@/components/hospitality/ProcessStage";
 import { WhatWeDo } from "@/components/hospitality/WhatWeDo";
-import { assetPath, at, cn } from "@/lib/utils";
+import { assetPath, at, cn, u } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Hospitality",
@@ -86,6 +86,16 @@ function HospitalityLockup({ className, style }: { className?: string; style?: C
  */
 export default function HospitalityPage() {
   return (
+    <>
+      <HospitalityMobile />
+      <div className="hidden md:block">
+        <HospitalityDesktop />
+      </div>
+    </>
+  );
+}
+function HospitalityDesktop() {
+  return (
     <main className="@container mx-auto w-full max-w-[1920px] bg-[#f8f7f2] [--u:calc(100cqw/1920)]">
       <div className="relative w-full xl:h-[calc(9134*var(--u))]">
         {/* ---- Hero: 1920 x 1005 ---- */}
@@ -105,11 +115,11 @@ export default function HospitalityPage() {
           </div>
 
           <HospitalityLockup
-            className="w-56 md:w-72 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+            className="w-56 md:w-72 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w)"
             style={at(798, 683, 327)}
           />
           <p
-            className="relative text-center font-helvetica-ui uppercase text-[#f8f7f2] mt-6 text-[0.8125rem] leading-[1.6] tracking-[0.04em] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(21.5*var(--u))] xl:leading-[calc(31*var(--u))]"
+            className="font-helvetica-ui relative mt-6 text-center text-[0.8125rem] leading-[1.6] tracking-[0.04em] text-[#f8f7f2] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(21.5*var(--u))] xl:leading-[calc(31*var(--u))]"
             style={at(720, 750, 485)}
           >
             A consultancy &amp; advisory
@@ -118,7 +128,7 @@ export default function HospitalityPage() {
           </p>
           {/* Regions: the bars are "I" glyphs, as in the design. */}
           <p
-            className="relative text-center font-helvetica-ui uppercase text-[#f8f7f2] mt-6 flex items-center justify-center gap-3 text-[0.8125rem] leading-[1.6] tracking-[0.04em] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(21.5*var(--u))] xl:leading-[calc(31*var(--u))]"
+            className="font-helvetica-ui relative mt-6 flex items-center justify-center gap-3 text-center text-[0.8125rem] leading-[1.6] tracking-[0.04em] text-[#f8f7f2] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:gap-[calc(20*var(--u))] xl:text-[length:calc(21.5*var(--u))] xl:leading-[calc(31*var(--u))]"
             style={at(720, 874, 485)}
           >
             <span>India</span>
@@ -129,11 +139,10 @@ export default function HospitalityPage() {
           </p>
         </section>
 
-
         {/* ---- Who We Are: three columns at x 209 / 753 / 1266, y 1338 ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">
           <h2
-            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
+            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
             style={at(198, 1163, 1088)}
           >
             Who We Are
@@ -141,7 +150,7 @@ export default function HospitalityPage() {
           {/* Stacked below lg: cap the line length (~75 characters). */}
           <div className="mt-10 grid max-w-xl gap-8 lg:max-w-none lg:grid-cols-3 xl:mt-0 xl:block">
             <div
-              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
+              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
               style={at(209, 1338)}
             >
               <p>
@@ -170,7 +179,7 @@ export default function HospitalityPage() {
             </div>
 
             <div
-              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
+              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
               style={at(753, 1338)}
             >
               <p>
@@ -196,7 +205,7 @@ export default function HospitalityPage() {
             </div>
 
             <div
-              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
+              className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
               style={at(1266, 1338)}
             >
               <p>
@@ -227,7 +236,7 @@ export default function HospitalityPage() {
         {/* ---- What We Do + statement ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">
           <h2
-            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
+            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
             style={at(209, 2052, 1088)}
           >
             What We Do
@@ -236,7 +245,7 @@ export default function HospitalityPage() {
             <WhatWeDo />
           </div>
           <p
-            className="font-cormorant text-taupe text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] mt-16 text-center xl:mt-0 xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))]"
+            className="font-cormorant text-taupe mt-16 text-center text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:mt-0 xl:w-(--w) xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))]"
             style={at(391, 2832, 1050)}
           >
             <Line>Strategic Brand &amp; Storytelling is not just a creative layer; it is</Line>
@@ -262,13 +271,13 @@ export default function HospitalityPage() {
           {/* Flow layout only: the photo is cropped tighter there, so lift the contrast. */}
           <div aria-hidden className="absolute inset-0 bg-black/25 xl:hidden" />
           <h2
-            className="font-cormorant relative text-center text-[3.25rem] leading-none font-normal tracking-[-0.08em] text-[#f8f7f2] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(118*var(--u))] xl:leading-[calc(81*var(--u))]"
+            className="font-cormorant relative text-center text-[3.25rem] leading-none font-normal tracking-[-0.08em] text-[#f8f7f2] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(118*var(--u))] xl:leading-[calc(81*var(--u))]"
             style={at(591, 419, 726)}
           >
             How We Do It
           </h2>
           <p
-            className="relative text-center font-helvetica-ui uppercase text-[#f8f7f2] mt-5 text-[0.75rem] leading-[1.5] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(21*var(--u))] xl:leading-[calc(23*var(--u))]"
+            className="font-helvetica-ui relative mt-5 text-center text-[0.75rem] leading-[1.5] text-[#f8f7f2] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(21*var(--u))] xl:leading-[calc(23*var(--u))]"
             style={at(653, 534, 615)}
           >
             New Launches <span className="px-2 xl:px-[calc(8*var(--u))]">|</span> Hotel Re-brands
@@ -278,13 +287,13 @@ export default function HospitalityPage() {
         {/* ---- Our Process ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">
           <h2
-            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
+            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
             style={at(209, 4321, 1088)}
           >
             Our Process
           </h2>
           <p
-            className="font-cormorant mt-4 text-[1.375rem] leading-[1.3] font-normal tracking-[-0.06em] text-[#7d7062] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:text-[length:calc(40*var(--u))] xl:leading-[calc(66*var(--u))] xl:whitespace-nowrap"
+            className="font-cormorant mt-4 text-[1.375rem] leading-[1.3] font-normal tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(40*var(--u))] xl:leading-[calc(66*var(--u))] xl:whitespace-nowrap"
             style={at(214, 4429)}
           >
             We step into the critical window between construction and operations - and sometimes
@@ -365,13 +374,13 @@ export default function HospitalityPage() {
         {/* ---- Our Work ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">
           <h2
-            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
+            className="font-cormorant text-taupe text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] md:text-[3.5rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(104*var(--u))] xl:leading-[calc(96*var(--u))]"
             style={at(209, 5495, 1088)}
           >
             Our Work
           </h2>
           <p
-            className="font-cormorant text-taupe text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] mt-4 xl:whitespace-nowrap xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))]"
+            className="font-cormorant text-taupe mt-4 text-[1.625rem] leading-[1.2] font-normal tracking-[-0.06em] md:text-[2rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:text-[length:calc(50*var(--u))] xl:leading-[calc(66*var(--u))] xl:whitespace-nowrap"
             style={at(220, 5602)}
           >
             These are all living archives of our life, in our brands.
@@ -382,7 +391,7 @@ export default function HospitalityPage() {
             <Link
               href="/work/haveli-dharampura"
               aria-label="Haveli Dharampura"
-              className="@container relative block overflow-hidden [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02] aspect-[494/741] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+              className="@container relative block aspect-[494/741] overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02]"
               style={at(0, 6009, 494)}
             >
               <OptimizedImage
@@ -395,7 +404,7 @@ export default function HospitalityPage() {
               {/* Figma (110, 6504) w219 on the tile; 50px type on a 494px tile = 10.12cqw. */}
               <span
                 aria-hidden
-                className="font-cormorant absolute text-center font-normal tracking-[-0.06em] text-[#f8f7f2] top-[66.8%] left-[22.27%] w-[44.33%] text-[10.12cqw] leading-[8.3cqw]"
+                className="font-cormorant absolute top-[66.8%] left-[22.27%] w-[44.33%] text-center text-[10.12cqw] leading-[8.3cqw] font-normal tracking-[-0.06em] text-[#f8f7f2]"
               >
                 <span className="block">Haveli</span>
                 <span className="block">Dharampura</span>
@@ -406,7 +415,7 @@ export default function HospitalityPage() {
             <Link
               href="/work/virsa-baltistan"
               aria-label="Virsa Baltistan"
-              className="@container relative block overflow-hidden [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02] aspect-[843/1061] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+              className="@container relative block aspect-[843/1061] overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02]"
               style={at(539, 5832, 843)}
             >
               <OptimizedImage
@@ -421,7 +430,7 @@ export default function HospitalityPage() {
             <Link
               href="/work/lahe-life"
               aria-label="Lahé Life"
-              className="@container relative block overflow-hidden [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02] aspect-[493/741] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+              className="@container relative block aspect-[493/741] overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-700 [&>img]:ease-[cubic-bezier(0.22,1,0.36,1)] hover:[&>img]:scale-[1.02]"
               style={at(1427, 6009, 493)}
             >
               <OptimizedImage
@@ -433,7 +442,7 @@ export default function HospitalityPage() {
               />
               <span
                 aria-hidden
-                className="font-cormorant absolute text-center font-normal tracking-[-0.06em] text-[#f8f7f2] top-[64.64%] left-[46.25%] w-[17.04%] text-[10.14cqw] leading-[8.32cqw]"
+                className="font-cormorant absolute top-[64.64%] left-[46.25%] w-[17.04%] text-center text-[10.14cqw] leading-[8.32cqw] font-normal tracking-[-0.06em] text-[#f8f7f2]"
               >
                 <span className="block">Lahé</span>
                 <span className="block">Life</span>
@@ -441,7 +450,7 @@ export default function HospitalityPage() {
             </Link>
           </div>
           <p
-            className="font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] mx-auto mt-16 max-w-2xl text-center xl:mt-0 xl:max-w-none xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
+            className="font-helvetica-ui text-sage mx-auto mt-16 max-w-2xl text-center text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:mt-0 xl:w-(--w) xl:max-w-none xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
             style={at(479, 7125, 963)}
           >
             <Line>
@@ -462,7 +471,7 @@ export default function HospitalityPage() {
         {/* ---- Write to Us ---- */}
         <section className="px-6 py-16 md:px-12 md:py-24 xl:p-0">
           <h2
-            className="font-cormorant text-center text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] text-[#7d7062] md:text-[3.5rem] xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w) xl:text-[length:calc(90.7*var(--u))] xl:leading-[calc(95*var(--u))]"
+            className="font-cormorant text-center text-[2.75rem] leading-[1.05] font-normal tracking-[-0.06em] text-[#7d7062] md:text-[3.5rem] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(90.7*var(--u))] xl:leading-[calc(95*var(--u))]"
             style={at(413, 7360, 1088)}
           >
             Write to Us
@@ -472,7 +481,7 @@ export default function HospitalityPage() {
             {/* Photo (Figma x 961, overhanging the frame; the export is the visible
                 959px) with the cycling script and the brand marks laid over it. */}
             <div
-              className="relative aspect-[959/1378] w-full overflow-hidden [&>img]:h-full [&>img]:w-full [&>img]:object-cover xl:absolute xl:m-0 xl:left-(--x) xl:top-(--y) xl:w-(--w)"
+              className="relative aspect-[959/1378] w-full overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
               style={at(961, 7615, 959)}
             >
               <OptimizedImage
@@ -497,6 +506,397 @@ export default function HospitalityPage() {
             </div>
           </div>
         </section>
+      </div>
+    </main>
+  );
+}
+
+/*
+  Figma: AJC Hospitality mobile frame, 390 x 5149. Flow layout so the READ MORE
+  stages and the What We Do tabs push the page down; margins are measured from
+  the PNG (1 design px = var(--u)). Not drawn in the frame: the third "Who We
+  Are" column (omitted here) and the portrait photo of two monks beside the
+  copy (the closest asset, the hero's hands, is cropped in its place).
+*/
+function HospitalityMobile() {
+  return (
+    <main className="@container w-full bg-[#f8f7f2] pb-[calc(20*var(--u))] [--u:calc(100cqw/390)] md:hidden">
+      <section className="relative w-full overflow-hidden bg-[#1c1c1c]" style={{ height: u(859) }}>
+        <OptimizedImage
+          src={`${IMG}/1.png`}
+          alt="Hands holding a curved stick beside a brass bowl, next to a carved wooden post"
+          width={1920}
+          height={905}
+          priority
+          sizes="100vw"
+          className="h-full w-full object-cover object-[36%_50%]"
+        />
+        <div className="absolute" style={{ left: u(90), top: u(579), width: u(214) }}>
+          <HospitalityLockup />
+        </div>
+        <p
+          className="font-helvetica-ui absolute inset-x-0 text-center tracking-[0.04em] text-[#f8f7f2] uppercase"
+          style={{ top: u(646), fontSize: u(11.5), lineHeight: u(17) }}
+        >
+          A consultancy &amp; advisory
+          <br />
+          for small luxury hotels
+        </p>
+        <p
+          className="font-helvetica-ui absolute inset-x-0 flex items-center justify-center text-[#f8f7f2] uppercase"
+          style={{ top: u(714), fontSize: u(11.5), lineHeight: u(15), gap: u(14) }}
+        >
+          <span>India</span>
+          <span aria-hidden>I</span>
+          <span>Asia</span>
+          <span aria-hidden>I</span>
+          <span>Europe</span>
+        </p>
+      </section>
+      {/* Who We Are */}
+      <section className="relative w-full" style={{ height: u(750) }}>
+        <h2
+          className="font-cormorant text-taupe absolute font-normal tracking-[-0.06em]"
+          style={{ left: u(50), top: u(52), fontSize: u(40), lineHeight: u(48) }}
+        >
+          Who We Are
+        </h2>
+        <div
+          className="absolute overflow-hidden"
+          style={{ left: u(67), top: u(153), width: u(116), height: u(348) }}
+        >
+          <OptimizedImage
+            src={`${IMG}/1.png`}
+            alt="Hands holding a curved stick beside a brass bowl"
+            width={1920}
+            height={905}
+            sizes="50vw"
+            className="h-full w-full object-cover object-[21%_50%]"
+          />
+        </div>
+        <div
+          className="font-helvetica-ui text-sage absolute tracking-[0.02em] opacity-[0.79] [&_p+p]:mt-[calc(13*var(--u))]"
+          style={{ left: u(208), top: u(152), fontSize: u(11), lineHeight: u(13) }}
+        >
+          <p>
+            AJC has been our way
+            <br />
+            of telling stories.
+          </p>
+          <p>
+            We began in the
+            <br />
+            hospitality industry in
+            <br />
+            2024 with a
+            <br />
+            foundation in
+            <br />
+            corporate business
+            <br />
+            and strategy. For our
+            <br />
+            first hotel launch, we
+            <br />
+            set out for a year-long
+            <br />
+            residency in India’s
+            <br />
+            Himalayan region of
+            <br />
+            Ladakh, marking a
+            <br />
+            decisive pivot and the
+            <br />
+            launch of AJC
+            <br />
+            Hospitality, grounded
+            <br />
+            in a single realisation:
+          </p>
+          <p>
+            “What guests feel
+            <br />
+            when they think of a
+            <br />
+            hotel is just as vital as
+            <br />
+            the hotel itself.”
+          </p>
+          <p>
+            It is the human touch,
+            <br />
+            <strong className="font-bold">the human story</strong>, that
+            <br />
+            people truly travel for.
+          </p>
+        </div>
+        <div
+          className="font-helvetica-ui text-sage absolute tracking-[0.02em] opacity-[0.79] [&_p+p]:mt-[calc(13*var(--u))]"
+          style={{ left: u(69), top: u(541), fontSize: u(11), lineHeight: u(13) }}
+        >
+          <p>
+            We believe small luxury hotels around the world
+            <br />
+            deserve that crucial level of intentionality.
+          </p>
+          <p>
+            When you invest deeply in your narrative rather than
+            <br />
+            selling generic room nights, guests feel invited into a
+            <br />
+            rare cultural fabric from their very first interaction.
+          </p>
+          <p>
+            If your hotel feels like anywhere in the world, and
+            <br />
+            nowhere special, your guests may never return.
+          </p>
+          <p>For this, we enter your journey.</p>
+        </div>
+      </section>
+      {/* What We Do */}
+      <h2
+        className="font-cormorant text-taupe font-normal tracking-[-0.06em]"
+        style={{ marginLeft: u(50), fontSize: u(40), lineHeight: u(48) }}
+      >
+        What We Do
+      </h2>
+      <WhatWeDo mobile />
+      <p
+        className="font-cormorant text-taupe mx-auto text-center font-normal tracking-[-0.01em]"
+        style={{ marginTop: u(71), fontSize: u(20), lineHeight: u(21) }}
+      >
+        Strategic Brand &amp; Storytelling
+        <br />
+        is not just a creative layer; it is
+        <br />
+        the commercial engine that
+        <br />
+        defines your Average Daily
+        <br />
+        Rate (ADR) and long-term
+        <br />
+        asset valuation.
+      </p>
+      {/* How We Do It */}
+      <section
+        className="relative w-full overflow-hidden"
+        style={{ marginTop: u(46), height: u(370) }}
+      >
+        <OptimizedImage
+          src={`${IMG}/2.png`}
+          alt="A woman in profile reaching for cones of yarn on a shelf"
+          width={1920}
+          height={905}
+          sizes="100vw"
+          className="h-full w-full object-cover"
+        />
+        <h2
+          className="font-cormorant absolute inset-x-0 text-center font-normal tracking-[-0.08em] text-[#f8f7f2]"
+          style={{ top: u(165), fontSize: u(40), lineHeight: u(44) }}
+        >
+          How We Do It
+        </h2>
+        <p
+          className="font-helvetica-ui absolute inset-x-0 text-center tracking-[0.02em] text-[#f8f7f2] uppercase"
+          style={{ top: u(211), fontSize: u(8), lineHeight: u(10) }}
+        >
+          New Launches <span style={{ padding: `0 ${u(4)}` }}>|</span> Hotel Re-brands
+        </p>
+      </section>
+      {/* Our Process */}
+      <h2
+        className="font-cormorant text-taupe font-normal tracking-[-0.06em]"
+        style={{ marginTop: u(52), marginLeft: u(52), fontSize: u(40), lineHeight: u(48) }}
+      >
+        Our Process
+      </h2>
+      <p
+        className="font-cormorant font-normal tracking-[-0.01em] text-[#7d7062]"
+        style={{
+          marginTop: u(15),
+          marginLeft: u(65),
+          fontSize: u(12),
+          lineHeight: u(15),
+        }}
+      >
+        We step into the critical window between construction
+        <br />
+        and operations - and sometimes years later.
+      </p>
+      <ProcessStage
+        title="De-briefing with Core Stories"
+        lines={5}
+        geometry={{
+          x: 209,
+          y: 4627,
+          body: { dx: 5, gap: 15, width: 531 },
+          more: { dx: 7, gap: 19 },
+          wash: { dx: -5, dy: 20 },
+        }}
+        mobile={{ x: 128, mt: 44, dx: 7, bodyGap: 7, moreGap: 2, fade: 2 }}
+      >
+        Before any visual or experiential work begins, we unlock the foundational narrative of the
+        property.
+        <br />
+        Through our 4-stage <em>Steel Box</em> debriefing process, we excavate the principal’s
+        original vision, the architectural intent, and the deeper cultural roots of the region to
+        isolate the property’s singular, defensible story.
+      </ProcessStage>
+      <ProcessStage
+        title="Identity & Experience Design"
+        lines={3}
+        geometry={{
+          x: 214,
+          y: 4942,
+          body: { dx: 0, gap: 15, width: 518 },
+          more: { dx: 2, gap: 49 },
+          wash: { dx: -5, dy: 25 },
+        }}
+        mobile={{ x: 50, mt: 37, dx: 7, bodyGap: 7, moreGap: 8, fade: 1 }}
+      >
+        With the residency insights established, we craft the core brand identity, narrative, visual
+        language, culinary framework, and guest journey rituals. We bring together the creative
+        teams of photographers, filmmakers, locals and more, to birth a brand directly from its
+        land.
+      </ProcessStage>
+      <ProcessStage
+        title="Living Residency & Audit"
+        lines={3}
+        geometry={{
+          x: 1202,
+          y: 4631,
+          body: { dx: 0, gap: 11, width: 484 },
+          more: { dx: 7, gap: 44 },
+          wash: { dx: 0, dy: 20 },
+        }}
+        mobile={{ x: 128, mt: 45, dx: 7, bodyGap: 7, moreGap: 4, fade: 1 }}
+      >
+        We do not believe in designing luxury from a distance; to build something meaningful in a
+        place, we live on shared land alongside your team and community. We audit the world through
+        a sensory and narrative lens, evaluating every micro-interaction.
+      </ProcessStage>
+      <ProcessStage
+        title="Digital Development"
+        lines={4}
+        geometry={{
+          x: 1202,
+          y: 4940,
+          body: { dx: 0, gap: 16, width: 465 },
+          more: { dx: 7, gap: 25 },
+          wash: { dx: 0, dy: 26 },
+        }}
+        mobile={{ x: 50, mt: 63, dx: 7, bodyGap: 7, moreGap: 7, fade: 1 }}
+      >
+        We translate the physical atmosphere of the hotel into its flagship digital platform and
+        communication assets. Finally, we establish the PR guidelines, social media setup, and
+        launch strategy required to unveil a hotel to the curated global audience of tastemakers and
+        guests.
+      </ProcessStage>
+      {/* Our Work */}
+      <h2
+        className="font-cormorant text-taupe font-normal tracking-[-0.06em]"
+        style={{ marginTop: u(52), marginLeft: u(52), fontSize: u(40), lineHeight: u(48) }}
+      >
+        Our Work
+      </h2>
+      <p
+        className="font-cormorant text-taupe font-normal tracking-[-0.01em]"
+        style={{ marginTop: u(9), marginLeft: u(65), fontSize: u(12), lineHeight: u(15) }}
+      >
+        These are all living archives of our life, in our brands.
+      </p>
+      {/* The outer tiles overhang the frame, as in the design. */}
+      <div className="relative w-full overflow-hidden" style={{ marginTop: u(47), height: u(226) }}>
+        <Link
+          href="/work/haveli-dharampura"
+          aria-label="Haveli Dharampura"
+          className="absolute block overflow-hidden"
+          style={{ left: u(-19), top: u(28), width: u(117), height: u(175) }}
+        >
+          <OptimizedImage
+            src={`${IMG}/3.png`}
+            alt="Multi-storey courtyard with carved wooden arches and stained-glass doors"
+            width={494}
+            height={741}
+            sizes="30vw"
+            className="h-full w-full object-cover"
+          />
+        </Link>
+        <Link
+          href="/work/virsa-baltistan"
+          aria-label="Virsa Baltistan"
+          className="absolute block overflow-hidden"
+          style={{ left: u(105), top: 0, width: u(180), height: u(226) }}
+        >
+          <OptimizedImage
+            src={`${IMG}/4.png`}
+            alt="A stone-paved veranda between two open wooden doors, with mountains beyond"
+            width={843}
+            height={1061}
+            sizes="50vw"
+            className="h-full w-full object-cover"
+          />
+        </Link>
+        <Link
+          href="/work/lahe-life"
+          aria-label="Lahé Life"
+          className="absolute block overflow-hidden"
+          style={{ left: u(291), top: u(28), width: u(117), height: u(175) }}
+        >
+          <OptimizedImage
+            src={`${IMG}/5.png`}
+            alt="A cargo ship on grey water, seen through a dark window frame"
+            width={493}
+            height={741}
+            sizes="30vw"
+            className="h-full w-full object-cover"
+          />
+        </Link>
+      </div>
+      <p
+        className="font-helvetica-ui text-sage mx-auto text-center tracking-[0.02em] opacity-[0.79]"
+        style={{ marginTop: u(47), fontSize: u(9), lineHeight: u(10) }}
+      >
+        A key insight that drives our approach at AJC is the
+        <br />
+        profound impact of human experience on brand
+        <br />
+        interactions. We do not look to alter the soul of
+        <br />
+        your hotel; we look to unearth it, to protect it from
+        <br />
+        the frantic global noise, and to present it to the
+        <br />
+        world as a living masterpiece.
+      </p>
+      {/* Write to Us */}
+      <h2
+        className="font-cormorant text-center font-normal tracking-[-0.06em] text-[#7d7062]"
+        style={{ marginTop: u(54), fontSize: u(40), lineHeight: u(48) }}
+      >
+        Write to Us
+      </h2>
+      <div style={{ marginTop: u(18) }}>
+        <EnquiryForm mobile />
+      </div>
+      <div className="relative w-full overflow-hidden" style={{ marginTop: u(6), height: u(558) }}>
+        <OptimizedImage
+          src={`${IMG}/6.png`}
+          alt="A cup of coffee on a saucer beside an open book"
+          width={959}
+          height={1378}
+          sizes="100vw"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute top-[46%] left-1/2 w-[53%] -translate-x-1/2 -translate-y-1/2">
+          <ScriptCycle />
+        </div>
+        <div aria-hidden className="absolute inset-x-0 top-[89.6%] h-[1.9%] text-[#f8f7f2]">
+          <ApekshaJainWordmark className="absolute left-[29.6%] h-full" />
+          <AjcLogo className="absolute left-[63%] h-full" />
+        </div>
       </div>
     </main>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy, useExpandReflow } from "@/components/work/ReadMoreCopy";
+import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, cn, u } from "@/lib/utils";
 
 /*
@@ -88,263 +89,566 @@ export function HillTribePage() {
   const totalShift = introShift + identityShift;
 
   return (
-    <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
+    <>
+      <HillTribeMobile
+        introExpanded={introExpanded}
+        onToggleIntro={() => setIntroExpanded((prev) => !prev)}
+        identityExpanded={identityExpanded}
+        onToggleIdentity={() => setIdentityExpanded((prev) => !prev)}
+      />
+      <div className="bg-cream @container relative mx-auto hidden w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)] md:block">
+        <div className="relative w-full" style={{ height: u(12757 + totalShift) }}>
+          {/* ============ HERO ============ */}
+          <Pic
+            src="hero.png"
+            alt="Mountains above Turtuk in Ladakh"
+            className="top-[calc(-251*var(--u))] left-[calc(-77*var(--u))] h-[calc(1331*var(--u))] w-[calc(1997*var(--u))]"
+            imgClassName="top-[11.48%] left-[1.93%] h-full w-[99.96%]"
+            priority
+          />
 
-      <div className="relative w-full" style={{ height: u(12757 + totalShift) }}>
-        {/* ============ HERO ============ */}
+          <p className="font-helvetica absolute top-[calc(528*var(--u))] left-[calc(112*var(--u))] w-[calc(348*var(--u))] text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
+            2025 / ۲۰۲۵
+          </p>
+          <p className="font-helvetica absolute top-[calc(528*var(--u))] left-[calc(1472*var(--u))] w-[calc(348*var(--u))] text-center text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
+            AJC in Ladakh / لداخ
+          </p>
+
+          {/* ============ TITLE + CREDITS + INTRO ============ */}
+          <h1 className="font-cormorant text-taupe absolute top-[calc(1192*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
+            Hill Tribe
+          </h1>
+          <div className="font-helvetica-regular absolute top-[calc(1381*var(--u))] left-[calc(109*var(--u))] w-[calc(575*var(--u))] text-[length:calc(28*var(--u))] leading-[normal] tracking-[calc(0.56*var(--u))] text-[#836b43] uppercase opacity-80">
+            <p>Brand Identity</p>
+            <p>Narrative</p>
+            <p>Packaging Design</p>
+            <p>Product Photography</p>
+            <p>Creative Direction</p>
+          </div>
+          <ReadMoreCopy
+            ref={introRef}
+            className="top-[calc(1388*var(--u))] left-[calc(954*var(--u))] w-[calc(585*var(--u))]"
+            textClassName="text-[#a69576]"
+            lead={[
+              "“Bohot bhadiya.” – said he, with the gentle rhyme of Urdu-Farsi; a man who traversed the Karakoram mountains long before his store ever existed.",
+              "Hill Tribe is an organic store in Turtuk, but more accurately, it is the living archive of Mr. Abdul Rashid Khan. A man of quiet resilience and the most charming stories, Mr. Khan’s life spans the memory of the Kargil war to simpler times spent climbing the vast mountains of Baltistan in search of Shilajit. Today, if you follow him up a mountain, you will still find us panting like the donkey who accompanied him back in the day.",
+            ]}
+            expandedTail={[
+              "Where our city eye sees a rugged landscape, Mr. Khan sees a blooming garden. His store holds over 150 mountain secrets – rare herbs, sun-dried fruits, and wild botanicals that only a lifetime of walking these peaks could unearth. It was our privilege, to bring his life, into this small slice he calls his store.",
+            ]}
+            expanded={introExpanded}
+            onToggle={() => setIntroExpanded((prev) => !prev)}
+          />
+
+          {/* Everything below the intro moves down when the intro is expanded. */}
+          <div
+            className="absolute top-0 left-0 h-0 w-full transition-transform duration-500 ease-out"
+            style={{ transform: `translateY(${u(introShift)})` }}
+          >
+            {/* Full-bleed band under the intro */}
+            <Pic
+              src="avani-rai.png"
+              alt="Hill Tribe products set against the mountain"
+              className="top-[calc(1903*var(--u))] left-[calc(-39*var(--u))] h-[calc(1085*var(--u))] w-[calc(1997*var(--u))]"
+              imgClassName="top-[-99.7%] left-[-0.06%] h-[276.13%] w-[100.03%]"
+            />
+
+            {/* ============ IDENTITY ============ */}
+            <h2 className="font-cormorant text-taupe absolute top-[calc(3868*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
+              Identity
+            </h2>
+
+            {/* Logo framed by the dashed guide grid (Figma "Group 137") */}
+            <Pic
+              src="palette-photo.png"
+              alt="Hill Tribe logo: from the last village of India"
+              className="top-[calc(3342*var(--u))] left-[calc(716*var(--u))] h-[calc(307*var(--u))] w-[calc(487*var(--u))]"
+            />
+            <GuideLine
+              vertical
+              className="top-[calc(3362*var(--u))] left-[calc(652*var(--u))] h-[calc(318*var(--u))]"
+            />
+            <GuideLine
+              vertical
+              className="top-[calc(3362*var(--u))] left-[calc(711*var(--u))] h-[calc(318*var(--u))]"
+            />
+            <GuideLine
+              vertical
+              className="top-[calc(3362*var(--u))] left-[calc(1202*var(--u))] h-[calc(318*var(--u))]"
+            />
+            <GuideLine
+              vertical
+              className="top-[calc(3362*var(--u))] left-[calc(1268*var(--u))] h-[calc(318*var(--u))]"
+            />
+            <GuideLine className="top-[calc(3362*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3462*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3493*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3581*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3612*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3629*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+            <GuideLine className="top-[calc(3680*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
+
+            <ReadMoreCopy
+              ref={identityRef}
+              className="top-[calc(4099*var(--u))] left-[calc(953*var(--u))] w-[calc(596*var(--u))]"
+              textClassName="text-[#a69576]"
+              lead={[
+                "The branding brief for Hill Tribe, hence, was not manufactured; it was observed. It was formed from his personal narrative: a man, a mountain, and his donkey in search of Shilajit.",
+                "When we first showed him the concept, he let out a small, amused chuckle – thinking us kids make anything these days. Yet, it was that exact humility we sought to capture. To honor the depth of his roots, we infused the typography with a subtle nod to the Urdu-Farsi script, anchoring the brand in his voice before the world ever saw it.",
+              ]}
+              expandedTail={[
+                "Nearly a hundred meters from the store lies Mr. Khan’s farm, an endless expanse where the finest apples and grapes grow beneath the Himalayan sky. When we first stepped foot there, unable to differentiate coriander from dragon head, he chuckled at our city innocence. That farm, with its trees stretching to the edge of sight, became the literal blueprint for our visual identity. The illustrations were humble, and rooted, translating the untamed lines of his orchards into the packaging itself.",
+              ]}
+              expanded={identityExpanded}
+              onToggle={() => setIdentityExpanded((prev) => !prev)}
+            />
+
+            {/* Everything below the Identity copy moves down when it is expanded. */}
+            <div
+              className="absolute top-0 left-0 h-0 w-full transition-transform duration-500 ease-out"
+              style={{ transform: `translateY(${u(identityShift)})` }}
+            >
+              {/* ============ COLOUR PALETTE ============ */}
+              <h2 className="font-cormorant text-taupe absolute top-[calc(4537*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
+                Colour Palette
+              </h2>
+              <Pic
+                src="colour-palette-band.png"
+                alt="Mountain slope above Turtuk"
+                className="top-[calc(4675*var(--u))] left-0 h-[calc(918*var(--u))] w-[calc(1920*var(--u))]"
+              />
+              {/* Five swatches in one row, ending at the Figma right edge (x1541). */}
+              <div className="absolute top-[calc(5095*var(--u))] left-[calc(376*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#2c2b25]" />
+              <div className="absolute top-[calc(5095*var(--u))] left-[calc(609*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#8d837f]" />
+              <div className="absolute top-[calc(5095*var(--u))] left-[calc(842*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#665442]" />
+              <div className="absolute top-[calc(5095*var(--u))] left-[calc(1075*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#575d3d]" />
+              <div className="absolute top-[calc(5095*var(--u))] left-[calc(1308*var(--u))] box-border h-[calc(78*var(--u))] w-[calc(233*var(--u))] border border-[#836b43] bg-[#fbfbf9]" />
+
+              <div className="font-helvetica-regular absolute top-[calc(5689*var(--u))] left-[calc(953*var(--u))] w-[calc(596*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] text-[#a69576]">
+                <p>
+                  The palette was earthy, raw, and entirely local, sampled from the natural tones of
+                  Turtuk’s soil, flora, and dried harvests.
+                </p>
+                <p className="mt-[calc(69*var(--u))]">
+                  To bring the brand alive, we bypassed the artificiality of a studio. We took the
+                  finished products back to their very origin, photographing them in Turtuk’s
+                  unfiltered, shifting natural light. Set against the rocks and soil from which they
+                  came, the creative cycle completed itself: the fruits of the earth, returning to
+                  the earth, contextualised for the modern world.
+                </p>
+              </div>
+
+              {/* ============ GALLERY ============ */}
+              <Pic
+                src="207.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(6101*var(--u))] left-[calc(56*var(--u))] h-[calc(1079*var(--u))] w-[calc(906*var(--u))]"
+                imgClassName="top-0 left-0 h-[104.95%] w-full"
+              />
+              <Pic
+                src="208.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(6105*var(--u))] left-[calc(962*var(--u))] h-[calc(1079*var(--u))] w-[calc(906*var(--u))]"
+                imgClassName="top-[-0.01%] left-[-44.15%] h-[104.96%] w-[187.49%]"
+              />
+              <Pic
+                src="217.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(7180*var(--u))] left-[calc(52*var(--u))] h-[calc(1100*var(--u))] w-[calc(910*var(--u))]"
+                imgClassName="top-0 left-0 h-[103.39%] w-[99.99%]"
+              />
+              <Pic
+                src="218.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(7184*var(--u))] left-[calc(962*var(--u))] h-[calc(1096*var(--u))] w-[calc(906*var(--u))]"
+                imgClassName="top-0 left-0 h-[103.32%] w-full"
+              />
+
+              <h2 className="font-cormorant text-taupe absolute top-[calc(8393*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(102*var(--u))] tracking-[calc(-5.82*var(--u))]">
+                Photography &amp;
+                <br />
+                Creative Direction
+              </h2>
+              <Pic
+                src="223.png"
+                alt="Hill Tribe in the mountains"
+                className="top-[calc(8648*var(--u))] left-[calc(30*var(--u))] h-[calc(1080*var(--u))] w-[calc(1860*var(--u))]"
+                imgClassName="top-[-11.86%] left-0 h-[114.83%] w-full"
+              />
+              <Pic
+                src="215-a.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(9761*var(--u))] left-[calc(30*var(--u))] h-[calc(663*var(--u))] w-[calc(931*var(--u))]"
+                imgClassName="top-[0.06%] left-[0.04%] h-full w-[106.73%]"
+              />
+              <Pic
+                src="209-a.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(9761*var(--u))] left-[calc(993*var(--u))] h-[calc(663*var(--u))] w-[calc(897*var(--u))]"
+                imgClassName="top-[-68.65%] left-[-1.78%] h-[187%] w-[110.58%]"
+              />
+              <p className="font-cormorant absolute top-[calc(10533*var(--u))] left-[calc(460*var(--u))] w-[calc(1000*var(--u))] text-center text-[length:calc(47*var(--u))] leading-[calc(48*var(--u))] tracking-[calc(-0.47*var(--u))] text-[#8b7f73]">
+                “Products of the Earth - our concept, dives into the
+                <br />
+                land of Turtuk, pulling roots straight from the sand.”
+              </p>
+              <Pic
+                src="215-b.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(10736*var(--u))] left-[calc(30*var(--u))] h-[calc(997*var(--u))] w-[calc(931*var(--u))]"
+                imgClassName="top-[-14.12%] left-0 h-[116.72%] w-full"
+              />
+              <Pic
+                src="209-b.png"
+                alt="Hill Tribe products in Turtuk"
+                className="top-[calc(10736*var(--u))] left-[calc(993*var(--u))] h-[calc(997*var(--u))] w-[calc(897*var(--u))]"
+                imgClassName="top-[-0.01%] left-[-17.15%] h-[100.01%] w-[117.15%]"
+              />
+
+              {/* ============ TEAM ============ */}
+              <h2 className="font-cormorant text-taupe absolute top-[calc(11882*var(--u))] left-[calc(108*var(--u))] w-[calc(868*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
+                Team
+              </h2>
+              <p className="font-helvetica text-sage absolute top-[calc(11908*var(--u))] left-[calc(810*var(--u))] w-[calc(192*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
+                PHOTOGRAPHY
+              </p>
+              <p className="font-helvetica-regular text-sage absolute top-[calc(11908*var(--u))] left-[calc(1015*var(--u))] w-[calc(203*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
+                Avani Rai
+              </p>
+              <p className="font-helvetica text-sage absolute top-[calc(11945*var(--u))] left-[calc(810*var(--u))] w-[calc(192*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
+                PHOTOGRAPHY
+              </p>
+              <p className="font-helvetica-regular text-sage absolute top-[calc(11945*var(--u))] left-[calc(1015*var(--u))] w-[calc(203*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
+                Ansen Antony
+              </p>
+              <p className="font-helvetica text-sage absolute top-[calc(11908*var(--u))] left-[calc(1281*var(--u))] w-[calc(240*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] uppercase">
+                Visual Design
+              </p>
+              <p className="font-helvetica-regular text-sage absolute top-[calc(11908*var(--u))] left-[calc(1526*var(--u))] w-[calc(233*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
+                Praneet Selva
+              </p>
+              <p className="font-helvetica text-sage absolute top-[calc(11945*var(--u))] left-[calc(1282*var(--u))] w-[calc(210*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
+                CREATIVE PARTNER
+              </p>
+              <p className="font-helvetica-regular text-sage absolute top-[calc(11945*var(--u))] left-[calc(1527*var(--u))] w-[calc(265*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
+                Rashidullah Khan
+              </p>
+
+              {/* ============ NEXT PROJECT ============ */}
+              <p
+                aria-hidden
+                className="font-cormorant text-taupe absolute top-[calc(12068*var(--u))] left-[calc(905*var(--u))] w-[calc(110*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] font-bold tracking-[calc(-4.8*var(--u))]"
+              >
+                &gt;
+              </p>
+              <Link
+                href="/work/balti-kitchen"
+                className="font-cormorant text-taupe absolute top-[calc(12156*var(--u))] left-[calc(654*var(--u))] block w-[calc(612*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]"
+              >
+                Next Project
+              </Link>
+              <p className="font-helvetica-regular text-sage absolute top-[calc(12256*var(--u))] left-[calc(810*var(--u))] w-[calc(300*var(--u))] text-center text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
+                Balti Kitchen
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/*
+  Mobile frame (under md), Figma "hill tribe" 390 x 4952 above the footer.
+  `--u` = 1 mobile design px, every coordinate read off the 390px PNG. The page
+  is three stacked sections so the two Read more blocks push the rest down:
+  A (hero to intro), B (portrait to identity copy) and C (everything after).
+*/
+function HillTribeMobile({
+  introExpanded,
+  onToggleIntro,
+  identityExpanded,
+  onToggleIdentity,
+}: {
+  introExpanded: boolean;
+  onToggleIntro: () => void;
+  identityExpanded: boolean;
+  onToggleIdentity: () => void;
+}) {
+  return (
+    <div className="bg-cream @container relative w-full overflow-hidden [--u:calc(100cqw/390)] md:hidden">
+      {/* ============ A: HERO, TITLE, CREDITS, INTRO (page y 0 - 1252) ============ */}
+      <div className="relative w-full pt-[calc(988*var(--u))] pb-[calc(60*var(--u))]">
         <Pic
           src="hero.png"
           alt="Mountains above Turtuk in Ladakh"
-          className="top-[calc(-251*var(--u))] left-[calc(-77*var(--u))] h-[calc(1331*var(--u))] w-[calc(1997*var(--u))]"
-          imgClassName="top-[11.48%] left-[1.93%] h-full w-[99.96%]"
+          className="top-0 left-0 h-[calc(700*var(--u))] w-full"
+          imgClassName="inset-0 h-full w-full object-cover object-[51%_50%]"
           priority
         />
-
-        <p className="font-helvetica absolute top-[calc(528*var(--u))] left-[calc(112*var(--u))] w-[calc(348*var(--u))] text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
-          2025 / ۲۰۲۵
-        </p>
-        <p className="font-helvetica absolute top-[calc(528*var(--u))] left-[calc(1472*var(--u))] w-[calc(348*var(--u))] text-center text-[length:calc(28*var(--u))] font-bold tracking-[calc(0.56*var(--u))] text-white uppercase opacity-80">
+        <p className="font-helvetica absolute top-[calc(83*var(--u))] left-0 w-full text-center text-[length:calc(15*var(--u))] leading-[calc(18*var(--u))] font-bold tracking-[0.02em] text-white uppercase opacity-80">
           AJC in Ladakh / لداخ
         </p>
-
-        {/* ============ TITLE + CREDITS + INTRO ============ */}
-        <h1 className="font-cormorant text-taupe absolute top-[calc(1192*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
+        <p className="font-helvetica absolute top-[calc(614*var(--u))] left-0 w-full text-center text-[length:calc(15*var(--u))] leading-[calc(18*var(--u))] font-bold tracking-[0.02em] text-white uppercase opacity-80">
+          2025 / ۲۰۲۵
+        </p>
+        <h1 className="font-cormorant text-taupe absolute top-[calc(787*var(--u))] left-[calc(49*var(--u))] w-[calc(330*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(76*var(--u))] tracking-[-0.06em] whitespace-nowrap">
           Hill Tribe
         </h1>
-        <div className="font-helvetica-regular absolute top-[calc(1381*var(--u))] left-[calc(109*var(--u))] w-[calc(575*var(--u))] text-[length:calc(28*var(--u))] leading-[normal] tracking-[calc(0.56*var(--u))] text-[#836b43] uppercase opacity-80">
+        <div className="font-helvetica-regular absolute top-[calc(876*var(--u))] left-[calc(55*var(--u))] w-[calc(200*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] text-[#836b43] uppercase opacity-80">
           <p>Brand Identity</p>
           <p>Narrative</p>
           <p>Packaging Design</p>
           <p>Product Photography</p>
           <p>Creative Direction</p>
         </div>
-        <ReadMoreCopy
-          ref={introRef}
-          className="top-[calc(1388*var(--u))] left-[calc(954*var(--u))] w-[calc(585*var(--u))]"
-          textClassName="text-[#a69576]"
-          lead={[
-            "“Bohot bhadiya.” – said he, with the gentle rhyme of Urdu-Farsi; a man who traversed the Karakoram mountains long before his store ever existed.",
-            "Hill Tribe is an organic store in Turtuk, but more accurately, it is the living archive of Mr. Abdul Rashid Khan. A man of quiet resilience and the most charming stories, Mr. Khan’s life spans the memory of the Kargil war to simpler times spent climbing the vast mountains of Baltistan in search of Shilajit. Today, if you follow him up a mountain, you will still find us panting like the donkey who accompanied him back in the day.",
-          ]}
-          expandedTail={[
-            "Where our city eye sees a rugged landscape, Mr. Khan sees a blooming garden. His store holds over 150 mountain secrets – rare herbs, sun-dried fruits, and wild botanicals that only a lifetime of walking these peaks could unearth. It was our privilege, to bring his life, into this small slice he calls his store.",
-          ]}
-          expanded={introExpanded}
-          onToggle={() => setIntroExpanded((prev) => !prev)}
-        />
-
-        {/* Everything below the intro moves down when the intro is expanded. */}
-        <div
-          className="absolute top-0 left-0 h-0 w-full transition-transform duration-500 ease-out"
-          style={{ transform: `translateY(${u(introShift)})` }}
-        >
-          {/* Full-bleed band under the intro */}
-          <Pic
-            src="avani-rai.png"
-            alt="Hill Tribe products set against the mountain"
-            className="top-[calc(1903*var(--u))] left-[calc(-39*var(--u))] h-[calc(1085*var(--u))] w-[calc(1997*var(--u))]"
-            imgClassName="top-[-99.7%] left-[-0.06%] h-[276.13%] w-[100.03%]"
-          />
-
-          {/* ============ IDENTITY ============ */}
-          <h2 className="font-cormorant text-taupe absolute top-[calc(3868*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
-            Identity
-          </h2>
-
-          {/* Logo framed by the dashed guide grid (Figma "Group 137") */}
-          <Pic
-            src="palette-photo.png"
-            alt="Hill Tribe logo: from the last village of India"
-            className="top-[calc(3342*var(--u))] left-[calc(716*var(--u))] h-[calc(307*var(--u))] w-[calc(487*var(--u))]"
-          />
-          <GuideLine
-            vertical
-            className="top-[calc(3362*var(--u))] left-[calc(652*var(--u))] h-[calc(318*var(--u))]"
-          />
-          <GuideLine
-            vertical
-            className="top-[calc(3362*var(--u))] left-[calc(711*var(--u))] h-[calc(318*var(--u))]"
-          />
-          <GuideLine
-            vertical
-            className="top-[calc(3362*var(--u))] left-[calc(1202*var(--u))] h-[calc(318*var(--u))]"
-          />
-          <GuideLine
-            vertical
-            className="top-[calc(3362*var(--u))] left-[calc(1268*var(--u))] h-[calc(318*var(--u))]"
-          />
-          <GuideLine className="top-[calc(3362*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3462*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3493*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3581*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3612*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3629*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-          <GuideLine className="top-[calc(3680*var(--u))] left-[calc(652*var(--u))] w-[calc(616*var(--u))]" />
-
-          <ReadMoreCopy
-            ref={identityRef}
-            className="top-[calc(4099*var(--u))] left-[calc(953*var(--u))] w-[calc(596*var(--u))]"
-            textClassName="text-[#a69576]"
-            lead={[
-              "The branding brief for Hill Tribe, hence, was not manufactured; it was observed. It was formed from his personal narrative: a man, a mountain, and his donkey in search of Shilajit.",
-              "When we first showed him the concept, he let out a small, amused chuckle – thinking us kids make anything these days. Yet, it was that exact humility we sought to capture. To honor the depth of his roots, we infused the typography with a subtle nod to the Urdu-Farsi script, anchoring the brand in his voice before the world ever saw it.",
-            ]}
-            expandedTail={[
-              "Nearly a hundred meters from the store lies Mr. Khan’s farm, an endless expanse where the finest apples and grapes grow beneath the Himalayan sky. When we first stepped foot there, unable to differentiate coriander from dragon head, he chuckled at our city innocence. That farm, with its trees stretching to the edge of sight, became the literal blueprint for our visual identity. The illustrations were humble, and rooted, translating the untamed lines of his orchards into the packaging itself.",
-            ]}
-            expanded={identityExpanded}
-            onToggle={() => setIdentityExpanded((prev) => !prev)}
-          />
-
-          {/* Everything below the Identity copy moves down when it is expanded. */}
-          <div
-            className="absolute top-0 left-0 h-0 w-full transition-transform duration-500 ease-out"
-            style={{ transform: `translateY(${u(identityShift)})` }}
+        <div className="font-helvetica-regular ml-[calc(81*var(--u))] w-[calc(263*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] text-[#a69576]">
+          <p>
+            “Bohot bhadiya.” – said he, with the gentle rhyme of Urdu-Farsi; a man who traversed the
+            Karakoram mountains long before his store ever existed.
+          </p>
+          <p className="mt-[calc(13*var(--u))]">
+            Hill Tribe is an organic store in Turtuk, but more accurately, it is the living archive
+            of Mr. Abdul Rashid Khan. A man of quiet resilience and the most charming stories, Mr.
+            Khan’s life spans the memory of the Kargil war to simpler times spent climbing the vast
+            mountains of Baltistan in search{" "}
+            <span className={cn("transition-opacity duration-300", !introExpanded && "opacity-33")}>
+              of Shilajit. Today, if you follow him up a mountain, you will still find us panting
+              like the donkey who accompanied him back in the day.
+            </span>
+          </p>
+          {introExpanded && (
+            <p className="mt-[calc(13*var(--u))]">
+              Where our city eye sees a rugged landscape, Mr. Khan sees a blooming garden. His store
+              holds over 150 mountain secrets – rare herbs, sun-dried fruits, and wild botanicals
+              that only a lifetime of walking these peaks could unearth. It was our privilege, to
+              bring his life, into this small slice he calls his store.
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={onToggleIntro}
+            aria-expanded={introExpanded}
+            className="group/readmore font-helvetica text-sage mt-[calc(22*var(--u))] block cursor-pointer text-left font-bold"
           >
-            {/* ============ COLOUR PALETTE ============ */}
-            <h2 className="font-cormorant text-taupe absolute top-[calc(4537*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
-              Colour Palette
-            </h2>
-            <Pic
-              src="colour-palette-band.png"
-              alt="Mountain slope above Turtuk"
-              className="top-[calc(4675*var(--u))] left-0 h-[calc(918*var(--u))] w-[calc(1920*var(--u))]"
-            />
-            {/* Five swatches in one row, ending at the Figma right edge (x1541). */}
-            <div className="absolute top-[calc(5095*var(--u))] left-[calc(376*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#2c2b25]" />
-            <div className="absolute top-[calc(5095*var(--u))] left-[calc(609*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#8d837f]" />
-            <div className="absolute top-[calc(5095*var(--u))] left-[calc(842*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#665442]" />
-            <div className="absolute top-[calc(5095*var(--u))] left-[calc(1075*var(--u))] h-[calc(78*var(--u))] w-[calc(233*var(--u))] bg-[#575d3d]" />
-            <div className="absolute top-[calc(5095*var(--u))] left-[calc(1308*var(--u))] box-border h-[calc(78*var(--u))] w-[calc(233*var(--u))] border border-[#836b43] bg-[#fbfbf9]" />
-
-            <div className="font-helvetica-regular absolute top-[calc(5689*var(--u))] left-[calc(953*var(--u))] w-[calc(596*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] text-[#a69576]">
-              <p>
-                The palette was earthy, raw, and entirely local, sampled from the natural tones of
-                Turtuk’s soil, flora, and dried harvests.
-              </p>
-              <p className="mt-[calc(69*var(--u))]">
-                To bring the brand alive, we bypassed the artificiality of a studio. We took the
-                finished products back to their very origin, photographing them in Turtuk’s
-                unfiltered, shifting natural light. Set against the rocks and soil from which they
-                came, the creative cycle completed itself: the fruits of the earth, returning to the
-                earth, contextualised for the modern world.
-              </p>
-            </div>
-
-            {/* ============ GALLERY ============ */}
-            <Pic
-              src="207.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(6101*var(--u))] left-[calc(56*var(--u))] h-[calc(1079*var(--u))] w-[calc(906*var(--u))]"
-              imgClassName="top-0 left-0 h-[104.95%] w-full"
-            />
-            <Pic
-              src="208.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(6105*var(--u))] left-[calc(962*var(--u))] h-[calc(1079*var(--u))] w-[calc(906*var(--u))]"
-              imgClassName="top-[-0.01%] left-[-44.15%] h-[104.96%] w-[187.49%]"
-            />
-            <Pic
-              src="217.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(7180*var(--u))] left-[calc(52*var(--u))] h-[calc(1100*var(--u))] w-[calc(910*var(--u))]"
-              imgClassName="top-0 left-0 h-[103.39%] w-[99.99%]"
-            />
-            <Pic
-              src="218.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(7184*var(--u))] left-[calc(962*var(--u))] h-[calc(1096*var(--u))] w-[calc(906*var(--u))]"
-              imgClassName="top-0 left-0 h-[103.32%] w-full"
-            />
-
-            <h2 className="font-cormorant text-taupe absolute top-[calc(8393*var(--u))] left-[calc(108*var(--u))] w-[calc(1088*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(102*var(--u))] tracking-[calc(-5.82*var(--u))]">
-              Photography &amp;
-              <br />
-              Creative Direction
-            </h2>
-            <Pic
-              src="223.png"
-              alt="Hill Tribe in the mountains"
-              className="top-[calc(8648*var(--u))] left-[calc(30*var(--u))] h-[calc(1080*var(--u))] w-[calc(1860*var(--u))]"
-              imgClassName="top-[-11.86%] left-0 h-[114.83%] w-full"
-            />
-            <Pic
-              src="215-a.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(9761*var(--u))] left-[calc(30*var(--u))] h-[calc(663*var(--u))] w-[calc(931*var(--u))]"
-              imgClassName="top-[0.06%] left-[0.04%] h-full w-[106.73%]"
-            />
-            <Pic
-              src="209-a.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(9761*var(--u))] left-[calc(993*var(--u))] h-[calc(663*var(--u))] w-[calc(897*var(--u))]"
-              imgClassName="top-[-68.65%] left-[-1.78%] h-[187%] w-[110.58%]"
-            />
-            <p className="font-cormorant absolute top-[calc(10533*var(--u))] left-[calc(460*var(--u))] w-[calc(1000*var(--u))] text-center text-[length:calc(47*var(--u))] leading-[calc(48*var(--u))] tracking-[calc(-0.47*var(--u))] text-[#8b7f73]">
-              “Products of the Earth - our concept, dives into the
-              <br />
-              land of Turtuk, pulling roots straight from the sand.”
-            </p>
-            <Pic
-              src="215-b.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(10736*var(--u))] left-[calc(30*var(--u))] h-[calc(997*var(--u))] w-[calc(931*var(--u))]"
-              imgClassName="top-[-14.12%] left-0 h-[116.72%] w-full"
-            />
-            <Pic
-              src="209-b.png"
-              alt="Hill Tribe products in Turtuk"
-              className="top-[calc(10736*var(--u))] left-[calc(993*var(--u))] h-[calc(997*var(--u))] w-[calc(897*var(--u))]"
-              imgClassName="top-[-0.01%] left-[-17.15%] h-[100.01%] w-[117.15%]"
-            />
-
-            {/* ============ TEAM ============ */}
-            <h2 className="font-cormorant text-taupe absolute top-[calc(11882*var(--u))] left-[calc(108*var(--u))] w-[calc(868*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
-              Team
-            </h2>
-            <p className="font-helvetica text-sage absolute top-[calc(11908*var(--u))] left-[calc(810*var(--u))] w-[calc(192*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
-              PHOTOGRAPHY
-            </p>
-            <p className="font-helvetica-regular text-sage absolute top-[calc(11908*var(--u))] left-[calc(1015*var(--u))] w-[calc(203*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
-              Avani Rai
-            </p>
-            <p className="font-helvetica text-sage absolute top-[calc(11945*var(--u))] left-[calc(810*var(--u))] w-[calc(192*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
-              PHOTOGRAPHY
-            </p>
-            <p className="font-helvetica-regular text-sage absolute top-[calc(11945*var(--u))] left-[calc(1015*var(--u))] w-[calc(203*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
-              Ansen Antony
-            </p>
-            <p className="font-helvetica text-sage absolute top-[calc(11908*var(--u))] left-[calc(1281*var(--u))] w-[calc(240*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] uppercase">
-              Visual Design
-            </p>
-            <p className="font-helvetica-regular text-sage absolute top-[calc(11908*var(--u))] left-[calc(1526*var(--u))] w-[calc(233*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
-              Praneet Selva
-            </p>
-            <p className="font-helvetica text-sage absolute top-[calc(11945*var(--u))] left-[calc(1282*var(--u))] w-[calc(210*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))]">
-              CREATIVE PARTNER
-            </p>
-            <p className="font-helvetica-regular text-sage absolute top-[calc(11945*var(--u))] left-[calc(1527*var(--u))] w-[calc(265*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] uppercase">
-              Rashidullah Khan
-            </p>
-
-            {/* ============ NEXT PROJECT ============ */}
-            <p
-              aria-hidden
-              className="font-cormorant text-taupe absolute top-[calc(12068*var(--u))] left-[calc(905*var(--u))] w-[calc(110*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] font-bold tracking-[calc(-4.8*var(--u))]"
-            >
-              &gt;
-            </p>
-            <Link
-              href="/work/balti-kitchen"
-              className="font-cormorant text-taupe absolute top-[calc(12156*var(--u))] left-[calc(654*var(--u))] block w-[calc(612*var(--u))] text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))]"
-            >
-              Next Project
-            </Link>
-            <p className="font-helvetica-regular text-sage absolute top-[calc(12256*var(--u))] left-[calc(810*var(--u))] w-[calc(300*var(--u))] text-center text-[length:calc(20*var(--u))] leading-[normal] tracking-[calc(0.4*var(--u))] whitespace-nowrap uppercase">
-              Balti Kitchen
-            </p>
-          </div>
+            <ReadMoreLabel expanded={introExpanded} />
+          </button>
         </div>
+      </div>
+
+      {/* ============ B: PORTRAIT, IDENTITY, LOGO, COPY (page y 1252 - 2150) ============ */}
+      <div className="relative w-full pt-[calc(663*var(--u))] pb-[calc(36*var(--u))]">
+        <Pic
+          src="avani-rai.png"
+          alt="Hill Tribe products set against the mountain"
+          className="top-[calc(0*var(--u))] left-[calc(0*var(--u))] h-[calc(291*var(--u))] w-[calc(390*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_30%]"
+        />
+        <h2 className="font-cormorant text-taupe absolute top-[calc(342*var(--u))] left-[calc(49*var(--u))] w-[calc(330*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(76*var(--u))] tracking-[-0.06em] whitespace-nowrap">
+          Identity
+        </h2>
+        <GuideLine
+          vertical
+          className="top-[calc(471*var(--u))] left-[calc(80.0*var(--u))] h-[calc(118*var(--u))]"
+        />
+        <GuideLine
+          vertical
+          className="top-[calc(471*var(--u))] left-[calc(101.8*var(--u))] h-[calc(118*var(--u))]"
+        />
+        <GuideLine
+          vertical
+          className="top-[calc(471*var(--u))] left-[calc(283.5*var(--u))] h-[calc(118*var(--u))]"
+        />
+        <GuideLine
+          vertical
+          className="top-[calc(471*var(--u))] left-[calc(307.9*var(--u))] h-[calc(118*var(--u))]"
+        />
+        <GuideLine className="top-[calc(471.0*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(508.0*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(519.5*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(552.0*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(563.5*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(569.8*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        <GuideLine className="top-[calc(588.7*var(--u))] left-[calc(80*var(--u))] w-[calc(228*var(--u))]" />
+        {/* Logo framed by the dashed guide grid (Figma "Group 137") */}
+        <Pic
+          src="palette-photo.png"
+          alt="Hill Tribe logo: from the last village of India"
+          className="top-[calc(464*var(--u))] left-[calc(104*var(--u))] h-[calc(114*var(--u))] w-[calc(180*var(--u))]"
+        />
+        <div className="font-helvetica-regular ml-[calc(81*var(--u))] w-[calc(263*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] text-[#a69576]">
+          <p>
+            The branding brief for Hill Tribe, hence, was not manufactured; it was observed. It was
+            formed from his personal narrative: a man, a mountain, and his donkey in search of
+            Shilajit.
+          </p>
+          <p className="mt-[calc(13*var(--u))]">
+            When we first showed him the concept, he let out a small, amused chuckle – thinking us
+            kids make anything these days. Yet, it was that exact humility we sought to capture. To
+            honor the depth of his{" "}
+            <span
+              className={cn("transition-opacity duration-300", !identityExpanded && "opacity-33")}
+            >
+              roots, we infused the typography with a subtle nod to the Urdu-Farsi script, anchoring
+              the brand in his voice before the world ever saw it.
+            </span>
+          </p>
+          {identityExpanded && (
+            <p className="mt-[calc(13*var(--u))]">
+              Nearly a hundred meters from the store lies Mr. Khan’s farm, an endless expanse where
+              the finest apples and grapes grow beneath the Himalayan sky. When we first stepped
+              foot there, unable to differentiate coriander from dragon head, he chuckled at our
+              city innocence. That farm, with its trees stretching to the edge of sight, became the
+              literal blueprint for our visual identity. The illustrations were humble, and rooted,
+              translating the untamed lines of his orchards into the packaging itself.
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={onToggleIdentity}
+            aria-expanded={identityExpanded}
+            className="group/readmore font-helvetica text-sage mt-[calc(30*var(--u))] block cursor-pointer text-left font-bold"
+          >
+            <ReadMoreLabel expanded={identityExpanded} />
+          </button>
+        </div>
+      </div>
+
+      {/* ============ C: PALETTE TO NEXT PROJECT (page y 2150 - 4952; y below is page y - 2150) ============ */}
+      <div className="relative h-[calc(2802*var(--u))] w-full">
+        <h2 className="font-cormorant text-taupe absolute top-[calc(16*var(--u))] left-[calc(49*var(--u))] w-[calc(330*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(76*var(--u))] tracking-[-0.06em] whitespace-nowrap">
+          Color Palette
+        </h2>
+        <Pic
+          src="colour-palette-band.png"
+          alt="Mountain slope above Turtuk"
+          className="top-[calc(118*var(--u))] left-0 h-[calc(221*var(--u))] w-full"
+          imgClassName="inset-0 h-full w-full object-cover object-[40%_50%]"
+        />
+        <div className="absolute top-[calc(223*var(--u))] left-[calc(33*var(--u))] flex h-[calc(21*var(--u))] w-[calc(323*var(--u))]">
+          <div className="flex-1 bg-[#2c2b25]" />
+          <div className="flex-1 bg-[#8d837f]" />
+          <div className="flex-1 bg-[#665442]" />
+          <div className="flex-1 bg-[#575d3d]" />
+          <div className="box-border flex-1 border border-[#836b43] bg-[#fbfbf9]" />
+        </div>
+        <div className="font-helvetica-regular absolute top-[calc(370*var(--u))] left-[calc(85*var(--u))] w-[calc(258*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] text-[#a69576]">
+          <p>
+            The palette was earthy, raw, and entirely local, sampled from the natural tones of
+            Turtuk’s soil, flora, and dried harvests.
+          </p>
+          <p className="mt-[calc(13*var(--u))]">
+            To bring the brand alive, we bypassed the artificiality of a studio. We took the
+            finished products back to their very origin, photographing them in Turtuk’s unfiltered,
+            shifting natural light. Set against the rocks and soil from which they came, the
+            creative cycle completed itself: the fruits of the earth, returning to the earth,
+            contextualised for the modern world.
+          </p>
+        </div>
+        <Pic
+          src="207.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(575*var(--u))] left-[calc(0*var(--u))] h-[calc(233*var(--u))] w-[calc(193*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_60%]"
+        />
+        <Pic
+          src="208.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(575*var(--u))] left-[calc(194*var(--u))] h-[calc(233*var(--u))] w-[calc(196*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[72%_50%]"
+        />
+        <Pic
+          src="217.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(809*var(--u))] left-[calc(0*var(--u))] h-[calc(239*var(--u))] w-[calc(193*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_55%]"
+        />
+        <Pic
+          src="218.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(809*var(--u))] left-[calc(194*var(--u))] h-[calc(239*var(--u))] w-[calc(196*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_55%]"
+        />
+        <h2 className="font-cormorant text-taupe absolute top-[calc(1090*var(--u))] left-[calc(49*var(--u))] w-[calc(330*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(45*var(--u))] tracking-[-0.06em] whitespace-nowrap">
+          Photography &amp;
+          <br />
+          Creative Direction
+        </h2>
+        <Pic
+          src="223.png"
+          alt="Hill Tribe in the mountains"
+          className="top-[calc(1211*var(--u))] left-[calc(1*var(--u))] h-[calc(222*var(--u))] w-[calc(383*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_60%]"
+        />
+        <Pic
+          src="215-a.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(1438*var(--u))] left-[calc(0*var(--u))] h-[calc(137*var(--u))] w-[calc(194*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[35%_50%]"
+        />
+        <Pic
+          src="209-a.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(1438*var(--u))] left-[calc(198*var(--u))] h-[calc(137*var(--u))] w-[calc(192*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_78%]"
+        />
+        <p className="font-cormorant absolute top-[calc(1610*var(--u))] left-0 w-full text-center text-[length:calc(15*var(--u))] leading-[calc(18*var(--u))] tracking-[-0.01em] text-[#8b7f73]">
+          “Products of the Earth - our concept, dives into the
+          <br />
+          land of Turtuk, pulling roots straight from the sand.”
+        </p>
+        <Pic
+          src="215-b.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(1669*var(--u))] left-[calc(69*var(--u))] h-[calc(271*var(--u))] w-[calc(253*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_50%]"
+        />
+        <Pic
+          src="209-b.png"
+          alt="Hill Tribe products in Turtuk"
+          className="top-[calc(1955*var(--u))] left-[calc(14*var(--u))] h-[calc(403*var(--u))] w-[calc(362*var(--u))]"
+          imgClassName="inset-0 h-full w-full object-cover object-[50%_50%]"
+        />
+        <h2 className="font-cormorant text-taupe absolute top-[calc(2399*var(--u))] left-[calc(46*var(--u))] w-[calc(330*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(76*var(--u))] tracking-[-0.06em] whitespace-nowrap">
+          Team
+        </h2>
+        <p className="font-helvetica text-sage absolute top-[calc(2490*var(--u))] left-[calc(58*var(--u))] w-[calc(130*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] font-bold tracking-[0.02em] uppercase">
+          Photography
+        </p>
+        <p className="font-helvetica-regular text-sage absolute top-[calc(2490*var(--u))] left-[calc(197*var(--u))] w-[calc(180*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase">
+          Avani Rai
+          <br />
+          Ansen Antony
+        </p>
+        <p className="font-helvetica text-sage absolute top-[calc(2544*var(--u))] left-[calc(58*var(--u))] w-[calc(130*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] font-bold tracking-[0.02em] uppercase">
+          Visual Design
+        </p>
+        <p className="font-helvetica-regular text-sage absolute top-[calc(2544*var(--u))] left-[calc(197*var(--u))] w-[calc(180*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase">
+          Praneet Selva
+        </p>
+        <p className="font-helvetica text-sage absolute top-[calc(2579*var(--u))] left-[calc(58*var(--u))] w-[calc(130*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] font-bold tracking-[0.02em] uppercase">
+          Creative
+          <br />
+          Partner
+        </p>
+        <p className="font-helvetica-regular text-sage absolute top-[calc(2579*var(--u))] left-[calc(197*var(--u))] w-[calc(180*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase">
+          Rashidullah Khan
+        </p>
+        <p
+          aria-hidden
+          className="font-cormorant text-taupe absolute top-[calc(2623*var(--u))] left-0 w-full text-center text-[length:calc(40*var(--u))] leading-[calc(50*var(--u))] tracking-[-0.06em]"
+        >
+          &gt;
+        </p>
+        <Link
+          href="/work/balti-kitchen"
+          className="font-cormorant text-taupe absolute top-[calc(2667*var(--u))] left-0 block w-full text-center text-[length:calc(40*var(--u))] leading-[calc(60*var(--u))] tracking-[-0.06em]"
+        >
+          Next Project
+        </Link>
+        <p className="font-helvetica-regular text-sage absolute top-[calc(2734*var(--u))] left-0 w-full text-center text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] uppercase">
+          Balti Kitchen
+        </p>
       </div>
     </div>
   );

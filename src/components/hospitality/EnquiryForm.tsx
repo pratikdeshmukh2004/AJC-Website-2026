@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState, useSyncExternalStore, type FormEvent } from "react";
 import { siteConfig } from "@/config/site";
-import { ENQUIRY_ENDPOINT, at, submitEnquiry } from "@/lib/utils";
+import { ENQUIRY_ENDPOINT, at, submitEnquiry, u } from "@/lib/utils";
 
 // The four "Current phase" choices, in Figma order. (x, y) is the ring's position.
 const PHASES = [
@@ -31,7 +31,11 @@ const SENT_MESSAGE_MS = 6000;
 
 const noopSubscribe = () => () => {};
 
-export function EnquiryForm() {
+/**
+ * `mobile` lays the form out from the 390px frame (needs `--u` from the page):
+ * fields sit at design-px offsets from the form's top edge.
+ */
+export function EnquiryForm({ mobile = false }: { mobile?: boolean }) {
   const [phase, setPhase] = useState<string>(PHASES[0].value);
   const phaseLabelId = useId();
   const email = siteConfig.contactEmail;
@@ -95,6 +99,164 @@ export function EnquiryForm() {
     }
   }
 
+  if (mobile) {
+    // Underlined field: `top` is the line box's top, `rule` the underline's y.
+    const field = (top: number, rule: number) => ({
+      left: u(100),
+      top: u(top),
+      width: u(188),
+      height: u(rule - top + 1),
+      paddingBottom: u(rule - top - 14),
+      fontSize: u(12),
+      lineHeight: u(14),
+    });
+    const fieldClass =
+      "font-helvetica-ui absolute box-border block resize-none overflow-hidden border-0 border-b border-solid border-[#957d54] bg-transparent p-0 text-center tracking-[0.04em] text-[#8b7f73] uppercase outline-none placeholder:text-[#9b9484]/80";
+    return (
+      <form
+        onSubmit={onSubmit}
+        onInput={() => status !== "idle" && status !== "sending" && setStatus("idle")}
+        aria-label="Write to us"
+        className="relative"
+        style={{ height: u(600) }}
+      >
+        <input
+          name="name"
+          type="text"
+          required
+          autoComplete="name"
+          aria-label="Full name"
+          placeholder="Full name"
+          className={fieldClass}
+          style={field(8, 37)}
+        />
+        <input
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          aria-label="Email address"
+          placeholder="Email address"
+          className={fieldClass}
+          style={field(66, 91)}
+        />
+        <input
+          name="hotel"
+          type="text"
+          autoComplete="organization"
+          aria-label="Hotel name and location"
+          placeholder="Hotel name & location"
+          className={fieldClass}
+          style={field(124, 148)}
+        />
+        <div role="radiogroup" aria-labelledby={phaseLabelId}>
+          <p
+            id={phaseLabelId}
+            className="font-helvetica-ui absolute inset-x-0 text-center tracking-[0.04em] text-[#9b9484]/80 uppercase"
+            style={{ top: u(183), fontSize: u(12), lineHeight: u(14) }}
+          >
+            Current phase
+          </p>
+          {[PHASES[0], PHASES[2], PHASES[1], PHASES[3]].map((p, i) => {
+            const checked = phase === p.value;
+            return (
+              <label
+                key={p.value}
+                className="absolute flex cursor-pointer items-center whitespace-nowrap"
+                style={{ left: u(104), top: u(221 + i * 29), height: u(16), gap: u(9) }}
+              >
+                <input
+                  type="radio"
+                  name="phase"
+                  value={p.value}
+                  checked={checked}
+                  onChange={() => setPhase(p.value)}
+                  className="peer sr-only"
+                />
+                <span
+                  aria-hidden
+                  className="shrink-0 rounded-full text-[#8f8275] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#8f8275]"
+                  style={{ width: u(16), height: u(16) }}
+                >
+                  <svg viewBox="0 0 23 23" className="block h-full w-full" focusable="false">
+                    {checked ? (
+                      <circle cx="11.5" cy="11.5" r="11.5" fill="currentColor" />
+                    ) : (
+                      <ellipse
+                        cx="11.5"
+                        cy="11.5"
+                        rx="10.7"
+                        ry="10.2"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                    )}
+                  </svg>
+                </span>
+                <span
+                  className="font-helvetica-ui tracking-[0.04em] text-[#9b9484]/80 uppercase"
+                  style={{ fontSize: u(12) }}
+                >
+                  {p.value}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+        <textarea
+          name="message"
+          rows={1}
+          aria-label="Your message"
+          placeholder="Please write a message"
+          className={fieldClass.replace("overflow-hidden", "overflow-y-auto")}
+          style={field(360, 384)}
+        />
+        <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+          <label>
+            Company
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
+        <button
+          type="submit"
+          disabled={!ready || status === "sending"}
+          className="font-helvetica-ui absolute cursor-pointer rounded-full border-0 bg-[#957d54] p-0 text-center tracking-[0.02em] text-[#fdfbf4] uppercase transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-70"
+          style={{ left: u(132), top: u(435), width: u(125), height: u(28), fontSize: u(12) }}
+        >
+          {status === "sending" ? "Sending…" : "Submit"}
+        </button>
+        <p
+          role="status"
+          aria-live="polite"
+          className="font-helvetica-ui absolute text-center text-[#7d7062] empty:hidden"
+          style={{ left: u(60), top: u(470), width: u(270), fontSize: u(11), lineHeight: u(14) }}
+        >
+          {status === "sent"
+            ? "Thank you, your enquiry has been sent. We'll be in touch soon."
+            : null}
+          {status === "error" ? (
+            <>
+              Something went wrong. Please write to us at{" "}
+              <a className="underline" href={`mailto:${email}`}>
+                {email}
+              </a>
+              .
+            </>
+          ) : null}
+        </p>
+        <p
+          className="font-helvetica-ui absolute inset-x-0 text-center tracking-[0.02em] uppercase"
+          style={{ top: u(497), fontSize: u(13.3), lineHeight: u(16) }}
+        >
+          <span className="block text-[#9b9484]">or write to us on</span>
+          <a href={`mailto:${email}`} className="block text-[#836b43] normal-case hover:underline">
+            {email}
+          </a>
+        </p>
+      </form>
+    );
+  }
   return (
     <form
       onSubmit={onSubmit}

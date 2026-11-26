@@ -107,7 +107,7 @@ const EXPERIENCES: Experience[] = [
  * paragraphs; the rest appears on "Read more".
  */
 const INTRO = [
-  "In the creative world, there are works that inspire and ignite, but seldom are there projects that invent an entirely new parallel. In them, you discover yourself.. your true abilities, your profound shortcomings, and your core potential. For AJC, Virsa Baltistan was precisely that.",
+  "In the creative world, there are works that inspire and ignite, but\nseldom are there projects that invent an entirely new parallel. In them, you discover yourself.. your true abilities, your profound shortcomings, and your core potential. For AJC, Virsa Baltistan was precisely that.",
   "A hotel situated in India’s last village, its story is bound to a modern border that brought the land of Turtuk from Baltistan into Ladakh, India, during the skirmish of 1971. It is a place where lines on a map shifted, but the ancestral soul, language, and culture of the Balti people remained proudly intact.",
   "To build the launch identity for Virsa Baltistan was not to merely design a brand for a luxury boutique stay; it was an exercise in preserving an isolated living legacy. It required an approach that respects the deep, untamed history of the land, while translating its poignant geopolitical narrative into a luxury format for the world.",
   "We did not design this brand from a desk in Delhi. We arrived and stationed ourselves in Ladakh for nearly six months, completely immersing our lives and our practice into the Baltistan we were preparing to share with the world. We lived the narrative, directed the visuals, and breathed life into the physical hotel and its identity from the ground up.",
@@ -289,6 +289,8 @@ export function VirsaBaltistanPage() {
             h={1104}
             ar="390 / 700"
             priority
+            // Mobile frame: the photo is a 1307x699 plate at x-97 (node 175-DSC06192).
+            className="max-md:[&_img]:left-[-97px]! max-md:[&_img]:w-[1307px]! max-md:[&_img]:max-w-none!"
           />
           <p
             className="font-helvetica absolute inset-x-0 top-[90px] text-center text-[15px] font-bold tracking-[0.02em] text-white uppercase opacity-80 xl:inset-x-auto xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-right xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
@@ -308,7 +310,7 @@ export function VirsaBaltistanPage() {
           Virsa Baltistan
         </Heading>
         <ul
-          className="font-helvetica-regular mt-[36px] ml-[56px] text-[12px] leading-[19px] tracking-[0.02em] text-[#7d7062] uppercase opacity-60 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[0.9976] xl:tracking-[calc(0.56*var(--u))] xl:opacity-80"
+          className="font-helvetica-regular mt-[36px] ml-[56px] text-[12px] leading-[19px] tracking-[0.02em] text-[#7d7062] uppercase opacity-60 max-md:mt-[42px] xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[0.9976] xl:tracking-[calc(0.56*var(--u))] xl:opacity-80"
           style={at(117, 1437, 523)}
         >
           <li>Strategy</li>
@@ -319,18 +321,30 @@ export function VirsaBaltistanPage() {
           <li>Hotel Launch</li>
         </ul>
 
-        <div className="mt-[51px] pr-[57px] pl-[82px] xl:contents">
+        <div className="mt-[51px] pr-[57px] pl-[82px] max-md:mt-[50px] xl:contents">
           <VirsaExpandableIntro
             responsive
             compact
+            // Mobile frame shows 17.7em of copy (to y1210) before "Read more".
+            clamp="max-h-[17em] max-md:max-h-[17.7em]"
             x={989}
             y={1437}
             width={677}
             preview={INTRO.slice(0, 2).map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              <p
+                key={paragraph.slice(0, 24)}
+                className="max-md:mb-[13px] max-md:whitespace-pre-line"
+              >
+                {paragraph}
+              </p>
             ))}
             full={INTRO.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              <p
+                key={paragraph.slice(0, 24)}
+                className="max-md:mb-[13px] max-md:whitespace-pre-line"
+              >
+                {paragraph}
+              </p>
             ))}
             // Figma: plate at x957 y1617 (747x80), "Read more" at x992 y1710.
             fade={{ x: -32, y: 180, width: 747, height: 80 }}
@@ -354,7 +368,7 @@ export function VirsaBaltistanPage() {
           h={1129}
           ar="390 / 650"
           // Mobile crop: keeps the rider and flag in the middle of the frame.
-          className="mt-[60px] [&_img]:object-[36%_50%] xl:[&_img]:object-center"
+          className="mt-[60px] max-md:mt-[68px] [&_img]:object-[36%_50%] max-md:[&_img]:object-[32%_50%] xl:[&_img]:object-center"
         />
 
         {/* ---- Identity: the logo on its construction grid ---- */}
@@ -380,7 +394,8 @@ export function VirsaBaltistanPage() {
           w={1920}
           h={1133}
           ar="390 / 423"
-          className="mt-[74px]"
+          // Mobile plate is 743 wide at x-176 (node 2Chogori 1).
+          className="mt-[74px] max-md:[&_img]:left-[-176px]! max-md:[&_img]:w-[743px]! max-md:[&_img]:max-w-none!"
         />
         {/* Mobile: the two sketches side by side, then the artisan full width. */}
         <div className="grid grid-cols-[189fr_201fr] xl:contents">
@@ -424,13 +439,14 @@ export function VirsaBaltistanPage() {
           representing the summit, and a sharp 45-degree angle referencing the steep slopes of the
           mountain&rsquo;s high-altitude Death Zone.
         </Copy>
-        <div className="mt-[14px] ml-[242px] w-[97px] xl:contents">
+        <div className="mt-[14px] ml-[242px] w-[97px] max-md:mt-[39px] xl:contents">
           <Pic file="mark.png" alt="The Virsa mark" x={409} top={r(6948)} w={240} h={225} />
         </div>
 
         {/* ---- Colour Palette ---- */}
         <Heading x={130} y={r(7506)} className="mt-[85px]">
-          Colour Palette
+          <span className="md:hidden">Color</span>
+          <span className="max-md:hidden">Colour</span> Palette
         </Heading>
         <div className="relative mt-[30px] xl:contents">
           <Pic
@@ -441,12 +457,14 @@ export function VirsaBaltistanPage() {
             w={1920}
             h={946}
             ar="390 / 286"
+            // Mobile plate is 590 wide at x-132 (node Harsh_Surti_3 2).
+            className="md:aspect-[1920/946] max-md:[&_img]:left-[-132px]! max-md:[&_img]:w-[590px]! max-md:[&_img]:max-w-none!"
           />
           {/* Swatches: vectors in Figma, not part of the photo. Two rows of four on
-              mobile (x70 y113, 251x60), one row of eight on desktop (x292 y8075). */}
+              mobile (x70 y113, 251x60), one row of eight from md up (x292 y8075 as % of the photo). */}
           <div
             aria-hidden
-            className="absolute top-[113px] left-[70px] grid h-[60px] w-[251px] grid-cols-4 xl:top-(--y) xl:left-(--x) xl:h-[calc(78*var(--u))] xl:w-(--w) xl:grid-cols-8"
+            className="absolute top-[113px] left-[70px] grid h-[60px] w-[251px] grid-cols-4 md:top-[45.88%] md:left-[15.21%] md:h-[8.25%] md:w-[68.96%] md:grid-cols-8 xl:top-(--y) xl:left-(--x) xl:h-[calc(78*var(--u))] xl:w-(--w) xl:grid-cols-8"
             style={at(292, r(8075), 1324)}
           >
             <div className="bg-[#5d6f5b]" />
@@ -469,13 +487,13 @@ export function VirsaBaltistanPage() {
         </Copy>
 
         {/* ---- Mascot of the Mountains ---- */}
-        <Heading x={130} y={r(9074)} className="mt-[68px]">
+        <Heading x={130} y={r(9074)} className="mt-[68px] max-md:mt-[62px] max-md:leading-[46px]">
           Mascot of the
           <br />
           Mountains
         </Heading>
         {/* Mobile: the ibex and its copy on the left, the film on the right. */}
-        <div className="mt-[36px] ml-[49px] grid grid-cols-[111px_197px] gap-x-[23px] xl:contents">
+        <div className="mt-[36px] ml-[49px] grid grid-cols-[111px_197px] gap-x-[23px] max-md:mt-[34px] xl:contents">
           <div className="flex flex-col xl:contents">
             <div className="mt-[61px] ml-[6px] w-[84px] xl:contents">
               <Pic
@@ -496,22 +514,24 @@ export function VirsaBaltistanPage() {
               Virsa stands tall &amp; untamed in the wild.
             </p>
           </div>
-          <VirsaFilmPlayer
-            responsive
-            src={assetPath("/videos/virsa-ibex.mp4")}
-            poster={`${IMG}/ibex-film-poster.jpg`}
-            title="the Virsa ibex film"
-            box={{ x: 980, y: r(9316), w: 913, h: 1061 }}
-            // Figma: the triangle is centred on the film (x1404 y9814, 65px).
-            triangle={{ x: 424, y: 498, size: 65 }}
-          />
+          <div className="max-md:*:aspect-[197/309]! xl:contents">
+            <VirsaFilmPlayer
+              responsive
+              src={assetPath("/videos/virsa-ibex.mp4")}
+              poster={`${IMG}/ibex-film-poster.jpg`}
+              title="the Virsa ibex film"
+              box={{ x: 980, y: r(9316), w: 913, h: 1061 }}
+              // Figma: the triangle is centred on the film (x1404 y9814, 65px).
+              triangle={{ x: 424, y: 498, size: 65 }}
+            />
+          </div>
         </div>
 
         {/* ---- Website Design ---- */}
         <Heading x={130} y={r(10581)} className="mt-[59px]">
           Website Design
         </Heading>
-        <div className="mt-[53px] xl:contents">
+        <div className="mt-[53px] max-md:mt-[57px] xl:contents">
           <VirsaSlideCarousel
             responsive
             label="Website pages"
@@ -528,7 +548,7 @@ export function VirsaBaltistanPage() {
         <Heading x={130} y={r(11805)} className="mt-[75px]">
           Brand Assets
         </Heading>
-        <div className="mt-[46px] flex flex-col gap-[7px] px-[11px] xl:contents">
+        <div className="mt-[46px] flex flex-col gap-[7px] px-[11px] max-md:mt-[47px] xl:contents">
           <Pic
             file="assets-3.png"
             alt="Virsa brochures laid on autumn leaves"
@@ -607,7 +627,7 @@ export function VirsaBaltistanPage() {
         {/* Postcard close-ups. Mobile frame 3995:1393 overlaps them in a 229px
             band, the address side on top. */}
         <div className="relative mt-[63px] h-[229px] xl:contents">
-          <div className="absolute top-[99px] left-[122px] z-10 w-[194px] xl:contents">
+          <div className="absolute top-[99px] left-[122px] z-10 w-[194px] max-md:left-[124px] xl:contents">
             <Pic
               file="card-1.png"
               alt="The Virsa Postale postcard, address side"
@@ -636,7 +656,7 @@ export function VirsaBaltistanPage() {
           w={913}
           h={1061}
           ar="390 / 451"
-          className="mt-[67px]"
+          className="mt-[67px] max-md:mt-[63px]"
         />
         <Pic
           file="assets-6.png"
@@ -679,10 +699,16 @@ export function VirsaBaltistanPage() {
         </div>
 
         {/* ---- Social Media ---- */}
-        <Heading x={130} y={r(18353)} className="mt-[65px]">
+        <Heading x={130} y={r(18353)} className="mt-[65px] max-md:mt-[59px] max-md:pl-[54px]">
           Social Media
         </Heading>
-        <Copy x={989} y={r(18412)} w={663} mobile="ml-[64px]" className="mt-[30px]">
+        <Copy
+          x={989}
+          y={r(18412)}
+          w={663}
+          mobile="ml-[64px]"
+          className="mt-[30px] max-md:mt-[36px]"
+        >
           Built entirely on organic growth, Virsa&rsquo;s digital presence serves <br />
           as an authentic window into daily life at the property. Rather than <br />
           treating Instagram as isolated media, every visual contributes to <br />a unified
@@ -696,17 +722,17 @@ export function VirsaBaltistanPage() {
             responsive
             label="Instagram grid"
             slides={SOCIAL}
-            box={{ x: 536, y: r(18707), w: 889, h: 1756 }}
-            arrows={{ y: r(19518), left: 262, right: 1599 }}
+            box={{ x: 711, y: r(19048), w: 542, h: 1075 }}
+            arrows={{ y: r(19518), left: 436, right: 1384 }}
           />
         </div>
 
         {/* ---- Creative Direction: links to the visual-archive page ---- */}
-        <Heading x={138} y={r(20650)} className="mt-[72px]">
+        <Heading x={138} y={r(20650)} className="mt-[72px] max-md:mt-[68px] max-md:pl-[54px]">
           Creative
           <br className="xl:hidden" /> Direction
         </Heading>
-        <div className="mx-auto mt-[41px] grid w-[313px] grid-cols-2 gap-[7px] xl:contents">
+        <div className="mx-auto mt-[41px] grid w-[313px] grid-cols-2 gap-[7px] max-md:mt-[38px] xl:contents">
           <Pic
             file="creative-1.jpg"
             alt="Timber balconies above a stone lane at Virsa"
@@ -753,11 +779,11 @@ export function VirsaBaltistanPage() {
         </Link>
 
         {/* ---- Experience Design ---- */}
-        <Heading x={139} y={r(21619)} className="mt-[53px]">
+        <Heading x={139} y={r(21619)} className="mt-[53px] max-md:mt-[50px] max-md:pl-[54px]">
           Experience
           <br className="xl:hidden" /> Design
         </Heading>
-        <div className="mt-[50px] xl:contents">
+        <div className="mt-[50px] max-md:mt-[51px] xl:contents">
           <VirsaExperienceCarousel
             responsive
             className="aspect-[390/523]"
@@ -800,7 +826,8 @@ export function VirsaBaltistanPage() {
         <h2 className="font-cormorant mt-[57px] px-[49px] text-[45px] leading-[42px] tracking-[-0.06em] text-[#8b7f73] xl:hidden">
           Features
         </h2>
-        <div className="mt-[13px] flex flex-wrap items-center justify-center gap-x-[36px] gap-y-[16px] px-[49px] xl:contents">
+        {/* Mobile: the logo group is a 290x64 box at x49; each logo sits at its Figma offset. */}
+        <div className="relative mt-[13px] ml-[49px] flex h-[64px] w-[290px] flex-wrap items-center justify-center gap-x-[36px] gap-y-[16px] max-md:block md:mx-0 md:ml-0 md:h-auto md:w-auto md:px-[49px] xl:contents">
           <PressLogo
             src={`${IMG}/press/architectural-digest.png`}
             alt="Read about Virsa Baltistan in Architectural Digest"
@@ -809,7 +836,7 @@ export function VirsaBaltistanPage() {
             y={24510}
             w={116}
             h={75}
-            className="h-[19px] w-[30px]"
+            className="h-[19px] w-[30px] max-md:absolute max-md:top-[5px] max-md:left-0"
           />
           <PressLogo
             src={assetPath("/images/projects/ranjits-svaasa/press-robb.png")}
@@ -820,7 +847,7 @@ export function VirsaBaltistanPage() {
             y={24532}
             w={278}
             h={59}
-            className="h-[29px] w-[137px]"
+            className="h-[29px] w-[137px] max-md:absolute max-md:top-0 max-md:left-[66px]"
           />
           <PressLogo
             src={`${IMG}/press/conde-nast-traveller.png`}
@@ -830,7 +857,7 @@ export function VirsaBaltistanPage() {
             y={24522}
             w={193}
             h={69}
-            className="h-[19px] w-[54px]"
+            className="h-[19px] w-[54px] max-md:absolute max-md:top-[5px] max-md:left-[236px]"
           />
           <PressLogo
             src={`${IMG}/press/travel-leisure.png`}
@@ -840,14 +867,14 @@ export function VirsaBaltistanPage() {
             y={24527}
             w={246}
             h={57}
-            className="h-[19px] w-[82px]"
+            className="h-[19px] w-[82px] max-md:absolute max-md:top-[45px] max-md:left-[30px]"
           />
           {/* No logo file was supplied for Brown History, so its name is set in type. */}
           <a
             href="https://www.instagram.com/p/DRczqw0AU6L/"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-helvetica text-center text-[11px] font-bold tracking-[-0.02em] text-black transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(28*var(--u))]"
+            className="font-helvetica text-center text-[11px] font-bold tracking-[-0.02em] text-black transition-opacity duration-300 hover:opacity-70 max-md:absolute max-md:top-[49px] max-md:left-[179px] max-md:w-[82px] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(28*var(--u))]"
             style={at(1564, r(24542), 197)}
           >
             Brown History
@@ -855,19 +882,21 @@ export function VirsaBaltistanPage() {
         </div>
 
         {/* ---- Team ---- */}
-        <Heading x={130} y={r(24705)} className="mt-[56px]">
+        <Heading x={130} y={r(24705)} className="mt-[56px] max-md:mt-[54px]">
           Team
         </Heading>
         {/* Mobile: one row per role, names stacked beside it. */}
-        <dl className="mt-[31px] ml-[62px] grid grid-cols-[139px_1fr] gap-y-[18px] text-[12px] leading-[17px] tracking-[0.02em] text-[#9b9484] uppercase xl:hidden">
+        <dl className="mt-[31px] ml-[62px] grid grid-cols-[139px_1fr] gap-y-[18px] text-[12px] leading-[17px] tracking-[0.02em] text-[#9b9484] uppercase max-md:mt-[34px] max-md:grid-rows-[36px_36px_69px_41px_auto] max-md:gap-y-0 max-md:leading-[14px] xl:hidden">
           <dt className="font-helvetica font-bold">Concept</dt>
           <dd className="font-helvetica-regular">Rashidullah Khan</dd>
           <dt className="font-helvetica font-bold">Community</dt>
           <dd className="font-helvetica-regular">Turtuk Village</dd>
           <dt className="font-helvetica font-bold">Photography</dt>
           <dd className="font-helvetica-regular">
-            Avani Rai
-            <br />
+            <span className="max-md:hidden">
+              Avani Rai
+              <br />
+            </span>
             Alex Buzolic
             <br />
             Marie-Eve
@@ -917,10 +946,10 @@ export function VirsaBaltistanPage() {
         })}
 
         {/* ---- Next project ---- */}
-        <div className="mt-[46px] flex flex-col items-center text-center xl:contents">
+        <div className="mt-[46px] flex flex-col items-center text-center max-md:mt-[68px] xl:contents">
           <div
             aria-hidden
-            className="font-cormorant text-[40px] leading-none font-bold text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))]"
+            className="font-cormorant text-[40px] leading-none font-bold text-[#7d7062] max-md:font-normal xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))]"
             style={at(905, r(24925), 110)}
           >
             &gt;

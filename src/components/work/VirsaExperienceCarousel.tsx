@@ -200,7 +200,7 @@ export function VirsaExperienceCarousel({
                   } as CSSProperties
                 }
               >
-                <h3 className="font-cormorant max-w-[240px] text-[35px] leading-[42px] tracking-[0.02em] text-[#fdfbf4] [font-variant-caps:small-caps] xl:absolute xl:bottom-(--tb) xl:left-(--tx) xl:w-(--tw) xl:max-w-none xl:text-[length:calc(55*var(--u))] xl:leading-[normal] xl:tracking-[calc(-3.3*var(--u))] xl:text-white xl:[font-variant-caps:normal]">
+                <h3 className="font-cormorant max-w-[240px] text-[35px] leading-[42px] tracking-[0.02em] text-[#fdfbf4] [font-variant-caps:small-caps] max-md:translate-y-[5px] xl:absolute xl:bottom-(--tb) xl:left-(--tx) xl:w-(--tw) xl:max-w-none xl:text-[length:calc(55*var(--u))] xl:leading-[normal] xl:tracking-[calc(-3.3*var(--u))] xl:text-white xl:[font-variant-caps:normal]">
                   {item.title}
                 </h3>
                 <p className="font-helvetica-regular mt-[10px] max-w-[255px] text-[10px] leading-[1.2] tracking-[0.02em] text-[#fdfbf4] xl:absolute xl:top-(--by) xl:left-(--bx) xl:mt-0 xl:w-(--bw) xl:max-w-none xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))] xl:text-white">

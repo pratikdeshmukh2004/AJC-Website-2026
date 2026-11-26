@@ -7,7 +7,7 @@ import { AjcLogo, ApekshaJainWordmark } from "@/components/brand";
 import { getEntryChoice, subscribeEntry } from "@/components/home/entry-session";
 import { MenuPanel } from "@/components/layout/MenuPanel";
 import { siteConfig } from "@/config/site";
-import { cn, fig } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 /*
   The one site header — Figma: Header (node 3834:14), 1920 x 141, transparent.
@@ -48,54 +48,38 @@ export function SiteHeader() {
     <>
       <header
         className={cn(
-          "pointer-events-none absolute inset-x-0 top-0 z-30",
+          "pointer-events-none absolute inset-x-0 top-0 z-30 [--u:clamp(0.9px,calc(100vw/390),1.5px)] md:[--u:initial]",
           onPaper ? "text-taupe" : "text-white",
         )}
       >
-        <div
-          className="mx-auto flex max-w-[1920px] items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr]"
-          style={{
-            height: fig(141, "5.5rem"),
-            paddingLeft: fig(101, "1.5rem"),
-            paddingRight: fig(109, "1.5rem"),
-          }}
-        >
+        <div className="mx-auto grid h-[calc(62*var(--u))] max-w-[1920px] grid-cols-[1fr_auto_1fr] items-center pr-[calc(35*var(--u))] pl-[calc(24*var(--u))] md:h-[clamp(5.5rem,7.344vw,141px)] md:pr-[clamp(1.5rem,5.677vw,109px)] md:pl-[clamp(1.5rem,5.26vw,101px)]">
           <ApekshaJainWordmark
             title="Apeksha Jain"
-            className="md:justify-self-start"
-            style={{ height: fig(38, "0.9375rem") }}
+            className="h-[calc(9*var(--u))] justify-self-start md:h-[clamp(0.9375rem,1.979vw,38px)]"
           />
-
+          {/* Mobile frame places the logo at x187, 9px right of the centred column. */}
           <Link
             href="/"
             aria-label={`${siteConfig.name} — home`}
-            className="pointer-events-auto flex md:justify-self-center"
+            className="pointer-events-auto flex translate-x-[calc(9*var(--u))] justify-self-center md:translate-x-0"
           >
-            <AjcLogo style={{ height: fig(38, "1.375rem") }} />
+            <AjcLogo className="h-[calc(10*var(--u))] md:h-[clamp(1.375rem,1.979vw,38px)]" />
           </Link>
-
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-label="Open menu"
-            className="pointer-events-auto flex cursor-pointer items-center transition-opacity hover:opacity-80 md:justify-self-end"
-            style={{ gap: fig(9, "0.45rem") }}
+            className="pointer-events-auto flex cursor-pointer items-center gap-[calc(1*var(--u))] justify-self-end transition-opacity hover:opacity-80 md:gap-[clamp(0.45rem,0.469vw,9px)]"
           >
             <span
               aria-hidden
-              className="rounded-full border border-solid border-current"
-              style={{
-                width: fig(45, "0.8125rem"),
-                height: fig(45, "0.8125rem"),
-                borderWidth: fig(2.75, "1px"),
-              }}
+              className="size-[calc(10*var(--u))] rounded-full border-[length:calc(1*var(--u))] border-solid border-current md:size-[clamp(0.8125rem,2.344vw,45px)] md:border-[length:clamp(1px,0.143vw,2.75px)]"
             />
             <span
               aria-hidden
-              className="rounded-full bg-current"
-              style={{ width: fig(45, "0.8125rem"), height: fig(45, "0.8125rem") }}
+              className="size-[calc(10*var(--u))] rounded-full bg-current md:size-[clamp(0.8125rem,2.344vw,45px)]"
             />
           </button>
         </div>

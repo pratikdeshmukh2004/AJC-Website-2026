@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CopyEmail } from "@/components/philosophy/CopyEmail";
 import { PhotoCarousel } from "@/components/philosophy/PhotoCarousel";
-import { StagedPanel, type Stage } from "@/components/philosophy/StagedPanel";
+import { StagedPanel, StagedPanelMobile, type Stage } from "@/components/philosophy/StagedPanel";
 import { siteConfig } from "@/config/site";
-import { fig } from "@/lib/utils";
+import { fig, u } from "@/lib/utils";
 // Static imports: Next fingerprints the files and applies the basePath itself.
 import heroValley from "../../../public/images/philosophy/hero-valley.jpg";
 import family from "../../../public/images/philosophy/family.jpg";
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
 const STAGES: Stage[] = [
   {
     image: boxClosed,
+    mobile: { x: 101, w: 190, mt: 88, textMt: 49, dotsMt: 29 },
     content: (
       <div>
         <h2
@@ -58,6 +59,7 @@ const STAGES: Stage[] = [
   },
   {
     image: boxKey,
+    mobile: { x: 97, w: 204, mt: 64.5, textMt: 24.4, dotsMt: 26.6 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
@@ -70,13 +72,16 @@ const STAGES: Stage[] = [
         </p>
         <p>
           So I did what I could. I kept all my travel tickets, my antiques, the coins I found inside
-          that box, intact. It became my box of memories, of my life’s pieces.
+          that box, intact. It became my box of memories,
+          <br className="md:hidden" />
+          of my life’s pieces.
         </p>
       </div>
     ),
   },
   {
     image: boxOpen,
+    mobile: { x: 97, w: 193, mt: 96, textMt: 49.4, dotsMt: 40.6 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
@@ -96,6 +101,7 @@ const STAGES: Stage[] = [
   },
   {
     image: boxOverflowing,
+    mobile: { x: 71, w: 246, mt: 108, textMt: 70.1, dotsMt: 26.6 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
@@ -108,16 +114,35 @@ const STAGES: Stage[] = [
           <br />
           their deeply intentional eyes.
           <br />
-          Our driving force is to create what doesn’t yet exist, and to tell stories that outlive
-          all of us.
+          Our driving force is to create what
+          <br className="md:hidden" />
+          doesn’t yet exist, and to tell stories
+          <br className="md:hidden" />
+          that outlive all of us.
         </p>
-        <p>We give you a place to put your life’s pieces in, by slowing down enough to hear it.</p>
+        <p>
+          We give you a place to put your life’s pieces in,
+          <br className="md:hidden" />
+          by slowing down enough to
+          <br className="md:hidden" />
+          hear it.
+        </p>
       </div>
     ),
   },
 ];
 
 export default function PhilosophyPage() {
+  return (
+    <>
+      <PhilosophyMobile />
+      <div className="hidden md:block">
+        <PhilosophyDesktop />
+      </div>
+    </>
+  );
+}
+function PhilosophyDesktop() {
   return (
     // Bottom padding is the paper-coloured gap between the family photo and the
     // site footer (the photo is full-bleed, so it would otherwise sit on it).
@@ -213,6 +238,115 @@ export default function PhilosophyPage() {
               style={{
                 marginTop: fig(38, "1rem"),
                 fontSize: fig(20, "0.8rem"),
+                letterSpacing: "0.02em",
+              }}
+            >
+              {siteConfig.location}
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+/*
+  Figma: PHILOSOPHY mobile frame, 390 x 3559. Flow layout measured from the PNG
+  (1 design px = var(--u)). The valley photo is the 1920 asset enlarged to
+  1000px wide so the peak sits where the frame has it; the sky above it is a
+  gradient (the asset has no more sky), faded into the photo's top edge.
+*/
+function PhilosophyMobile() {
+  return (
+    <div className="@container bg-[#f8f7f2] [--u:calc(100cqw/390)] md:hidden">
+      <main>
+        <section
+          className="relative w-full overflow-hidden bg-[linear-gradient(to_bottom,#f0eee9_0%,#f3f0eb_12%,#dcdad3_30%,#c2c0b8_46%,#b9b6ae_100%)]"
+          style={{ height: u(859) }}
+        >
+          <Image
+            src={heroValley}
+            alt=""
+            priority
+            sizes="100vw"
+            className="absolute max-w-none [mask-image:linear-gradient(to_bottom,transparent,black_20%)]"
+            style={{ left: u(-163), top: u(402), width: u(1000), height: "auto" }}
+          />
+          <figure className="absolute inset-x-0 text-center text-[#f8f7f2]" style={{ top: u(606) }}>
+            <blockquote>
+              <h1
+                className="font-cormorant tracking-[-0.06em]"
+                style={{ fontSize: u(40), lineHeight: u(47) }}
+              >
+                To create is
+                <br />
+                to be vulnerable.
+              </h1>
+            </blockquote>
+            <figcaption
+              className="font-helvetica-regular uppercase"
+              style={{
+                marginTop: u(15.5),
+                fontSize: u(8),
+                lineHeight: u(10),
+                letterSpacing: "0.02em",
+              }}
+            >
+              Rochelle Pinto
+            </figcaption>
+          </figure>
+        </section>
+        <StagedPanelMobile stages={STAGES} />
+        <div style={{ marginTop: u(58) }}>
+          <PhotoCarousel mobile />
+        </div>
+        <p
+          className="font-cormorant mx-auto text-center text-[#8b7f73]"
+          style={{
+            marginTop: u(57),
+            width: u(216),
+            fontSize: u(20),
+            lineHeight: u(21),
+            letterSpacing: "-0.01em",
+          }}
+        >
+          We are custodians of stories and kindness is our fabric. To work with us, you have to be
+          humane enough, for this is a very human process – to bare your soul, your life, and your
+          land to us.
+        </p>
+        <section
+          aria-label="Write to us"
+          className="relative w-full overflow-hidden"
+          style={{ marginTop: u(59), height: u(318) }}
+        >
+          <Image
+            src={family}
+            alt="Apeksha Jain as a child, with her grandparents."
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div
+            className="absolute inset-x-0 flex flex-col items-center text-center text-[#f8f7f2] uppercase"
+            style={{ top: u(83.2) }}
+          >
+            <p
+              className="font-helvetica font-bold"
+              style={{ fontSize: u(15), lineHeight: u(17), letterSpacing: "0.02em" }}
+            >
+              Write to us on
+            </p>
+            <CopyEmail
+              email={siteConfig.contactEmail}
+              className="font-helvetica-regular normal-case"
+              style={{ fontSize: u(15.3), lineHeight: u(19), letterSpacing: "0.02em" }}
+            />
+            <p
+              className="font-helvetica-regular"
+              style={{
+                marginTop: u(11),
+                fontSize: u(12.2),
+                lineHeight: u(14),
                 letterSpacing: "0.02em",
               }}
             >
