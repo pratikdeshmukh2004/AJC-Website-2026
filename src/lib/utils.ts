@@ -133,3 +133,17 @@ export function place(desktop: FrameBox, mobile: FrameBox): CSSProperties {
     "--mh": len(mobile.h),
   } as CSSProperties;
 }
+
+/**
+ * Keyboard navigation for a vertical ARIA tab list: the tab index a key moves
+ * to (arrows wrap; Home / End jump to the ends), or null for any other key.
+ *
+ * @example const next = tabKeyTarget(e.key, i, tabs.length)
+ */
+export function tabKeyTarget(key: string, index: number, count: number): number | null {
+  if (key === "ArrowDown") return (index + 1) % count;
+  if (key === "ArrowUp") return (index - 1 + count) % count;
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  return null;
+}
