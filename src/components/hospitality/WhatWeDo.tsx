@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
-import { at, cn, u } from "@/lib/utils";
+import { at, cn, tabKeyTarget, u } from "@/lib/utils";
 
 type Stage = {
   label: string;
@@ -81,17 +81,7 @@ export function WhatWeDo({ mobile = false }: { mobile?: boolean }) {
   const stage = STAGES[active];
 
   function onKeyDown(e: KeyboardEvent<HTMLButtonElement>, i: number) {
-    const last = STAGES.length - 1;
-    const next =
-      e.key === "ArrowDown"
-        ? (i + 1) % STAGES.length
-        : e.key === "ArrowUp"
-          ? (i - 1 + STAGES.length) % STAGES.length
-          : e.key === "Home"
-            ? 0
-            : e.key === "End"
-              ? last
-              : null;
+    const next = tabKeyTarget(e.key, i, STAGES.length);
     if (next === null) return;
     e.preventDefault();
     setActive(next);

@@ -551,7 +551,15 @@ export function VirsaArchivePage() {
             x={981}
             y={1389}
             width={677}
-            preview={<p>{INTRO[0]}</p>}
+            // The frame shows 10 lines: paragraph 1, then the start of paragraph 2
+            // under the fade plate.
+            preview={
+              <div className="max-h-[10lh] overflow-hidden">
+                {INTRO.slice(0, 2).map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                ))}
+              </div>
+            }
             full={INTRO.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}

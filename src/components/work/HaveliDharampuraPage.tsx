@@ -171,6 +171,8 @@ export function HaveliDharampuraPage() {
   const [introExpanded, setIntroExpanded] = useState(false);
   const [cocktailsExpanded, setCocktailsExpanded] = useState(false);
   const [foodExpanded, setFoodExpanded] = useState(false);
+  // Slide showing in the cocktail slider; drives the title and copy beside it.
+  const [cocktail, setCocktail] = useState(0);
   const [introRef, introShift] = useExpandReflow(introExpanded, 1937, 64, 1296);
   const [cocktailsRef, cocktailsShift] = useExpandReflow(cocktailsExpanded, 7202, 64, 3022);
   const [foodRef, foodShift] = useExpandReflow(foodExpanded, 10187, 64, 3936);
@@ -342,6 +344,7 @@ export function HaveliDharampuraPage() {
                 the arrows sit over the photo (Figma Group 213). */}
             <VirsaSlideCarousel
               label="Cocktails of the haveli"
+              onChange={setCocktail}
               box={{ x: 302, y: 7937, w: 646, h: 966 }}
               arrows={{ y: 8388, left: 215, right: 1017 }}
               mobile={{
@@ -379,17 +382,42 @@ export function HaveliDharampuraPage() {
               className="font-cormorant absolute top-(--my) left-(--mx) w-(--mw) text-right text-[length:calc(25*var(--u))] leading-[calc(24*var(--u))] tracking-[calc(-1.5*var(--u))] text-[#7d7062] xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-left xl:text-[length:calc(50*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-3*var(--u))]"
               style={place({ x: 1000, y: 8690, w: 642 }, { x: 194, y: 3228, w: 159 })}
             >
-              Shaam &amp; Champagne
+              {cocktail === 0 && <>Shaam &amp; Champagne</>}
+              {cocktail === 1 && <>Lal Quila</>}
+              {cocktail === 2 && <>Journey Of A Drink In Old Delhi</>}
+              {cocktail === 3 && <>A City In Motion</>}
+              {cocktail === 4 && <>Kesari In The Courtyard</>}
+              {cocktail === 5 && <>Stir of the Gin</>}
+              {cocktail === 6 && <>The Haveli Wine</>}
+              {cocktail === 7 && <>Indian Summer</>}
             </h3>
             <p
               className="font-helvetica-regular absolute top-(--my) left-(--mx) w-(--mw) text-right text-[length:calc(10*var(--u))] leading-[normal] tracking-[calc(0.2*var(--u))] text-[#9b9484] xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-left xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
               style={place({ x: 1000, y: 8788, w: 668 }, { x: 216, y: 3318, w: 137 })}
             >
-              A bottle rests in its bucket, flanked by fluted glasses catching the last light of
-              day. On the balcony of a 200-year-old haveli, champagne meets the stillness of Old
-              Delhi&rsquo;s grey alleys, where it is now often poured. A solemn staff member stands
-              by — upright, composed, embodying the quiet tension between heritage and hedonism,
-              service and celebration.
+              {cocktail === 0 && (
+                <>
+                  A bottle rests in its bucket, flanked by fluted glasses catching the last light of
+                  day. On the balcony of a 200-year-old haveli, champagne meets the stillness of Old
+                  Delhi&rsquo;s grey alleys, where it is now often poured. A solemn staff member
+                  stands by — upright, composed, embodying the quiet tension between heritage and
+                  hedonism, service and celebration.
+                </>
+              )}
+              {cocktail === 1 &&
+                "Captured under the warm Delhi sun, this image uses a mirror reflection to frame Lal Quila, a cocktail that channels the spirit of the Red Fort itself. The photography plays with light and symmetry, echoing the fort’s intricate architecture while highlighting the drink’s vibrant presence."}
+              {cocktail === 2 &&
+                "A glass of whisky stands quietly outside a breakfast shop that feels older than memory, its faded walls holding stories of countless mornings. In the background, a vintage-style menu board lingers in soft blur, hinting at decades of servings. This is a drink far from its expected setting, yet right at home, tracing the Old Delhi’s streets."}
+              {cocktail === 3 &&
+                "A smooth whisky rests firmly in hand, poised amid the vibrant pulse of the street. Behind, a rickshaw blurs past, capturing the relentless rhythm of Old Delhi’s ever-moving mosaic. This frame freezes a moment where calm indulgence meets the city’s ceaseless flow. It reflects a city that keeps moving and a haveli that feels paused in time."}
+              {cocktail === 4 &&
+                "A pour of saffron and sparkling wine, Kesari is served in a vintage glass, with a crisp cheese cracker resting on its side. Saffron, once prized in Mughal courts, returns not in a feast, but in a flute, reframed as an afternoon indulgence. Shot in the haveli’s inner courtyard, the drink becomes a quiet nod to the gatherings that once filled this space."}
+              {cocktail === 5 &&
+                "Styled with timeworn brass antiques and an elegant glass decanter, this gin and tonic comes to life in the quiet theatre of the haveli. Caught mid-stir, the drink captures a moment in motion, the liquid glinting as it swirls. Behind it, the haveli’s iconic green balcony and 3 arches stand in symmetry — framing the scene in history, and turning a simple pour into a portrait."}
+              {cocktail === 6 &&
+                "Framed by the haveli’s intricate jharokhas, the light danced softly across the glass, casting shadows. The top floor of the haveli stood proudly in the background, whispering stories of the past, while the sky above, though teasingly meant to catch pigeons — held only quiet stillness. The haveli wine, that smelled divine, was poured into a vintage Nick & Nora glass, repurposed elegantly as a flute."}
+              {cocktail === 7 &&
+                "Rimmed with Khari Baoli’s red chili and pink salt, Indian Summer is served in a sleek coupe glass, a bold reflection of the season’s heat. Nearby, small mango slices sprinkled with spice rest on a plate — a nostalgic nod to the simple pleasures of an Indian summer."}
             </p>
             {/* Tinted plate behind the portrait (desktop frame only) */}
             <div

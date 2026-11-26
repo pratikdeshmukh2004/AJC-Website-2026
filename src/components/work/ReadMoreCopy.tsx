@@ -132,18 +132,32 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
         className,
       )}
     >
-      {paragraphs.map((text, i) => (
-        <p
-          key={i}
-          className={cn(
-            i > 0 && "mt-[1em]",
-            compactBelowXl && "max-xl:mt-0",
-            compactBelowXl && fadedTail && i === paragraphs.length - 1 && "max-xl:opacity-33",
-          )}
-        >
-          {text}
-        </p>
-      ))}
+      <div className="relative">
+        {paragraphs.map((text, i) => (
+          <p
+            key={i}
+            className={cn(
+              i > 0 && "mt-[1em]",
+              compactBelowXl && "max-xl:mt-0",
+              compactBelowXl && fadedTail && i === paragraphs.length - 1 && "max-xl:opacity-33",
+            )}
+          >
+            {text}
+          </p>
+        ))}
+        {/* Collapsed: the same translucent cream plate as the Virsa intros fades the
+            last two lines (2.5em at leading 1.25). Below xl, compact pages fade the
+            tail with opacity instead, so the plate is desktop-only there. */}
+        {expanded ? null : (
+          <div
+            aria-hidden
+            className={cn(
+              "bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[2.5em]",
+              compactBelowXl && "max-xl:hidden",
+            )}
+          />
+        )}
+      </div>
       <button
         type="button"
         onClick={onToggle}

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import Link from "next/link";
 import { BandDots } from "@/components/home/BandDots";
+import { AboutWhatWeDo } from "@/components/about/AboutWhatWeDo";
 import { assetPath, u } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -208,31 +208,9 @@ function AboutDesktop() {
             height={322}
           />
         </div>
-        {/* Services list — Helvetica 28 uppercase / 156% / +2%, #7d7062 at 59% */}
-        <div className="font-helvetica-regular absolute top-[calc((4766-3477)*var(--u))] left-[calc(209*var(--u))] w-[calc(523*var(--u))] text-[length:calc(28*var(--u))] leading-[1.56] tracking-[0.02em] text-[#7d7062] uppercase opacity-[0.59]">
-          <p>Brand Strategy &amp; Narrative</p>
-          <p>Identity &amp; Design</p>
-          <p>Creative Direction</p>
-          <p>Experience Design</p>
-          <p>Hospitality Consulting</p>
-        </div>
-        {/* Note — body copy (Helvetica 22 / 24 / +2%, 79%) */}
-        <div className="font-helvetica-regular absolute top-[calc((4804-3477)*var(--u))] left-[calc(1195*var(--u))] w-[calc(523*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#8b7f73] opacity-[0.79]">
-          <p>
-            We step into the critical window after physical construction ends and before operational
-            launch begins – defining the core narrative, digital and design identity, global
-            perception, and guest experience journey to ensure memorable guest delight while
-            maximizing long-term asset valuation.
-          </p>
-        </div>
-        {/* Discover More — Helvetica 18 uppercase / 156% / +2%, #7d7062 */}
-        <Link
-          href="/work"
-          className="font-helvetica-regular absolute top-[calc((4990-3477)*var(--u))] left-[calc(1195*var(--u))] text-[length:calc(18*var(--u))] leading-[1.56] tracking-[0.02em] text-[#7d7062] uppercase"
-        >
-          Discover More
-        </Link>
-        <div className="absolute top-[calc((5016-3477)*var(--u))] left-[calc(1195*var(--u))] h-[calc(2*var(--u))] w-[calc(163*var(--u))] bg-[#7d7062]" />
+        {/* Services list (Figma y4766) as tabs; the selected one's note and link
+            show at y4804 on the right. */}
+        <AboutWhatWeDo />
         {/* Our Work — section title */}
         <p className="font-cormorant absolute top-[calc((5620-3477)*var(--u))] left-[calc(209*var(--u))] w-[calc(610*var(--u))] text-[length:calc(104*var(--u))] leading-[calc(152*var(--u))] font-normal tracking-[-0.06em] text-[#8b7f73]">
           Our Work
@@ -531,14 +509,19 @@ function AboutDesktop() {
 /*
   Figma: ABOUT US mobile frame, 390 x 8487 (footer starts at y7808). Every
   element is placed at its measured frame y with u(px) (1 design px = var(--u)).
-  The hero starts at y119 under the global header, which on mobile is a white bar
-  at y60 (see SiteHeader). Deviation: the river
-  band is shown in its first (scattered dots) state, without the scroll pin and
-  carousel, which the mobile frame does not define.
+  The frame opens with a 60px paper strip above its header bar; the site drops it,
+  so the frame is pulled up by FRAME_TOP_STRIP and its hero (y119) sits directly
+  under the global header, a white bar on mobile (see SiteHeader). The river band
+  pins and animates like desktop; the frame only defines its first state.
 */
+const FRAME_TOP_STRIP = 60;
+
 function AboutMobile() {
   return (
-    <div className="@container relative w-full bg-[#f8f7f2] [--u:calc(100cqw/390)] md:hidden">
+    <div
+      className="@container relative w-full bg-[#f8f7f2] [--u:calc(100cqw/390)] md:hidden"
+      style={{ marginTop: u(-FRAME_TOP_STRIP) }}
+    >
       {/* Top slice: frame y 0..1290 (tops unchanged) */}
       <div className="relative w-full" style={{ height: u(1290) }}>
         <div
@@ -697,16 +680,7 @@ function AboutMobile() {
           >
             What We Do
           </p>
-          <div
-            className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase opacity-[0.59]"
-            style={{ left: u(56), top: u(2222), fontSize: u(12.3), lineHeight: u(19) }}
-          >
-            <p>Brand Strategy &amp; Narrative</p>
-            <p>Identity &amp; Design</p>
-            <p>Creative Direction</p>
-            <p>Experience Design</p>
-            <p>Hospitality Consulting</p>
-          </div>
+          <AboutWhatWeDo mobile />
           <div
             className="absolute overflow-hidden"
             style={{ left: u(115), top: u(2361), width: u(161), height: u(167) }}
@@ -719,26 +693,6 @@ function AboutMobile() {
               className="h-full w-full object-cover"
             />
           </div>
-          <p
-            className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
-            style={{ left: u(49), top: u(2596), width: u(245), fontSize: u(12), lineHeight: u(14) }}
-          >
-            We step into the critical window after physical construction ends and before operational
-            launch begins – defining the core narrative, digital and design identity, global
-            perception, and guest experience journey to ensure memorable guest delight while
-            maximizing long-term asset valuation.
-          </p>
-          <Link
-            href="/work"
-            className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase"
-            style={{ left: u(49), top: u(2714), fontSize: u(13.4), lineHeight: u(18) }}
-          >
-            Discover More
-          </Link>
-          <div
-            className="absolute bg-[#7d7062]"
-            style={{ left: u(49), top: u(2736), width: u(113), height: u(2) }}
-          />
           <p
             className="font-cormorant absolute tracking-[-0.06em] text-[#8b7f73]"
             style={{ left: u(50), top: u(2798), fontSize: u(40), lineHeight: u(48) }}

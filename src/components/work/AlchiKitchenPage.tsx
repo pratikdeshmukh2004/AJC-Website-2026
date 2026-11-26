@@ -154,7 +154,8 @@ function Swatches({
             width: `${((165 / pic.w) * 100).toFixed(3)}%`,
             height: `${((78 / pic.h) * 100).toFixed(3)}%`,
             backgroundColor: color,
-            ...(outline && { border: `1px solid ${outline}` }),
+            // Outside the box, so the fill stays flush with its neighbours.
+            ...(outline && { outline: `1px solid ${outline}` }),
           }}
         />
       ))}
@@ -320,7 +321,7 @@ type Swatch = [x: number, y: number, fill: string, outline?: string];
 const SWATCHES_LEATHER: Swatch[] = [
   [249, 5748, "#896a3d"],
   [414, 5748, "#937f5f"],
-  [580, 5748, "#fbfbf9", "#836b43"],
+  [579, 5748, "#fbfbf9", "#836b43"],
 ];
 const SWATCHES_BRASS: Swatch[] = [
   [1271, 5748, "#c7c2b2"],
@@ -552,7 +553,7 @@ function AlchiKitchenMobile() {
           <div
             role="img"
             aria-label="Palette colour #fbfbf9"
-            className="absolute top-[calc(1762*var(--u))] left-[calc(103*var(--u))] h-[calc(29*var(--u))] w-[calc(61*var(--u))] border border-[#836b43] bg-[#fbfbf9]"
+            className="absolute top-[calc(1762*var(--u))] left-[calc(103*var(--u))] h-[calc(29*var(--u))] w-[calc(61*var(--u))] bg-[#fbfbf9] outline outline-1 outline-[#836b43]"
           />
           <div
             role="img"

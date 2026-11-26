@@ -26,10 +26,12 @@ const IMG = assetPath("/images/projects/assam-bengal-navigation");
 const VID = assetPath("/videos/assam-bengal-navigation");
 
 // Project films (from the AJC asset drop). Each has a poster frame so the
-// carousel visibly changes as you step through with the arrows.
+// carousel visibly changes as you step through with the arrows. 8-1 plays in
+// the portrait panel only; the carousel leaves it out so the same film is not
+// shown in two panels.
 type Film = { src: string; poster: string };
+const PORTRAIT_FILM: Film = { src: `${VID}/8-1.mp4`, poster: `${VID}/poster-8-1.jpg` };
 const FILMS: Film[] = [
-  { src: `${VID}/8-1.mp4`, poster: `${VID}/poster-8-1.jpg` },
   { src: `${VID}/8-2.mp4`, poster: `${VID}/poster-8-2.jpg` },
   { src: `${VID}/8-4.mp4`, poster: `${VID}/poster-8-4.jpg` },
 ];
@@ -199,7 +201,6 @@ export function AssamBengalNavigationPage() {
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
-
       {/* Canvas ends at the "Alchi Kitchen" label (y28011) plus breathing room. */}
       <div className="relative h-[calc(28250*var(--u))] w-full">
         {/* ============ HERO (two stacked fills) ============ */}
@@ -250,7 +251,7 @@ export function AssamBengalNavigationPage() {
           style={{ transform: `translateY(${u(portraitShift)})` }}
         >
           <InlineFilm
-            film={FILMS[0]}
+            film={PORTRAIT_FILM}
             className="pointer-events-auto top-[calc(1937*var(--u))] left-[calc(719*var(--u))] h-[calc(859*var(--u))] w-[calc(481*var(--u))]"
             label="Play the Assam Bengal Navigation film"
           />

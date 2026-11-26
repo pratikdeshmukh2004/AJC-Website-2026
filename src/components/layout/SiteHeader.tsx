@@ -45,17 +45,14 @@ export function SiteHeader() {
   );
 
   // Mobile frames "About us (Mob)" and "Alchi Kitchen (Mob)" draw the header as a
-  // solid white bar with taupe marks over the hero photo. About's frame also
-  // leaves a 60px paper strip above the bar. md and up is unchanged.
-  const isAbout = pathname.startsWith("/about");
-  const whiteBar = isAbout || pathname.startsWith("/work/alchi-kitchen");
+  // solid white bar with taupe marks over the hero photo. md and up is unchanged.
+  const whiteBar = pathname.startsWith("/about") || pathname.startsWith("/work/alchi-kitchen");
 
   return (
     <>
       <header
         className={cn(
-          "pointer-events-none absolute inset-x-0 z-30 [--u:clamp(0.9px,calc(100vw/390),1.5px)] md:top-0 md:[--u:initial]",
-          isAbout ? "top-[calc(60*var(--u))]" : "top-0",
+          "pointer-events-none absolute inset-x-0 top-0 z-30 [--u:clamp(0.9px,calc(100vw/390),1.5px)] md:[--u:initial]",
           whiteBar
             ? "text-taupe bg-white md:bg-transparent md:text-white"
             : onPaper
