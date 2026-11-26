@@ -11,7 +11,7 @@ import { assetPath } from "@/lib/utils";
  * serif title on the left and the narrative on the right.
  *
  * The whole card opens the project's page at /work/<slug>. When a photo has
- * its own `link` (Virsa Baltistan's left photo opens its archive page), each
+ * its own `link` (none do at the moment), each
  * photo and the text become separate links instead, since links can't nest.
  */
 export function ProjectCard({

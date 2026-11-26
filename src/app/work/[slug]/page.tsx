@@ -39,7 +39,7 @@ const CASE_STUDIES: Partial<Record<string, ComponentType>> = {
   "haveli-experiences": HaveliExperiencesPage, // AJC-22
   "neemrana-hotels": NeemranaHotelsPage, // AJC-23
   "virsa-baltistan": VirsaBaltistanPage, // AJC-16
-  "virsa-archive": VirsaArchivePage, // AJC-16 (the visual archive; opened from the Virsa Baltistan left photo)
+  "virsa-archive": VirsaArchivePage, // AJC-16 (the visual archive; opened from "View Image Gallery" on Virsa Baltistan)
   "virsa-experiences": VirsaExperiencesPage, // AJC-21
   "alchi-kitchen": AlchiKitchenPage, // AJC-19
   "balti-kitchen": BaltiKitchenPage, // AJC-30

@@ -68,15 +68,9 @@ export const projects: Project[] = [
     description:
       "Launch identity for a boutique luxury hotel in India. Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and royal legacy of Baltistan.",
     images: {
-      // Per AJC-16: the left photo opens the visual-archive page (Figma node
-      // 2823:865); the right photo and the text open /work/virsa-baltistan
-      // (Figma node 2823:1389).
-      left: {
-        src: "/images/our_work/1-left.png",
-        width: 851,
-        height: 880,
-        link: { href: "/work/virsa-archive", title: "Archive of Virsa Baltistan" },
-      },
+      // Both photos and the text open /work/virsa-baltistan. The visual archive
+      // (/work/virsa-archive) is reached from "View Image Gallery" on that page.
+      left: { src: "/images/our_work/1-left.png", width: 851, height: 880 },
       right: { src: "/images/our_work/1-right.png", width: 850, height: 880 },
     },
   },

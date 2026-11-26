@@ -10,9 +10,8 @@ import { assetPath, u } from "@/lib/utils";
 /*
   Archive of Virsa Baltistan — the visual archive (creative direction) page
   at /work/virsa-archive (AJC-16), from the Figma frame "Virsa
-  Baltistan" (node 2823:865, 1920px wide). Opened from the left photo of the
-  Virsa Baltistan card on Our Work, and from "View Image Gallery" on the
-  Virsa Baltistan page.
+  Baltistan" (node 2823:865, 1920px wide). Opened from "View Image Gallery" on
+  the Virsa Baltistan page (the Our Work card opens Virsa Baltistan itself).
 
   Same technique as the About / Haveli / Neemrana pages: inside a 1920-wide
   `@container`, `--u` = 1 Figma px = 100cqw / 1920, so every Figma coordinate
