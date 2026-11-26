@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 const STAGES: Stage[] = [
   {
     image: boxClosed,
-    mobile: { x: 101, w: 190, mt: 88, textMt: 49, dotsMt: 29 },
+    mobile: { x: 101, w: 190 },
     content: (
       <div>
         <h2
@@ -59,7 +59,7 @@ const STAGES: Stage[] = [
   },
   {
     image: boxKey,
-    mobile: { x: 97, w: 204, mt: 64.5, textMt: 24.4, dotsMt: 26.6 },
+    mobile: { x: 97, w: 204 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
@@ -81,7 +81,7 @@ const STAGES: Stage[] = [
   },
   {
     image: boxOpen,
-    mobile: { x: 97, w: 193, mt: 96, textMt: 49.4, dotsMt: 40.6 },
+    mobile: { x: 97, w: 193 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
@@ -101,7 +101,7 @@ const STAGES: Stage[] = [
   },
   {
     image: boxOverflowing,
-    mobile: { x: 71, w: 246, mt: 108, textMt: 70.1, dotsMt: 26.6 },
+    mobile: { x: 71, w: 246 },
     content: (
       <div
         className="font-helvetica-regular text-[#8b7f73] [&_p+p]:mt-[1.275em]"
