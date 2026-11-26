@@ -20,8 +20,7 @@ import etHospitalityWorld from "../../../public/images/press/et-hospitality-worl
   Images are the Figma layer exports, already cropped to their Figma boxes.
   Not exported yet (so not drawn): the logo construction grid (Group 139), the
   hornbill mark over the coasters (Vector 2823:1711) and the "vivek-kumar" photo
-  of the closing band. The press logo (image 15) is a 49px interim asset, soft at
-  desktop size until a larger export arrives. The four swatch colours
+  of the closing band. The four swatch colours
   are sampled from the brand artwork until the Figma fills are confirmed.
 */
 
