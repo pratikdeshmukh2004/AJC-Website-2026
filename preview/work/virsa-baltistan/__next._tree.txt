@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/3mzianpzt2hoy.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/1aj7yly6o7q8m.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"virsa-baltistan","s":[]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"IJ9oHpdZF5E43hfIFppB9","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"NlLsPWKY2dkyfNhXGf36u","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
