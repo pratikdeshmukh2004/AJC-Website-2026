@@ -1,5 +1,6 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
+import { NeemranaFilm } from "@/components/work/NeemranaFilm";
 import { assetPath, u } from "@/lib/utils";
 
 /*
@@ -61,21 +62,6 @@ function CroppedPic({
         }}
       />
     </div>
-  );
-}
-
-/** Dark translucent circle with a white play triangle (Figma Group 37/38). */
-function PlayButton({ top, left = 911, size = 98 }: { top: number; left?: number; size?: number }) {
-  return (
-    // Decorative: the film itself is not yet linked in the design.
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={`${IMG}/play-ring.svg`}
-      alt=""
-      aria-hidden
-      className="absolute"
-      style={{ left: u(left), top: u(top), width: u(size), height: u(size) }}
-    />
   );
 }
 
@@ -215,9 +201,11 @@ function NeemranaMobile() {
           </p>
         </div>
 
-        <div
-          className="absolute overflow-hidden"
-          style={{ left: 0, top: u(1449), width: u(390), height: u(206) }}
+        <NeemranaFilm
+          src="/videos/neemrana-hotels/fort-palace.mp4"
+          title="the Neemrana Fort-Palace brand film"
+          box={{ x: 0, y: 1449, w: 390, h: 206 }}
+          ring={{ x: 175, y: 83, size: 40 }}
         >
           <OptimizedImage
             src={`${IMG}/film-fort-palace.png`}
@@ -227,8 +215,7 @@ function NeemranaMobile() {
             sizes="100vw"
             className="h-full w-full object-cover object-[60%_50%]"
           />
-        </div>
-        <PlayButton top={1532} left={175} size={40} />
+        </NeemranaFilm>
         <p
           className="font-helvetica-regular text-sage absolute text-[length:calc(10*var(--u))] leading-[calc(11*var(--u))] tracking-[0.02em] uppercase"
           style={{ left: u(35), top: u(1668), width: u(100) }}
@@ -246,9 +233,11 @@ function NeemranaMobile() {
           Livable History
         </p>
 
-        <div
-          className="absolute overflow-hidden"
-          style={{ left: 0, top: u(1759), width: u(390), height: u(206) }}
+        <NeemranaFilm
+          src="/videos/neemrana-hotels/kesroli.mp4"
+          title="the Hill Fort Kesroli brand film"
+          box={{ x: 0, y: 1759, w: 390, h: 206 }}
+          ring={{ x: 175, y: 77, size: 40 }}
         >
           <OptimizedImage
             src={`${IMG}/film-kesroli.png`}
@@ -258,8 +247,7 @@ function NeemranaMobile() {
             sizes="100vw"
             className="h-full w-full object-cover object-[50%_50%]"
           />
-        </div>
-        <PlayButton top={1836} left={175} size={40} />
+        </NeemranaFilm>
         <p
           className="font-helvetica-regular text-sage absolute text-[length:calc(10*var(--u))] leading-[calc(11*var(--u))] tracking-[0.02em] uppercase"
           style={{ left: u(38), top: u(1985), width: u(130) }}
@@ -439,16 +427,22 @@ function NeemranaDesktop() {
         </div>
 
         {/* ============ FILM 1 — NEEMRANA FORT-PALACE ============ */}
-        <CroppedPic
-          src="film-fort-palace.png"
-          alt="Neemrana Fort-Palace brand film"
-          left={109}
-          top={2025}
-          width={1701}
-          height={891}
-          crop={{ w: 103.13, h: 110.8, left: -1.03, top: -4.94 }}
-        />
-        <PlayButton top={2422} />
+        <NeemranaFilm
+          src="/videos/neemrana-hotels/fort-palace.mp4"
+          title="the Neemrana Fort-Palace brand film"
+          box={{ x: 109, y: 2025, w: 1701, h: 891 }}
+          ring={{ x: 802, y: 397, size: 98 }}
+        >
+          <CroppedPic
+            src="film-fort-palace.png"
+            alt="Neemrana Fort-Palace brand film"
+            left={0}
+            top={0}
+            width={1701}
+            height={891}
+            crop={{ w: 103.13, h: 110.8, left: -1.03, top: -4.94 }}
+          />
+        </NeemranaFilm>
         <p
           className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
           style={{ left: u(109), top: u(2950), width: u(391) }}
@@ -463,16 +457,22 @@ function NeemranaDesktop() {
         </p>
 
         {/* ============ FILM 2 — HILL FORT KESROLI ============ */}
-        <CroppedPic
-          src="film-kesroli.png"
-          alt="Hill Fort Kesroli brand film"
-          left={109}
-          top={3088}
-          width={1701}
-          height={891}
-          crop={{ w: 115.99, h: 124.48, left: -7.39, top: -2.3 }}
-        />
-        <PlayButton top={3485} />
+        <NeemranaFilm
+          src="/videos/neemrana-hotels/kesroli.mp4"
+          title="the Hill Fort Kesroli brand film"
+          box={{ x: 109, y: 3088, w: 1701, h: 891 }}
+          ring={{ x: 802, y: 397, size: 98 }}
+        >
+          <CroppedPic
+            src="film-kesroli.png"
+            alt="Hill Fort Kesroli brand film"
+            left={0}
+            top={0}
+            width={1701}
+            height={891}
+            crop={{ w: 115.99, h: 124.48, left: -7.39, top: -2.3 }}
+          />
+        </NeemranaFilm>
         <p
           className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
           style={{ left: u(109), top: u(4013), width: u(391) }}
