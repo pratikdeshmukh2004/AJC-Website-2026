@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { AjcLogo, ApekshaJainWordmark, ScriptCycle } from "@/components/brand";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { fig } from "@/lib/utils";
+import { fig, u } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 // Static imports: Next fingerprints the files and applies the basePath itself.
 import rockingChair from "../../../public/images/contact/rocking-chair.svg";
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-[#f8f7f2]">
-
-      <main>
+      <ContactMobile />
+      <main className="hidden md:block">
         {/* Intro: chair, headline, eyebrow */}
         <section
           className="flex flex-col items-center px-6 text-center"
@@ -135,5 +135,85 @@ export default function ContactPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+/*
+  Figma: CONTACT US mobile frame, 390 x 1379. Flow layout measured from the PNG
+  (1 design px = var(--u)); the photo is 390 x 449, the same ratio as the asset.
+*/
+function ContactMobile() {
+  return (
+    <main className="@container text-center [--u:calc(100cqw/390)] md:hidden">
+      <div className="flex flex-col items-center">
+        <Image
+          src={rockingChair}
+          alt=""
+          aria-hidden
+          priority
+          className="ajc-rock h-auto"
+          style={{ marginTop: u(123), width: u(115.5) }}
+        />
+        <h1
+          className="font-cormorant text-taupe tracking-[-0.06em]"
+          style={{ marginTop: u(25), fontSize: u(35), lineHeight: u(38) }}
+        >
+          You’re in our
+          <br />
+          sitting room now.
+        </h1>
+        <p
+          className="font-helvetica-regular text-[#a2988e] uppercase"
+          style={{
+            marginTop: u(53),
+            width: u(200),
+            fontSize: u(12.4),
+            lineHeight: u(21),
+            letterSpacing: "0.02em",
+          }}
+        >
+          This is where we begin conversations
+        </p>
+        <h2
+          className="font-cormorant text-taupe tracking-[-0.06em]"
+          style={{ marginTop: u(58), fontSize: u(35), lineHeight: u(40) }}
+        >
+          Say Hello!
+        </h2>
+        <ContactForm mobile />
+        <p
+          className="font-helvetica-regular text-[#9b9484] uppercase"
+          style={{
+            marginTop: u(33),
+            fontSize: u(13.3),
+            lineHeight: u(16),
+            letterSpacing: "0.02em",
+          }}
+        >
+          Or write to us on
+          <br />
+          <a
+            href={`mailto:${siteConfig.contactEmail}`}
+            className="hover:text-taupe-dark text-[#836b43] normal-case transition-colors"
+          >
+            {siteConfig.contactEmail}
+          </a>
+        </p>
+      </div>
+      <div className="relative w-full overflow-hidden" style={{ marginTop: u(72), height: u(449) }}>
+        <Image
+          src={sittingRoom}
+          alt="A pine tree on a hillside above misty mountain ridges, in sepia."
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <ScriptCycle className="absolute top-1/2 left-1/2 w-[52.4%] -translate-x-1/2 -translate-y-1/2" />
+        <div aria-hidden className="absolute inset-x-0 top-[86.4%] h-[1.95%] text-[#f8f7f2]">
+          <ApekshaJainWordmark className="absolute left-[30.5%] h-full" />
+          <AjcLogo className="absolute left-[63.6%] h-full" />
+        </div>
+      </div>
+    </main>
   );
 }

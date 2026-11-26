@@ -641,7 +641,7 @@ export function HaveliExperiencesPage() {
 
         {/* ============ NEXT PROJECT ============ */}
         <Link
-          href="/work/haveli-experiences"
+          href="/work/neemrana-hotels"
           className="font-cormorant absolute block text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))] text-[#7d7062]"
           style={{ left: u(654), top: u(17944), width: u(612) }}
         >
@@ -657,7 +657,7 @@ export function HaveliExperiencesPage() {
           className="font-helvetica-regular absolute text-center text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484] uppercase"
           style={{ left: u(848), top: u(18051), width: u(225) }}
         >
-          Haveli Experiences
+          Neemrana Hotels
         </p>
       </div>
     </div>

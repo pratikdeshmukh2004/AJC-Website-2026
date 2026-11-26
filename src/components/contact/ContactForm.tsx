@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useId, useState, useSyncExternalStore, type FormEvent } from "react";
 import { siteConfig } from "@/config/site";
-import { ENQUIRY_ENDPOINT, cn, fig, submitEnquiry } from "@/lib/utils";
+import { ENQUIRY_ENDPOINT, cn, fig, submitEnquiry, u } from "@/lib/utils";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -29,10 +29,16 @@ const noopSubscribe = () => () => {};
  * Apps Script can't answer a CORS preflight, and its redirect response has no
  * CORS headers, so the reply can't be read (see submitEnquiry in lib/utils).
  *
+ * `mobile` sizes the form from the 390px mobile frame (needs `--u` from the
+ * page, 1 design px). The page renders it once per layout, so ids carry useId.
+ *
  * If the endpoint isn't configured, the form falls back to opening the
  * visitor's mail app with the message pre-filled.
  */
-export function ContactForm() {
+export function ContactForm({ mobile = false }: { mobile?: boolean }) {
+  const uid = useId();
+  // Desktop value from the 1920 frame, or the mobile design px.
+  const size = (desktop: string, mobilePx: number) => (mobile ? u(mobilePx) : desktop);
   const [status, setStatus] = useState<Status>("idle");
   // False in the server HTML, true once React has hydrated. Until then Send is
   // disabled: a click before hydration would trigger the browser's native
@@ -83,8 +89,10 @@ export function ContactForm() {
     }
   }
 
-  const fieldClass =
-    "font-helvetica-regular block w-full resize-none border-0 border-b-[length:var(--rule)] border-[#c2b7a2] bg-transparent text-center text-taupe uppercase placeholder:text-[#9b9484] focus-visible:border-[#836b43] focus-visible:outline-none";
+  const fieldClass = cn(
+    "font-helvetica-regular block w-full resize-none border-0 border-b-[length:var(--rule)] bg-transparent text-center text-taupe uppercase placeholder:text-[#9b9484] focus-visible:border-[#836b43] focus-visible:outline-none",
+    mobile ? "border-[#957d54]" : "border-[#c2b7a2]",
+  );
 
   return (
     <form
@@ -96,26 +104,29 @@ export function ContactForm() {
       className="flex w-full flex-col items-center"
       style={{
         // Underline thickness: 4px at the 1920px design width.
-        ["--rule" as string]: fig(4, "2px"),
-        maxWidth: fig(647, "20rem"),
-        marginTop: fig(105, "2.5rem"),
+        ["--rule" as string]: mobile ? "1px" : fig(4, "2px"),
+        maxWidth: size(fig(647, "20rem"), 190),
+        marginTop: size(fig(105, "2.5rem"), 1),
+        // The mobile frame centres the form 2px right of the page centre.
+        marginLeft: mobile ? u(4) : undefined,
       }}
     >
-      {FIELDS.map((f) => {
+      {FIELDS.map((f, i) => {
         const shared = {
-          id: `contact-${f.name}`,
+          id: `${uid}-${f.name}`,
           name: f.name,
           required: true,
           placeholder: f.label,
           autoComplete: f.autoComplete,
           className: fieldClass,
           style: {
-            fontSize: fig(23, "0.95rem"),
+            fontSize: size(fig(23, "0.95rem"), 12.3),
             letterSpacing: "0.02em",
-            lineHeight: fig(26, "1.25rem"),
+            lineHeight: size(fig(26, "1.25rem"), 14),
             // 45 + 26 line + 11 + 4 rule = the 86px field pitch in Figma.
-            paddingTop: fig(45, "1.25rem"),
-            paddingBottom: fig(11, "0.5rem"),
+            paddingTop: size(fig(45, "1.25rem"), 30.5),
+            // The first mobile field sits 4px higher above its rule.
+            paddingBottom: size(fig(11, "0.5rem"), mobile && i === 0 ? 14 : 10),
           },
         };
         return (
@@ -149,12 +160,15 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={!ready || status === "sending"}
-        className="font-helvetica-regular hover:bg-taupe-dark cursor-pointer rounded-full bg-[#836b43] text-[#fdfbf4] uppercase transition-colors disabled:cursor-wait disabled:opacity-70"
+        className={cn(
+          "font-helvetica-regular hover:bg-taupe-dark cursor-pointer rounded-full text-[#fdfbf4] uppercase transition-colors disabled:cursor-wait disabled:opacity-70",
+          mobile ? "bg-[#957d54]" : "bg-[#836b43]",
+        )}
         style={{
-          marginTop: fig(65, "2rem"),
-          width: fig(249, "9rem"),
-          height: fig(55, "2.75rem"),
-          fontSize: fig(23, "0.95rem"),
+          marginTop: size(fig(65, "2rem"), 43),
+          width: size(fig(249, "9rem"), 125),
+          height: size(fig(55, "2.75rem"), 28),
+          fontSize: size(fig(23, "0.95rem"), 12.3),
           letterSpacing: "0.02em",
         }}
       >
@@ -165,7 +179,7 @@ export function ContactForm() {
         role="status"
         aria-live="polite"
         className="font-helvetica-regular text-taupe text-center empty:hidden"
-        style={{ marginTop: fig(20, "1rem"), fontSize: fig(20, "0.9rem") }}
+        style={{ marginTop: size(fig(20, "1rem"), 12), fontSize: size(fig(20, "0.9rem"), 12) }}
       >
         {status === "sent"
           ? "Thank you, your message has been sent. We'll be in touch soon."

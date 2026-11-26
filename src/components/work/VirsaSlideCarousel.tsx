@@ -90,7 +90,7 @@ export function VirsaSlideCarousel({
       aria-label={label}
       className={cn(
         responsive
-          ? "relative aspect-(--ar) w-full xl:absolute xl:top-(--y) xl:left-0 xl:aspect-auto xl:h-(--h)"
+          ? "relative aspect-(--ar) w-full md:aspect-auto md:h-(--h) xl:absolute xl:top-(--y) xl:left-0"
           : "absolute left-0 w-full",
         mobile && "top-(--my) h-(--mh) xl:top-(--y) xl:h-(--h)",
       )}
@@ -114,7 +114,7 @@ export function VirsaSlideCarousel({
         aria-label={`${index + 1} of ${n}`}
         className={cn(
           "absolute overflow-hidden",
-          responsive && "inset-0 xl:right-auto xl:left-(--bx) xl:w-(--bw)",
+          responsive && "inset-0 md:right-auto md:left-(--bx) md:w-(--bw)",
           mobile && "top-0 left-(--mx) h-(--mh) w-(--mw) xl:left-(--x) xl:h-(--h) xl:w-(--w)",
         )}
         style={
@@ -237,7 +237,7 @@ export function ArrowButton({
   y: number;
   mobile?: { x: number; y: number; onImage?: boolean };
   /**
-   * Below xl: over that side of its carousel, vertically centred (Virsa
+   * Below md: over that side of its carousel, vertically centred (Virsa
    * Baltistan). `light` makes it white there, for arrows over a photo.
    */
   responsive?: false | "left" | "right";
@@ -254,13 +254,13 @@ export function ArrowButton({
         "group font-helvetica hover:text-taupe absolute cursor-pointer text-center font-bold text-[#9b9484] transition-colors",
         responsive
           ? cn(
-              "top-1/2 h-[63px] w-[73px] -translate-y-1/2 text-[20px] leading-[63px] xl:top-(--ay) xl:right-auto xl:left-(--ax) xl:h-[calc(63*var(--u))] xl:w-[calc(73*var(--u))] xl:translate-y-0 xl:text-[length:calc(46*var(--u))] xl:leading-[calc(63*var(--u))]",
+              "top-1/2 h-[63px] w-[73px] -translate-y-1/2 text-[20px] leading-[63px] md:top-(--ay) md:right-auto md:left-(--ax) md:h-[calc(63*var(--u))] md:w-[calc(73*var(--u))] md:translate-y-0 md:text-[length:calc(46*var(--u))] md:leading-[calc(63*var(--u))]",
               responsive === "left" ? "left-0" : "right-0",
             )
           : mobile
             ? "top-(--my) left-(--mx) size-[calc(28*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(28*var(--u))] xl:top-(--y) xl:left-(--x) xl:h-[calc(63*var(--u))] xl:w-[calc(73*var(--u))] xl:text-[length:calc(46*var(--u))] xl:leading-[calc(63*var(--u))]"
             : "text-[length:calc(46*var(--u))] leading-[calc(63*var(--u))]",
-        (mobile?.onImage || (responsive && light)) && "max-xl:text-white max-xl:hover:text-white",
+        (mobile?.onImage || (responsive && light)) && "max-md:text-white max-md:hover:text-white",
       )}
       style={
         responsive

@@ -63,6 +63,7 @@ function Heading({
       className={cn(
         "font-cormorant scroll-mt-6 tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(97*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-5.82*var(--u))]",
         mobile,
+        "max-md:col-span-5 max-md:mb-[16px] max-md:max-w-[289px] max-md:pl-[49px] max-md:text-[45px] max-md:leading-[50px]",
         className,
       )}
       style={at(x, y, w)}
@@ -76,7 +77,7 @@ function Heading({
 function Copy({ children, x, y, w }: { children: ReactNode; x: number; y: number; w: number }) {
   return (
     <p
-      className="font-helvetica-regular pt-4 pb-6 text-xs leading-[1.6] tracking-[0.02em] text-[#9b9484] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
+      className="font-helvetica-regular pt-4 pb-6 text-xs leading-[1.6] tracking-[0.02em] text-[#9b9484] max-md:col-start-2 max-md:col-end-3 max-md:self-end max-md:p-0 max-md:text-[10px] max-md:leading-[11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]"
       style={at(x, y, w)}
     >
       {children}
@@ -99,6 +100,7 @@ function Pic({
   className,
   lead,
   mobileAspect,
+  m,
 }: {
   file: string;
   alt: string;
@@ -112,16 +114,26 @@ function Pic({
   lead?: boolean;
   /** Crop below xl (the mobile frame shows the full-width photos as portraits). */
   mobileAspect?: string;
+  /** Aspect ratio (w / h) of the 390px mobile frame's crop, below md only. */
+  m?: string;
 }) {
   return (
     <div
       className={cn(
-        lead ? "col-start-2 row-span-2 row-start-1 self-start" : "col-span-2",
+        lead
+          ? "col-start-2 row-span-2 row-start-1 self-start max-md:col-start-4 max-md:col-end-5 max-md:row-span-1 max-md:row-start-2"
+          : "col-span-2 max-md:col-span-5",
+        m && "max-md:aspect-(--arm)",
         "relative aspect-(--ar) w-full overflow-hidden xl:absolute xl:top-(--y) xl:left-(--x) xl:aspect-auto xl:h-(--h) xl:w-(--w) [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover",
         className,
       )}
       style={
-        { ...at(x, top, w), "--h": u(h), "--ar": mobileAspect ?? `${w} / ${h}` } as CSSProperties
+        {
+          ...at(x, top, w),
+          "--h": u(h),
+          "--ar": mobileAspect ?? `${w} / ${h}`,
+          "--arm": m,
+        } as CSSProperties
       }
     >
       <OptimizedImage
@@ -140,10 +152,21 @@ function Pic({
  * Photos side by side below xl, widths in the Figma ratio (e.g. 896 : 458), with
  * the thin gutter the mobile frame uses. Dissolves at xl, where each sits on the canvas.
  */
-function Row({ cols, children }: { cols: number[]; children: ReactNode }) {
+function Row({
+  cols,
+  children,
+  className,
+}: {
+  cols: number[];
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <div
-      className="col-span-2 grid gap-0.5 xl:contents [&>div]:col-span-1"
+      className={cn(
+        "col-span-2 grid gap-0.5 max-md:col-span-5 max-md:gap-[3px] xl:contents [&>div]:col-span-1",
+        className,
+      )}
       style={{ gridTemplateColumns: cols.map((c) => `${c}fr`).join(" ") }}
     >
       {children}
@@ -161,6 +184,7 @@ function PressLogo({
   w,
   h,
   cover,
+  className,
 }: {
   src: string;
   alt: string;
@@ -171,13 +195,18 @@ function PressLogo({
   h: number;
   /** For a file with transparent padding around the logo: crop to the box instead of fitting. */
   cover?: boolean;
+  /** Mobile frame position inside the logo group. */
+  className?: string;
 }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="block h-10 w-24 transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)"
+      className={cn(
+        "block h-10 w-24 transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:h-(--h) xl:w-(--w)",
+        className,
+      )}
       style={{ ...at(x, d(y), w), "--h": u(h) } as CSSProperties}
     >
       <OptimizedImage
@@ -219,11 +248,28 @@ function TeamRow({
   );
 }
 
+/**
+ * One experience: title across the top, copy left and the lead photo right
+ * (mobile frame columns x59 / x192), then the rest of the photos full width.
+ */
+function ExperienceSection({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <section
+      className={cn(
+        "grid grid-cols-2 gap-x-4 gap-y-0.5 max-md:grid-cols-[59px_105px_28px_163px_35px] max-md:gap-x-0 max-md:gap-y-[3px] xl:contents",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
+}
+
 export function VirsaExperiencesPage() {
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
       {/* ============ A. HERO + INTRO (Figma y 0–1920) ============ */}
-      <section className="relative flex flex-col gap-8 xl:block xl:min-h-[calc(1920*var(--u))] xl:gap-0">
+      <section className="relative flex flex-col gap-8 max-md:gap-0 xl:block xl:min-h-[calc(1920*var(--u))] xl:gap-0">
         {/* Wrapper holds the photo and its labels; at xl it dissolves so both sit on the canvas. */}
         <div className="relative xl:contents">
           <Pic
@@ -234,30 +280,38 @@ export function VirsaExperiencesPage() {
             w={1920}
             h={1080}
             mobileAspect="9 / 16"
+            m="390 / 700"
             priority
           />
           <p
-            className="font-helvetica absolute bottom-10 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-left xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica absolute bottom-10 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 max-md:bottom-[64px] max-md:text-[15px] xl:top-(--y) xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-left xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(103, 507, 348)}
           >
             2025 / ۲۰۲۵
           </p>
           <p
-            className="font-helvetica absolute top-24 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 xl:top-(--y) xl:right-auto xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-right xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica absolute top-24 left-0 w-full text-center text-sm font-bold tracking-[0.04em] text-white uppercase opacity-80 max-md:top-[88px] max-md:text-[15px] xl:top-(--y) xl:right-auto xl:bottom-auto xl:left-(--x) xl:w-(--w) xl:text-right xl:text-[length:calc(28*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(1469, 507, 348)}
           >
             AJC in Ladakh / لداخ
           </p>
         </div>
 
-        <div className="px-6 xl:contents">
-          <Heading level={1} x={113} y={1231} w={600} mobile="text-4xl leading-none">
+        <div className="px-6 max-md:px-0 max-md:pt-[62px] xl:contents">
+          <Heading
+            level={1}
+            x={113}
+            y={1231}
+            w={600}
+            mobile="text-4xl leading-none"
+            className="max-md:leading-[46px]!"
+          >
             Experiences at
             <br />
             Virsa Baltistan
           </Heading>
           <ul
-            className="font-helvetica-regular mt-6 text-xs leading-[1.5] tracking-[0.02em] text-[#7d7062] uppercase opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+            className="font-helvetica-regular mt-6 text-xs leading-[1.5] tracking-[0.02em] text-[#7d7062] uppercase opacity-80 max-md:mt-[47px] max-md:ml-[59px] max-md:leading-[19px] max-md:opacity-60 xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(32*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
             style={at(109, 1576, 523)}
           >
             <li>Strategy</li>
@@ -268,61 +322,64 @@ export function VirsaExperiencesPage() {
           </ul>
         </div>
 
-        <VirsaExpandableIntro
-          responsive
-          x={981}
-          y={1438}
-          width={677}
-          preview={
-            <div className="flex flex-col gap-4 xl:gap-[calc(12*var(--u))]">
-              <p>
-                Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and
-                royal legacy of Baltistan.
-              </p>
-              <p>
-                To build the world within these walls, we explored every raw, unvarnished thread of
-                the land, restoring lost traditions and borrowing directly from the untamed nature
-                around us. We consciously moved past the boundaries of conventional hospitality,
-                treating the stark, beautiful geography of India’s last village as a living theater
-                of history, culture, and lineage.
-              </p>
-              <p>
-                Our strategy was to architect an unexpected epitome of luxury and culinary
-                excellence, set precisely where you’d least expect it.
-              </p>
-            </div>
-          }
-          full={
-            <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
-              <p>
-                Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and
-                royal legacy of Baltistan.
-              </p>
-              <p>
-                To build the world within these walls, we explored every raw, unvarnished thread of
-                the land, restoring lost traditions and borrowing directly from the untamed nature
-                around us. We consciously moved past the boundaries of conventional hospitality,
-                treating the stark, beautiful geography of India’s last village as a living theater
-                of history, culture, and lineage.
-              </p>
-              <p>
-                Our strategy was to architect an unexpected epitome of luxury and culinary
-                excellence, set precisely where you’d least expect it. By designing a multi-tiered
-                ecosystem of sensory guest rituals—spanning dramatic frontier dining, royal
-                heritage, and indigenous craftsmanship—we transformed heritage preservation into an
-                active, breathing luxury experience.
-              </p>
-            </div>
-          }
-          // Figma: plate at x946 y1617 (747x80), "Read more" at x981 y1710.
-          fade={{ x: -35, y: 179, width: 747, height: 80 }}
-          toggle={{ x: 0, y: 272 }}
-          gapBelow={187}
-        />
+        {/* Mobile: the copy sits at x81 in 11px type, 13px between paragraphs. */}
+        <div className="max-md:mt-[70px] max-md:pr-[54px] max-md:pl-[81px] xl:contents max-md:[&>div]:px-0 max-md:[&>div>button]:mt-[19px] max-md:[&>div>button]:text-[11px] max-md:[&>div>div]:text-[11px] max-md:[&>div>div]:leading-[1.18] max-md:[&>div>div.overflow-hidden]:max-h-[17.7em]!">
+          <VirsaExpandableIntro
+            responsive
+            x={981}
+            y={1438}
+            width={677}
+            preview={
+              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(12*var(--u))]">
+                <p>
+                  Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and
+                  royal legacy of Baltistan.
+                </p>
+                <p>
+                  To build the world within these walls, we explored every raw, unvarnished thread
+                  of the land, restoring lost traditions and borrowing directly from the untamed
+                  nature around us. We consciously moved past the boundaries of conventional
+                  hospitality, treating the stark, beautiful geography of India’s last village as a
+                  living theater of history, culture, and lineage.
+                </p>
+                <p>
+                  Our strategy was to architect an unexpected epitome of luxury and culinary
+                  excellence, set precisely where you’d least expect it.
+                </p>
+              </div>
+            }
+            full={
+              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(20*var(--u))]">
+                <p>
+                  Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and
+                  royal legacy of Baltistan.
+                </p>
+                <p>
+                  To build the world within these walls, we explored every raw, unvarnished thread
+                  of the land, restoring lost traditions and borrowing directly from the untamed
+                  nature around us. We consciously moved past the boundaries of conventional
+                  hospitality, treating the stark, beautiful geography of India’s last village as a
+                  living theater of history, culture, and lineage.
+                </p>
+                <p>
+                  Our strategy was to architect an unexpected epitome of luxury and culinary
+                  excellence, set precisely where you’d least expect it. By designing a multi-tiered
+                  ecosystem of sensory guest rituals—spanning dramatic frontier dining, royal
+                  heritage, and indigenous craftsmanship—we transformed heritage preservation into
+                  an active, breathing luxury experience.
+                </p>
+              </div>
+            }
+            // Figma: plate at x946 y1617 (747x80), "Read more" at x981 y1710.
+            fade={{ x: -35, y: 179, width: 747, height: 80 }}
+            toggle={{ x: 0, y: 272 }}
+            gapBelow={187}
+          />
+        </div>
       </section>
 
       {/* ============ B. SECOND PHOTO (Figma y 1920–3189) ============ */}
-      <div className="relative mt-8 xl:mt-0 xl:h-[calc(1269*var(--u))]">
+      <div className="relative mt-8 max-md:mt-[70px] xl:mt-0 xl:h-[calc(1269*var(--u))]">
         <Pic
           file="intro.png"
           alt="A hand painting in an open travel journal beside a glass of brushes"
@@ -331,63 +388,67 @@ export function VirsaExperiencesPage() {
           w={1920}
           h={1080}
           mobileAspect="3 / 5"
+          m="390 / 654"
         />
       </div>
 
       {/* ============ C. CURATING THE EXPERIENCES (Figma y 3189–3579) ============ */}
-      <section className="relative flex flex-col gap-6 py-10 xl:block xl:min-h-[calc(390*var(--u))] xl:py-0">
+      <section className="relative flex flex-col gap-6 py-10 max-md:gap-0 max-md:pt-[74px] max-md:pb-[83px] xl:block xl:min-h-[calc(390*var(--u))] xl:py-0">
         <p
-          className="font-helvetica px-6 text-sm font-bold tracking-[0.04em] text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+          className="font-helvetica px-6 text-sm font-bold tracking-[0.04em] text-[#9b9484] uppercase max-md:mt-[35px] max-md:px-0 max-md:pl-[81px] max-md:text-[10px] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
           style={at(185, 0, 677)}
         >
-          Curating the Experiences
+          <span className="max-md:hidden">Curating the Experiences</span>
+          <span className="md:hidden">Curated Experiences</span>
         </p>
-        <VirsaExpandableIntro
-          responsive
-          x={189}
-          y={57}
-          width={677}
-          preview={
-            <div className="flex flex-col gap-4 xl:gap-[calc(12*var(--u))]">
-              <p>
-                Our time in Turtuk, Ladakh was not ear-marked for a corporate wavelength. It was
-                where we discovered, day in, and day out, the rhythms of a mountain village.
-              </p>
-              <p>
-                We heard stories, countless of them, from the kindest people you could meet. The
-                Baltis. ‘Bal’ means soft as cotton, and ‘Ti’ means those who live on the bank of a
-                river.
-              </p>
-              <p>We came not to remake this land of the Baltis, but to listen to its stream.</p>
-            </div>
-          }
-          full={
-            <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
-              <p>
-                Our time in Turtuk, Ladakh was not ear-marked for a corporate wavelength. It was
-                where we discovered, day in, and day out, the rhythms of a mountain village.
-              </p>
-              <p>
-                We heard stories, countless of them, from the kindest people you could meet. The
-                Baltis. ‘Bal’ means soft as cotton, and ‘Ti’ means those who live on the bank of a
-                river.
-              </p>
-              <p>
-                We came not to remake this land of the Baltis, but to listen to its stream. Virsa
-                Baltistan stands as our promise – a lineage of mountain warmth, ensuring that the
-                stories written into these borderlands are never lost to time, but lived anew with
-                every guest who enters its gates.
-              </p>
-            </div>
-          }
-          // Figma: plate at x154 y3379 (747x80), "Read more" at x189 y3472.
-          fade={{ x: -35, y: 133, width: 747, height: 80 }}
-          toggle={{ x: 0, y: 226 }}
-          gapBelow={84}
-        />
+        <div className="max-md:mt-[7px] max-md:pr-[54px] max-md:pl-[81px] xl:contents max-md:[&>div]:px-0 max-md:[&>div>button]:mt-[19px] max-md:[&>div>button]:text-[11px] max-md:[&>div>div]:text-[11px] max-md:[&>div>div]:leading-[1.18] max-md:[&>div>div.overflow-hidden]:max-h-[17.7em]!">
+          <VirsaExpandableIntro
+            responsive
+            x={189}
+            y={57}
+            width={677}
+            preview={
+              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(12*var(--u))]">
+                <p>
+                  Our time in Turtuk, Ladakh was not ear-marked for a corporate wavelength. It was
+                  where we discovered, day in, and day out, the rhythms of a mountain village.
+                </p>
+                <p>
+                  We heard stories, countless of them, from the kindest people you could meet. The
+                  Baltis. ‘Bal’ means soft as cotton, and ‘Ti’ means those who live on the bank of a
+                  river.
+                </p>
+                <p>We came not to remake this land of the Baltis, but to listen to its stream.</p>
+              </div>
+            }
+            full={
+              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(20*var(--u))]">
+                <p>
+                  Our time in Turtuk, Ladakh was not ear-marked for a corporate wavelength. It was
+                  where we discovered, day in, and day out, the rhythms of a mountain village.
+                </p>
+                <p>
+                  We heard stories, countless of them, from the kindest people you could meet. The
+                  Baltis. ‘Bal’ means soft as cotton, and ‘Ti’ means those who live on the bank of a
+                  river.
+                </p>
+                <p>
+                  We came not to remake this land of the Baltis, but to listen to its stream. Virsa
+                  Baltistan stands as our promise – a lineage of mountain warmth, ensuring that the
+                  stories written into these borderlands are never lost to time, but lived anew with
+                  every guest who enters its gates.
+                </p>
+              </div>
+            }
+            // Figma: plate at x154 y3379 (747x80), "Read more" at x189 y3472.
+            fade={{ x: -35, y: 133, width: 747, height: 80 }}
+            toggle={{ x: 0, y: 226 }}
+            gapBelow={84}
+          />
+        </div>
         <nav
           aria-label="The experiences"
-          className="font-helvetica-regular -order-1 px-6 text-xs leading-[1.9] tracking-[0.02em] text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:order-none xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[calc(33*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
+          className="font-helvetica-regular -order-1 px-6 text-xs leading-[1.9] tracking-[0.02em] text-[#9b9484] uppercase max-md:px-0 max-md:pl-[59px] max-md:leading-[19px] max-md:opacity-80 xl:absolute xl:top-(--y) xl:left-(--x) xl:order-none xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[calc(33*var(--u))] xl:tracking-[calc(0.56*var(--u))]"
           style={at(1096, 0, 862)}
         >
           <a href="#royal-welcome" className="block transition-opacity hover:opacity-70">
@@ -419,34 +480,37 @@ export function VirsaExperiencesPage() {
 
       {/* ============ D. THE EXPERIENCES … NEXT PROJECT (Figma y 3579 onward) ============ */}
       <div
-        className="relative flex flex-col gap-16 px-6 pt-6 pb-16 xl:block xl:h-(--end) xl:gap-0 xl:p-0"
+        className="relative flex flex-col gap-16 px-6 pt-6 pb-16 max-md:gap-0 max-md:px-0 max-md:pt-0 max-md:pb-[83px] xl:block xl:h-(--end) xl:gap-0 xl:p-0"
         style={{ "--end": u(END - D_TOP) } as CSSProperties}
       >
         {/* ---- The Royal Welcome ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection>
           <Heading id="royal-welcome" mobile="text-3xl leading-[1.05]" x={269} y={d(3629)}>
             The Royal Welcome
           </Heading>
           <Copy x={273} y={d(4183)} w={501}>
             In the land once ruled by kings, from the Yabgo rulers of Khaplu to the Maqpons of
             Skardu, whose courts shaped the culture, architecture, and traditions of this Himalayan
-            kingdom, every welcome carried the dignity of royalty. At Virsa, within our modern
-            fortress, we honoured and revived Baltistan’s grandeur with a welcome as regal as the
-            land itself. With drums that beat to culture, our horse mascot and a Virsa flag, we
-            welcome guests with a salaam in the hotel.
+            kingdom, every welcome carried the dignity of royalty. <br className="md:hidden" />
+            <br className="md:hidden" />
+            At Virsa, within our modern fortress, we honoured and revived Baltistan’s grandeur with
+            a welcome as regal as the land itself. With drums that beat to culture, our horse mascot
+            and a Virsa flag, we welcome guests with a salaam in the hotel.
           </Copy>
           <Pic
             lead
             file="royal-welcome-1.png"
+            m="163 / 275"
             alt="A Balti man on horseback in traditional dress, among poplar trees"
             x={1193}
             top={d(3719)}
             w={458}
             h={712}
           />
-          <Row cols={[896, 458]}>
+          <Row cols={[896, 458]} className="max-md:mt-[73px]">
             <Pic
               file="royal-welcome-2.png"
+              m="256 / 205"
               alt="The Royal Welcome at Virsa Baltistan, guests greeted at the hotel"
               x={273}
               top={d(4487)}
@@ -455,6 +519,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="royal-welcome-3.png"
+              m="131 / 205"
               alt="The Royal Welcome at Virsa Baltistan, a detail from the ceremony"
               x={1193}
               top={d(4487)}
@@ -465,6 +530,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[1, 1]}>
             <Pic
               file="royal-welcome-4.png"
+              m="194 / 274"
               alt="The Royal Welcome at Virsa Baltistan, drummers and the Virsa flag"
               x={272}
               top={d(5221)}
@@ -473,6 +539,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="royal-welcome-5.png"
+              m="193 / 274"
               alt="The Royal Welcome at Virsa Baltistan, the horse mascot"
               x={973}
               top={d(5221)}
@@ -482,13 +549,14 @@ export function VirsaExperiencesPage() {
           </Row>
           <Pic
             file="royal-welcome-6.png"
+            m="390 / 362"
             alt="The Royal Welcome at Virsa Baltistan, the welcome within the fortress"
             x={273}
             top={d(6194)}
             w={1378}
             h={777}
           />
-          <div className="col-span-2 xl:contents">
+          <div className="col-span-2 max-md:col-span-5 max-md:mt-[27px] max-md:px-[5px] max-md:*:aspect-[379/214]! xl:contents">
             <VirsaFilmPlayer
               responsive
               src={`${VIDEO}/royal-welcome.mp4`}
@@ -498,10 +566,10 @@ export function VirsaExperiencesPage() {
               triangle={{ x: 0, y: 0, size: 65 }}
             />
           </div>
-        </section>
+        </ExperienceSection>
 
         {/* ---- The Mountain-Beach Picnic ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[67px]">
           <Heading id="mountain-beach-picnic" mobile="text-3xl leading-[1.05]" x={269} y={d(8057)}>
             The Mountain-Beach Picnic
           </Heading>
@@ -513,6 +581,7 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="beach-picnic-1.png"
+            m="164 / 251"
             alt="The Mountain-Beach Picnic on the banks of the Shyok"
             x={1177}
             top={d(8057)}
@@ -521,6 +590,8 @@ export function VirsaExperiencesPage() {
           />
           <Pic
             file="beach-picnic-2.png"
+            className="max-md:mt-[60px]"
+            m="390 / 199"
             alt="A picnic table laid on the hidden beach by the river"
             x={266}
             top={d(8817)}
@@ -530,6 +601,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[681, 679]}>
             <Pic
               file="beach-picnic-3.png"
+              m="193 / 269"
               alt="Food and drink served at the beach picnic"
               x={266}
               top={d(9544)}
@@ -538,6 +610,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="beach-picnic-4.png"
+              m="194 / 269"
               alt="Kombucha poured by the river at the beach picnic"
               x={970}
               top={d(9544)}
@@ -547,16 +620,17 @@ export function VirsaExperiencesPage() {
           </Row>
           <Pic
             file="beach-picnic-5.png"
+            m="390 / 199"
             alt="The Shyok riverbank at the Mountain-Beach Picnic"
             x={266}
             top={d(10520)}
             w={1382}
             h={706}
           />
-        </section>
+        </ExperienceSection>
 
         {/* ---- Dine with Dynasty ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[75px]">
           <Heading id="dine-with-dynasty" mobile="text-3xl leading-[1.05]" x={269} y={d(11353)}>
             Dine With Dynasty
           </Heading>
@@ -568,15 +642,17 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="dine-with-dynasty-1.png"
+            m="164 / 251"
             alt="Dine with Dynasty, the royal descendant at the summer palace"
             x={1184}
             top={d(11353)}
             w={458}
             h={722}
           />
-          <Row cols={[896, 458]}>
+          <Row cols={[896, 458]} className="max-md:mt-[51px]">
             <Pic
               file="dine-with-dynasty-2.png"
+              m="256 / 210"
               alt="Dine with Dynasty, the courtyard of the summer palace"
               x={264}
               top={d(12126)}
@@ -585,6 +661,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="dine-with-dynasty-3.png"
+              m="131 / 210"
               alt="Dine with Dynasty, a detail of the table"
               x={1184}
               top={d(12126)}
@@ -595,6 +672,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[458, 896]}>
             <Pic
               file="dine-with-dynasty-4.png"
+              m="131 / 210"
               alt="Dine with Dynasty, a multi-course local menu"
               x={264}
               top={d(12863)}
@@ -603,6 +681,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="dine-with-dynasty-5.png"
+              m="256 / 210"
               alt="Dine with Dynasty, conversations across the table"
               x={746}
               top={d(12863)}
@@ -610,7 +689,7 @@ export function VirsaExperiencesPage() {
               h={716}
             />
           </Row>
-          <div className="col-span-2 xl:contents">
+          <div className="col-span-2 max-md:col-span-5 max-md:mt-[23px] max-md:*:aspect-[390/207]! xl:contents">
             <VirsaFilmPlayer
               responsive
               src={`${VIDEO}/dine-with-dynasty.mp4`}
@@ -620,10 +699,10 @@ export function VirsaExperiencesPage() {
               triangle={{ x: 0, y: 0, size: 65 }}
             />
           </div>
-        </section>
+        </ExperienceSection>
 
         {/* ---- Dinner on the Dunes ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[77px]">
           <Heading id="dinner-on-the-dunes" mobile="text-3xl leading-[1.05]" x={269} y={d(14553)}>
             Dinner On The Dunes
           </Heading>
@@ -635,6 +714,7 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="dune-dinner-1.png"
+            m="162 / 249"
             alt="Dinner on the Dunes, torches burning on the sand"
             x={1179}
             top={d(14553)}
@@ -643,6 +723,8 @@ export function VirsaExperiencesPage() {
           />
           <Pic
             file="dune-dinner-2.png"
+            className="max-md:mt-[31px]"
+            m="390 / 201"
             alt="Dinner on the Dunes, a long table under the stars"
             x={264}
             top={d(15304)}
@@ -652,6 +734,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[1, 1]}>
             <Pic
               file="dune-dinner-3.png"
+              m="194 / 274"
               alt="Dinner on the Dunes, a plated course"
               x={267}
               top={d(16031)}
@@ -660,6 +743,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="dune-dinner-4.png"
+              m="193 / 274"
               alt="Dinner on the Dunes, an intimate meal on the sand"
               x={968}
               top={d(16031)}
@@ -667,10 +751,10 @@ export function VirsaExperiencesPage() {
               h={955}
             />
           </Row>
-        </section>
+        </ExperienceSection>
 
         {/* ---- Recreation in Baltistan ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[68px]">
           <Heading
             id="recreation-in-baltistan"
             mobile="text-3xl leading-[1.05]"
@@ -688,15 +772,17 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="recreation-1.png"
+            m="158 / 250"
             alt="Recreation in Baltistan, an artisan’s workshop in Turtuk"
             x={1191}
             top={d(17078)}
             w={455}
             h={722}
           />
-          <Row cols={[896, 458]}>
+          <Row cols={[896, 458]} className="max-md:mt-[33px]">
             <Pic
               file="recreation-2.png"
+              m="256 / 205"
               alt="Recreation in Baltistan, learning beside a master artisan"
               x={271}
               top={d(17851)}
@@ -705,6 +791,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="recreation-3.png"
+              m="131 / 205"
               alt="Recreation in Baltistan, hands at work with ancestral tools"
               x={1191}
               top={d(17851)}
@@ -713,16 +800,19 @@ export function VirsaExperiencesPage() {
             />
           </Row>
           <Row cols={[1, 1]}>
-            <VirsaFilmPlayer
-              responsive
-              src={`${VIDEO}/recreation.mp4`}
-              poster={`${IMG}/recreation-video-poster.jpg`}
-              title="the Recreation in Baltistan film"
-              box={{ x: 270, y: d(18585), w: 678, h: 955 }}
-              triangle={{ x: 0, y: 0, size: 65 }}
-            />
+            <div className="max-md:*:aspect-[194/274]! xl:contents">
+              <VirsaFilmPlayer
+                responsive
+                src={`${VIDEO}/recreation.mp4`}
+                poster={`${IMG}/recreation-video-poster.jpg`}
+                title="the Recreation in Baltistan film"
+                box={{ x: 270, y: d(18585), w: 678, h: 955 }}
+                triangle={{ x: 0, y: 0, size: 65 }}
+              />
+            </div>
             <Pic
               file="recreation-5.png"
+              m="196 / 274"
               alt="Recreation in Baltistan, wood-carving in the workshop"
               x={971}
               top={d(18585)}
@@ -732,16 +822,17 @@ export function VirsaExperiencesPage() {
           </Row>
           <Pic
             file="recreation-6.png"
+            m="390 / 225"
             alt="Recreation in Baltistan, stone-masonry and loom-weaving"
             x={271}
             top={d(19558)}
             w={1378}
             h={777}
           />
-        </section>
+        </ExperienceSection>
 
         {/* ---- Lunch with a Local Family ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[80px]">
           <Heading
             id="lunch-with-a-local-family"
             mobile="text-3xl leading-[1.05]"
@@ -759,6 +850,7 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="local-family-1.png"
+            m="157 / 242"
             alt="Lunch with a Local Family, a couple at breakfast"
             x={1189}
             top={d(20484)}
@@ -767,6 +859,8 @@ export function VirsaExperiencesPage() {
           />
           <Pic
             file="local-family-2.png"
+            className="max-md:mt-[38px]"
+            m="390 / 207"
             alt="Lunch with a Local Family, a meal around the Bukhari"
             x={278}
             top={d(21242)}
@@ -776,6 +870,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[669, 679]}>
             <Pic
               file="local-family-3.png"
+              m="192 / 281"
               alt="Lunch with a Local Family, bread shared on traditional carpets"
               x={278}
               top={d(21973)}
@@ -784,6 +879,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="local-family-4.png"
+              m="195 / 281"
               alt="Lunch with a Local Family, the family at home in Turtuk"
               x={976}
               top={d(21973)}
@@ -793,16 +889,17 @@ export function VirsaExperiencesPage() {
           </Row>
           <Pic
             file="local-family-5.png"
+            m="390 / 207"
             alt="Lunch with a Local Family, the table in a Turtuk home"
             x={278}
             top={d(22950)}
             w={1378}
             h={706}
           />
-        </section>
+        </ExperienceSection>
 
         {/* ---- Ramdan Glacier Trek ---- */}
-        <section className="grid grid-cols-2 gap-x-4 gap-y-0.5 xl:contents">
+        <ExperienceSection className="max-md:mt-[90px]">
           <Heading id="ramdan-glacier-trek" mobile="text-3xl leading-[1.05]" x={269} y={d(23768)}>
             Ramdan Glacier Trek
           </Heading>
@@ -814,15 +911,17 @@ export function VirsaExperiencesPage() {
           <Pic
             lead
             file="glacier-trek-1.png"
+            m="158 / 249"
             alt="Ramdan Glacier Trek, the start of the trail"
             x={1194}
             top={d(23784)}
             w={458}
             h={722}
           />
-          <Row cols={[896, 458]}>
+          <Row cols={[896, 458]} className="max-md:mt-[56px]">
             <Pic
               file="glacier-trek-2.png"
+              m="256 / 203"
               alt="Ramdan Glacier Trek, a path along the glacial stream"
               x={274}
               top={d(24557)}
@@ -831,6 +930,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="glacier-trek-3.png"
+              m="131 / 203"
               alt="Ramdan Glacier Trek, wildflowers along the water channels"
               x={1194}
               top={d(24557)}
@@ -840,6 +940,7 @@ export function VirsaExperiencesPage() {
           </Row>
           <Pic
             file="glacier-trek-4.png"
+            m="390 / 202"
             alt="Ramdan Glacier Trek, under a clear blue sky"
             x={270}
             top={d(25292)}
@@ -849,6 +950,7 @@ export function VirsaExperiencesPage() {
           <Row cols={[669, 679]}>
             <Pic
               file="glacier-trek-5.png"
+              m="194 / 271"
               alt="Ramdan Glacier Trek, the canyon leading to the glacier"
               x={278}
               top={d(26024)}
@@ -857,6 +959,7 @@ export function VirsaExperiencesPage() {
             />
             <Pic
               file="glacier-trek-6.png"
+              m="193 / 271"
               alt="Ramdan Glacier Trek, the glacial stream"
               x={976}
               top={d(26024)}
@@ -864,15 +967,15 @@ export function VirsaExperiencesPage() {
               h={958}
             />
           </Row>
-        </section>
+        </ExperienceSection>
 
         {/* ---- Features ---- */}
-        <section className="flex flex-col gap-8 xl:contents">
+        <section className="flex flex-col gap-8 max-md:mt-[54px] max-md:gap-0 xl:contents">
           {/* The mobile frame splits this in two: "PR & Media" over the banner, "Features" over the logos. */}
           <Heading x={102} y={d(27148)} className="hidden xl:block">
             Features
           </Heading>
-          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] xl:hidden">
+          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] max-md:pl-[49px] max-md:text-[45px] max-md:leading-[42px] xl:hidden">
             PR &amp; Media
           </h2>
           {/* Award banner (Figma y27322), linked to the Travel + Leisure award story. */}
@@ -880,7 +983,7 @@ export function VirsaExperiencesPage() {
             href="https://www.travelandleisureasia.com/in/news/best-domestic-hotels-iba-2025/"
             target="_blank"
             rel="noopener noreferrer"
-            className="-mx-6 block transition-opacity duration-300 hover:opacity-90 xl:contents"
+            className="-mx-6 block transition-opacity duration-300 hover:opacity-90 max-md:mx-0 max-md:mt-[60px] xl:contents"
           >
             <Pic
               file="award.png"
@@ -890,12 +993,14 @@ export function VirsaExperiencesPage() {
               w={1920}
               h={1080}
               mobileAspect="3 / 5"
+              m="390 / 627"
             />
           </a>
-          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] xl:hidden">
+          <h2 className="font-cormorant text-3xl leading-none tracking-[-0.06em] text-[#7d7062] max-md:mt-[34px] max-md:pl-[49px] max-md:text-[45px] max-md:leading-[42px] xl:hidden">
             Features
           </h2>
-          <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-5 xl:contents">
+          {/* Mobile: the logo group is a 290x64 box at x46; each logo sits at its Figma offset. */}
+          <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-5 max-md:relative max-md:mt-[27px] max-md:ml-[46px] max-md:block max-md:h-[64px] max-md:w-[290px] xl:contents">
             <PressLogo
               src={assetPath("/images/projects/virsa-baltistan/press/architectural-digest.png")}
               alt="Read about Virsa Baltistan in Architectural Digest"
@@ -904,6 +1009,7 @@ export function VirsaExperiencesPage() {
               y={28526}
               w={116}
               h={75}
+              className="max-md:absolute max-md:top-[5px] max-md:left-[2px] max-md:h-[19px] max-md:w-[30px]"
             />
             <PressLogo
               src={assetPath("/images/projects/ranjits-svaasa/press-robb.png")}
@@ -914,6 +1020,7 @@ export function VirsaExperiencesPage() {
               y={28543}
               w={278}
               h={59}
+              className="max-md:absolute max-md:top-[1px] max-md:left-[72px] max-md:h-[29px] max-md:w-[137px]"
             />
             <PressLogo
               src={assetPath("/images/projects/virsa-baltistan/press/conde-nast-traveller.png")}
@@ -923,6 +1030,7 @@ export function VirsaExperiencesPage() {
               y={28538}
               w={193}
               h={69}
+              className="max-md:absolute max-md:top-[5px] max-md:left-[236px] max-md:h-[19px] max-md:w-[54px]"
             />
             <PressLogo
               src={assetPath("/images/projects/virsa-baltistan/press/travel-leisure.png")}
@@ -932,13 +1040,14 @@ export function VirsaExperiencesPage() {
               y={28543}
               w={246}
               h={57}
+              className="max-md:absolute max-md:top-[47px] max-md:left-[30px] max-md:h-[19px] max-md:w-[82px]"
             />
             {/* No logo file was supplied for Brown History, so its name is set in type. */}
             <a
               href="https://www.instagram.com/p/DRczqw0AU6L/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-helvetica text-center text-lg font-bold tracking-[-0.02em] text-black transition-opacity duration-300 hover:opacity-70 xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(28*var(--u))]"
+              className="font-helvetica text-center text-lg font-bold tracking-[-0.02em] text-black transition-opacity duration-300 hover:opacity-70 max-md:absolute max-md:top-[49px] max-md:left-[179px] max-md:w-[82px] max-md:text-[11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(28*var(--u))] xl:leading-[calc(28*var(--u))]"
               style={at(1557, d(28558), 197)}
             >
               Brown History
@@ -947,12 +1056,12 @@ export function VirsaExperiencesPage() {
         </section>
 
         {/* ---- Team ---- */}
-        <section className="flex flex-col gap-4 xl:contents">
-          <Heading x={106} y={d(28714)} mobile="text-3xl leading-none">
+        <section className="flex flex-col gap-4 max-md:mt-[48px] max-md:gap-0 xl:contents">
+          <Heading x={106} y={d(28714)} mobile="text-3xl leading-none" className="max-md:mb-0!">
             Team
           </Heading>
           {/* Mobile frame: roles grouped, names stacked beside them. */}
-          <dl className="font-helvetica-regular grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-xs tracking-[0.02em] text-[#9b9484] uppercase xl:hidden">
+          <dl className="font-helvetica-regular grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-xs tracking-[0.02em] text-[#9b9484] uppercase max-md:mt-[28px] max-md:ml-[62px] max-md:grid-cols-[139px_1fr] max-md:grid-rows-[36px_36px_69px_41px_auto] max-md:gap-0 max-md:leading-[14px] xl:hidden">
             <dt className="font-helvetica font-bold">Concept</dt>
             <dd>Rashidullah Khan</dd>
             <dt className="font-helvetica font-bold">Community</dt>
@@ -991,23 +1100,23 @@ export function VirsaExperiencesPage() {
         </section>
 
         {/* ---- Next project ---- */}
-        <div className="mt-6 flex flex-col items-center text-center xl:contents">
+        <div className="mt-6 flex flex-col items-center text-center max-md:mt-[73px] xl:contents">
           <div
             aria-hidden
-            className="font-cormorant text-5xl leading-none font-bold text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))]"
+            className="font-cormorant text-5xl leading-none font-bold text-[#7d7062] max-md:text-[40px] max-md:font-normal xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))]"
             style={at(905, d(28881), 110)}
           >
             &gt;
           </div>
           <Link
             href="/work/virsa-archive"
-            className="font-cormorant block text-5xl leading-none tracking-[-0.06em] text-[#7d7062] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
+            className="font-cormorant block text-5xl leading-none tracking-[-0.06em] text-[#7d7062] max-md:mt-[8px] max-md:text-[40px] xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:text-[length:calc(80*var(--u))] xl:leading-[calc(76*var(--u))] xl:tracking-[calc(-4.8*var(--u))]"
             style={at(654, d(28969), 612)}
           >
             Next Project
           </Link>
           <p
-            className="font-helvetica-regular mt-3 text-sm tracking-[0.02em] whitespace-nowrap text-[#9b9484] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
+            className="font-helvetica-regular mt-3 text-sm tracking-[0.02em] whitespace-nowrap text-[#9b9484] uppercase max-md:mt-[14px] max-md:text-[11px] xl:absolute xl:top-(--y) xl:left-(--x) xl:mt-0 xl:w-(--w) xl:text-[length:calc(20*var(--u))] xl:leading-[calc(23*var(--u))] xl:tracking-[calc(0.4*var(--u))]"
             style={at(858, d(29078), 205)}
           >
             The Virsa Archive

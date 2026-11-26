@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
@@ -78,13 +78,376 @@ function Credit({ role, name, x, w }: { role: string; name: string; x: number; w
   );
 }
 
+/** The 12 brand-pillar tiles; desktop and mobile only differ in the grid classes passed in. */
+function PillarGrid({ className, style }: { className: string; style?: CSSProperties }) {
+  return (
+    <div className={className} style={style}>
+      <OptimizedImage
+        src={`${IMG}/5-1.png`}
+        alt="A hill rising above lines of still water, on olive green"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-2.png`}
+        alt="A mirror-like river encircling a quiet hill captures gentleness and meditative calm. It reflects ‘Lahe’, the soft footprint we leave and the peace we offer our guests."
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-3.png`}
+        alt="From the Land, Lahe Looms: a grey hillside above a still lake"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-4.png`}
+        alt="The river’s rhythmic ripples represent a constant, graceful flow. As the brand's lifeblood, it is the pulse from which everything grows."
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-5.png`}
+        alt="On the River, Assam Bengal Navigation: rippling dark water"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-6.png`}
+        alt="Rows of small hills above lines of water, on olive green"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-7.png`}
+        alt="On the Land, Diphlu River Lodge: birds over the water at sunset"
+        width={544}
+        height={815}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-8.png`}
+        alt="A sun above hills reflected in water, on taupe"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-9.png`}
+        alt="Mountains and depths reflect a perfect harmony where earth and water meet. This balance captures the totality of our ecosystem beneath the sun."
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-10.png`}
+        alt="The ‘Wild’ captures the river’s raw energy and the mountain’s jagged strength. It honors the unpolished beauty and silent power of the natural world."
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-11.png`}
+        alt="In the Wild, JTI Holidays: a misty, forested mountain"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+      <OptimizedImage
+        src={`${IMG}/5-12.png`}
+        alt="Rows of small hills above lines of water, on olive green"
+        width={536}
+        height={807}
+        sizes="(min-width: 1920px) 536px, 50vw"
+      />
+    </div>
+  );
+}
+
+/** Mobile section title (Figma mobile frame, Cormorant, tracking -6%) at a mobile-frame y. */
+function MobileHeading({ children, y }: { children: ReactNode; y: number }) {
+  return (
+    <h2
+      className="font-cormorant text-taupe absolute top-(--y) left-(--x) text-[length:calc(45*var(--u))] leading-[calc(45*var(--u))] tracking-[-0.06em] whitespace-nowrap"
+      style={at(47, y)}
+    >
+      {children}
+    </h2>
+  );
+}
+
+/** Mobile body copy (Helvetica, sage); the intro runs larger than the other blocks. */
+function MobileCopy({
+  children,
+  x,
+  y,
+  w,
+  className,
+}: {
+  children: ReactNode;
+  x: number;
+  y: number;
+  w: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "font-helvetica-regular text-sage absolute top-(--y) left-(--x) w-(--w) text-[length:calc(10*var(--u))] leading-[calc(11*var(--u))] tracking-[0.02em] [&_p+p]:mt-[calc(11*var(--u))]",
+        className,
+      )}
+      style={at(x, y, w)}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Mobile "ROLE  Name" credit; the role column is fixed so names line up. */
+function MobileCredit({ role, name, y }: { role: ReactNode; name: string; y: number }) {
+  return (
+    <p
+      className="font-helvetica-regular text-sage absolute top-(--y) left-(--x) w-(--w) text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase"
+      style={at(62, y, 300)}
+    >
+      <span className="font-helvetica absolute top-0 left-0 font-bold">{role}</span>
+      <span className="ml-[calc(139*var(--u))] block">{name}</span>
+    </p>
+  );
+}
+
+/*
+  Mobile frame (390 wide). Below md the page is two stacked canvases at
+  1 Figma px = 100cqw / 390: the hero + intro (which grows when "Read more" is
+  opened, pushing the second canvas down) and everything below it. From md up
+  the existing flow / xl canvas layout is used unchanged.
+*/
+function LaheLifeMobile() {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="@container md:hidden">
+      <div className="relative [--u:calc(100cqw/390)]">
+        {/* ============ HERO + INTRO (mobile y 0 - 1200) ============ */}
+        <section className="relative pt-[calc(929*var(--u))] pb-[calc(36*var(--u))]">
+          <div className="absolute top-0 left-0 h-[calc(700*var(--u))] w-full overflow-hidden bg-black">
+            {/* The mobile hero is taller than the landscape asset: it keeps the asset's scale and the black frame fills the rest. */}
+            <OptimizedImage
+              src={`${IMG}/1.png`}
+              alt="A cargo ship crossing the water, seen through a ship's window"
+              width={1920}
+              height={1104}
+              priority
+              sizes="100vw"
+              className="absolute top-[calc(17*var(--u))] left-[calc(-336*var(--u))] h-auto w-[calc(985*var(--u))] max-w-none"
+            />
+            <p className="font-helvetica absolute top-[calc(91*var(--u))] w-full text-center text-[length:calc(15*var(--u))] leading-[calc(18*var(--u))] font-bold tracking-[0.02em] text-white uppercase opacity-80">
+              AJC in Assam / অসম
+            </p>
+            <p className="font-helvetica absolute top-[calc(616*var(--u))] w-full text-center text-[length:calc(15*var(--u))] leading-[calc(18*var(--u))] font-bold tracking-[0.05em] text-white uppercase opacity-80">
+              2026 / ২০২৬
+            </p>
+          </div>
+          <h1
+            className="font-cormorant text-taupe absolute top-(--y) left-(--x) text-[length:calc(45*var(--u))] leading-[calc(45*var(--u))] tracking-[-0.06em] whitespace-nowrap"
+            style={at(47, 778)}
+          >
+            Lahé Life
+          </h1>
+          <p
+            className="font-helvetica-regular text-taupe absolute top-(--y) left-(--x) w-(--w) text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase opacity-80"
+            style={at(55, 864, 150)}
+          >
+            Brand Identity Narrative
+          </p>
+          <div className="relative ml-[calc(81*var(--u))] w-[calc(252*var(--u))]">
+            <div className="font-helvetica-regular text-sage relative text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.01em] [&_p+p]:mt-[calc(13*var(--u))]">
+              <p>
+                Lahé Life is a conscious collection defined by the philosophy of the slow and the
+                stewardship of the land. Born from the Assamese way of life where time moves gently,
+                it is a crossover of heritage hospitality with the modern sensibility of the present
+                day.
+              </p>
+              <p>
+                With roots in a forty-year legacy of exploration, the brand pairs a deep-seated
+                regional soul with a collection of ventures that feel familiar and
+                <br />
+                easy to return to. From the unhurried journeys of Assam Bengal Navigation along the
+                Ganges and Brahmaputra rivers to the immersive sanctuary on land of Diphlu River
+                Lodge, every experience is shaped by a quiet intimacy with the surroundings.
+              </p>
+              {expanded && (
+                <>
+                  <p>
+                    This culture of presence is carried forward by Jungle Travels India through
+                    decades of regional knowledge, and preserved by Lahé Looms through a
+                    contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
+                    rhythm is brought into an urban setting, bridging the local supply chain with a
+                    refined, considered aesthetic.
+                  </p>
+                  <p>
+                    The best experiences of Lahé are the ones that are rooted; they offer a way of
+                    experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
+                    place.
+                  </p>
+                </>
+              )}
+              {/* Same cream veil as desktop: fades the last three collapsed lines */}
+              {!expanded && (
+                <div
+                  aria-hidden
+                  className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[calc(39*var(--u))]"
+                />
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => setExpanded((prev) => !prev)}
+              aria-expanded={expanded}
+              className="group/readmore font-helvetica text-sage mt-[calc(26*var(--u))] block cursor-pointer text-left text-[length:calc(11*var(--u))] leading-[calc(14*var(--u))] font-bold tracking-[0.02em]"
+            >
+              <ReadMoreLabel expanded={expanded} />
+            </button>
+          </div>
+        </section>
+
+        {/* ============ EVERYTHING BELOW (mobile y 1200 - 4656; y values below are minus 1200) ============ */}
+        <section className="relative h-[calc(3456*var(--u))]">
+          <MobileHeading y={51}>Identity</MobileHeading>
+          <OptimizedImage
+            src={`${IMG}/2.png`}
+            alt="The Lahé Life logo: a cluster of curved reeds above the wordmark, shown on its construction grid"
+            width={625}
+            height={513}
+            sizes="100vw"
+            className="absolute top-(--y) left-(--x) h-auto w-(--w)"
+            style={at(86, 175, 220)}
+          />
+
+          <MobileHeading y={458}>Iconography</MobileHeading>
+          <MobileCopy x={59} y={544} w={216}>
+            <p>
+              The Logo draws inspiration from young bamboo shoots and river reeds, where multiple
+              stems rise from a shared root system. It reflects a quiet, continuous growth that is
+              resilient and deeply connected to its origin. Each form grows upward with intention,
+              suggesting expansion while remaining anchored, much like the different brands within
+              Lahé Life that evolve individually yet belong to a larger whole.
+            </p>
+            <p>
+              The softness of the lines keeps the symbol organic, while its structure brings a sense
+              of balance and clarity. It is not a literal depiction, but an interpretation of growth
+              as a living system, one that is grounded, adaptive, and enduring.
+            </p>
+          </MobileCopy>
+          <OptimizedImage
+            src={`${IMG}/3.png`}
+            alt="The Lahé Life symbol: curved reed stems rising from a shared root"
+            width={303}
+            height={265}
+            sizes="115px"
+            className="absolute top-(--y) left-(--x) h-auto w-(--w)"
+            style={at(215, 778, 115)}
+          />
+
+          <MobileHeading y={980}>Color Palette</MobileHeading>
+          <div className="absolute top-[calc(1095*var(--u))] left-0 h-[calc(281*var(--u))] w-full overflow-hidden">
+            <OptimizedImage
+              src={`${IMG}/4.png`}
+              alt="Dark, rippling water"
+              width={1920}
+              height={1080}
+              sizes="100vw"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+          <div className="absolute top-[calc(1198*var(--u))] left-[calc(33*var(--u))] grid w-[calc(324*var(--u))] grid-cols-6">
+            <div className="col-span-3 h-[calc(38*var(--u))] rounded-t-[3px] bg-[#776d63]" />
+            <div className="col-span-3 h-[calc(38*var(--u))] rounded-t-[3px] bg-[#706851]" />
+            <div className="col-span-6 h-[calc(18*var(--u))] bg-[#fff6ed]" />
+            <div className="col-span-2 h-[calc(23*var(--u))] rounded-bl-[3px] bg-[#4d4645]" />
+            <div className="col-span-2 h-[calc(23*var(--u))] bg-[#3863a3]" />
+            <div className="col-span-2 h-[calc(23*var(--u))] rounded-br-[3px] bg-[#836541]" />
+          </div>
+          <MobileCopy x={59} y={1437} w={216}>
+            <p>
+              Slowly, by Nature
+              <br />
+              Our palette is an echo of the landscape, moving slowly by nature.
+              <br />
+              Browns and greys anchor the brand in the quiet weight of soil and stone – grounded,
+              tactile, and enduring. In the spaces between, blue and ivory white introduce movement,
+              drawing from the breath of open water and the clarity of unhurried air. Muted greens
+              complete the narrative, reflecting the forests and the layered wilderness that reveals
+              itself softly, one detail at a time.
+            </p>
+            <p>
+              Together, these tones form a visual language that is felt before it is seen, rooted
+              deeply in the place and its slowness.
+            </p>
+          </MobileCopy>
+
+          <MobileHeading y={1679}>Brand Pillars</MobileHeading>
+          <PillarGrid className="absolute top-[calc(1794*var(--u))] left-0 grid w-full grid-cols-3 gap-[calc(7*var(--u))] [&>img]:h-[calc(190*var(--u))] [&>img]:w-full [&>img]:object-cover" />
+
+          <MobileHeading y={2647}>Brand Assets</MobileHeading>
+          <OptimizedImage
+            src={`${IMG}/6.png`}
+            alt="Lahé Life website mockup: the logo over a misty golden lake, with the Assam Bengal Navigation, Diphlu River Lodge, JTI Holidays and Lahe Looms marks below"
+            width={1140}
+            height={840}
+            sizes="100vw"
+            className="absolute top-[calc(2755*var(--u))] left-0 h-[calc(290*var(--u))] w-full object-cover"
+          />
+
+          <MobileHeading y={3098}>Team</MobileHeading>
+          <MobileCredit role="Design Lead" name="Saksham Khanna" y={3175} />
+          <MobileCredit
+            role={
+              <>
+                Graphic
+                <br />
+                Design
+              </>
+            }
+            name="Guna M"
+            y={3211}
+          />
+
+          <p
+            aria-hidden
+            className="font-cormorant text-taupe absolute top-[calc(3270*var(--u))] w-full pr-[calc(10*var(--u))] text-center text-[length:calc(40*var(--u))] leading-[calc(40*var(--u))] font-bold"
+          >
+            &gt;
+          </p>
+          <Link
+            href="/work/assam-bengal-navigation"
+            className="font-cormorant text-taupe absolute top-[calc(3318*var(--u))] w-full text-center text-[length:calc(40*var(--u))] leading-[calc(40*var(--u))] tracking-[-0.06em]"
+          >
+            Next Project
+          </Link>
+          <p className="font-helvetica-regular text-sage absolute top-[calc(3375*var(--u))] w-full text-center text-[length:calc(11*var(--u))] leading-[calc(14*var(--u))] tracking-[0.02em] uppercase">
+            Assam Bengal Navigation
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 export function LaheLifePage() {
   const [introExpanded, setIntroExpanded] = useState(false);
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">
+      <LaheLifeMobile />
 
-      <div className="relative flex flex-col gap-6 pb-20 xl:block xl:h-[calc(11500*var(--u))] xl:pb-0">
+      <div className="relative hidden flex-col gap-6 pb-20 md:flex xl:block xl:h-[calc(11500*var(--u))] xl:pb-0">
         {/* ============ HERO (1920 x 1104) ============ */}
         <section className="relative aspect-[1920/1104] w-full xl:absolute xl:top-0 xl:left-0 xl:aspect-auto xl:h-[calc(1104*var(--u))]">
           <OptimizedImage
@@ -250,95 +613,10 @@ export function LaheLifePage() {
         <Heading y={6049} x={109}>
           Brand Pillars
         </Heading>
-        <div
+        <PillarGrid
           className="mx-6 grid grid-cols-2 gap-3 xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0 xl:w-(--w) xl:grid-cols-3 xl:gap-x-[calc(33*var(--u))] xl:gap-y-[calc(30*var(--u))] [&>img]:h-auto [&>img]:w-full"
           style={at(109, 6200, 1674)}
-        >
-          <OptimizedImage
-            src={`${IMG}/5-1.png`}
-            alt="A hill rising above lines of still water, on olive green"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-2.png`}
-            alt="A mirror-like river encircling a quiet hill captures gentleness and meditative calm. It reflects ‘Lahe’, the soft footprint we leave and the peace we offer our guests."
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-3.png`}
-            alt="From the Land, Lahe Looms: a grey hillside above a still lake"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-4.png`}
-            alt="The river’s rhythmic ripples represent a constant, graceful flow. As the brand's lifeblood, it is the pulse from which everything grows."
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-5.png`}
-            alt="On the River, Assam Bengal Navigation: rippling dark water"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-6.png`}
-            alt="Rows of small hills above lines of water, on olive green"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-7.png`}
-            alt="On the Land, Diphlu River Lodge: birds over the water at sunset"
-            width={544}
-            height={815}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-8.png`}
-            alt="A sun above hills reflected in water, on taupe"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-9.png`}
-            alt="Mountains and depths reflect a perfect harmony where earth and water meet. This balance captures the totality of our ecosystem beneath the sun."
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-10.png`}
-            alt="The ‘Wild’ captures the river’s raw energy and the mountain’s jagged strength. It honors the unpolished beauty and silent power of the natural world."
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-11.png`}
-            alt="In the Wild, JTI Holidays: a misty, forested mountain"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-          <OptimizedImage
-            src={`${IMG}/5-12.png`}
-            alt="Rows of small hills above lines of water, on olive green"
-            width={536}
-            height={807}
-            sizes="(min-width: 1920px) 536px, 50vw"
-          />
-        </div>
+        />
 
         <p
           className="font-helvetica-regular text-sage px-6 text-center text-base tracking-[0.02em] uppercase xl:absolute xl:top-(--y) xl:left-(--x) xl:w-(--w) xl:p-0 xl:text-[length:calc(28*var(--u))] xl:leading-[normal] xl:tracking-[calc(0.56*var(--u))]"
