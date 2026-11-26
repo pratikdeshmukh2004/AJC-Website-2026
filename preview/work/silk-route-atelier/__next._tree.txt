@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/2z3481z_pv_-s.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/0-ufqaxwb-zi4.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"silk-route-atelier","s":[]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"jw23cEI6PFlbH6tK-Kmip","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"hDsS2RWU-PPTGNN1_cC33","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
