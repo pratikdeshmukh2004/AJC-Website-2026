@@ -42,6 +42,7 @@ export function VirsaSlideCarousel({
   mobile,
   responsive = false,
   start = 0,
+  onChange,
 }: {
   label: string;
   slides: Slide[];
@@ -65,6 +66,8 @@ export function VirsaSlideCarousel({
   responsive?: boolean;
   /** Index of the slide shown first. */
   start?: number;
+  /** Called with the new slide index after each step, so a page can swap captions. */
+  onChange?: (index: number) => void;
 }) {
   const [index, setIndex] = useState(start);
   // Which way the last step went, and the slide that is still sliding out.
@@ -74,7 +77,9 @@ export function VirsaSlideCarousel({
   const step = (delta: number) => {
     setDirection(delta);
     setLeaving(index);
-    setIndex((i) => (i + delta + n) % n);
+    const next = (index + delta + n) % n;
+    setIndex(next);
+    onChange?.(next);
   };
   const slide = slides[index];
   const fitClass = fit === "contain" ? "object-contain object-top" : "object-cover";
