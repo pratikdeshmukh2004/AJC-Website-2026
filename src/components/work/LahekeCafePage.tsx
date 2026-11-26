@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, cn } from "@/lib/utils";
+import etHospitalityWorld from "../../../public/images/press/et-hospitality-world.png";
 
 /*
   Laheké Cafe — reproduction of the Figma project-page frame "Laheke"
@@ -17,8 +19,8 @@ import { assetPath, cn } from "@/lib/utils";
 
   Images are the Figma layer exports, already cropped to their Figma boxes.
   Not exported yet (so not drawn): the logo construction grid (Group 139), the
-  hornbill mark over the coasters (Vector 2823:1711), the "vivek-kumar" photo
-  of the closing band and the press logo (image 15). The four swatch colours
+  hornbill mark over the coasters (Vector 2823:1711) and the "vivek-kumar" photo
+  of the closing band. The four swatch colours
   are sampled from the brand artwork until the Figma fills are confirmed.
 */
 
@@ -273,14 +275,19 @@ export function LahekeCafePage() {
           <h2 className="font-cormorant text-taupe absolute top-[calc(12425*var(--u))] left-[calc(109*var(--u))] w-[calc(612*var(--u))] text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))]">
             Features
           </h2>
-          {/* Press logo (Figma "image 15") not exported yet; linked as text meanwhile. */}
+          {/* Press logo (Figma "image 15"), linked to the ET HospitalityWorld feature. */}
           <a
             href="https://hospitality.economictimes.indiatimes.com/news/hotels/a-taste-of-truly-luxurious-experience-curated-for-the-domestic-market/87928087"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-helvetica text-sage absolute top-[calc(12559*var(--u))] left-[calc(109*var(--u))] w-[calc(300*var(--u))] text-[length:calc(20*var(--u))] leading-[normal] font-bold tracking-[calc(0.4*var(--u))] uppercase transition-opacity duration-300 hover:opacity-70"
+            className="absolute top-[calc(12559*var(--u))] left-[calc(109*var(--u))] block w-[calc(168*var(--u))] transition-opacity duration-300 hover:opacity-70"
           >
-            ET HospitalityWorld
+            <Image
+              src={etHospitalityWorld}
+              alt="ET HospitalityWorld"
+              sizes="9vw"
+              className="h-auto w-full"
+            />
           </a>
 
           {/* ============ TEAM ============ */}
@@ -331,8 +338,7 @@ export function LahekeCafePage() {
 /*
   Mobile frame (under md), Figma "laheke" 390 x 5946. `--u` = 1 mobile design px,
   so every coordinate below is read off the 390px PNG. Not exported yet and so
-  not drawn: the logo construction grid, the ET Hospitality World logo (a text
-  link stands in) and the misty-hills photo of the closing band (the hornbill
+  not drawn: the logo construction grid and the misty-hills photo of the closing band (the hornbill
   photo stands in, as on desktop).
 */
 function LahekeMobile({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
@@ -568,14 +574,19 @@ function LahekeMobile({ expanded, onToggle }: { expanded: boolean; onToggle: () 
         <h2 className="font-cormorant text-taupe absolute top-[calc(5334*var(--u))] left-[calc(46*var(--u))] w-[calc(300*var(--u))] text-[length:calc(45*var(--u))] leading-[calc(76*var(--u))] tracking-[-0.06em]">
           Features
         </h2>
-        {/* Press logo (Figma "image 15") not exported yet; linked as text meanwhile. */}
+        {/* Press logo (Figma "image 15"), linked to the ET HospitalityWorld feature. */}
         <a
           href="https://hospitality.economictimes.indiatimes.com/news/hotels/a-taste-of-truly-luxurious-experience-curated-for-the-domestic-market/87928087"
           target="_blank"
           rel="noopener noreferrer"
-          className="font-helvetica text-sage absolute top-[calc(5424*var(--u))] left-[calc(50*var(--u))] w-[calc(150*var(--u))] text-[length:calc(12*var(--u))] leading-[calc(14*var(--u))] font-bold tracking-[0.02em] uppercase transition-opacity duration-300 hover:opacity-70"
+          className="absolute top-[calc(5424*var(--u))] left-[calc(50*var(--u))] block w-[calc(64*var(--u))] transition-opacity duration-300 hover:opacity-70"
         >
-          ET HospitalityWorld
+          <Image
+            src={etHospitalityWorld}
+            alt="ET HospitalityWorld"
+            sizes="17vw"
+            className="h-auto w-full"
+          />
         </a>
 
         {/* ============ TEAM ============ */}
