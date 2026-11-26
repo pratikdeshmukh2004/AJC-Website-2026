@@ -531,463 +531,450 @@ function AboutDesktop() {
 /*
   Figma: ABOUT US mobile frame, 390 x 8487 (footer starts at y7808). Every
   element is placed at its measured frame y with u(px) (1 design px = var(--u)).
-  Deviations: the frame's hero starts under a mock header strip (y0..119); here
-  the photo runs from y0 so the global white header stays legible. The river
+  The hero starts at y119 under the global header, which on mobile is a white bar
+  at y60 (see SiteHeader). Deviation: the river
   band is shown in its first (scattered dots) state, without the scroll pin and
   carousel, which the mobile frame does not define.
 */
 function AboutMobile() {
   return (
-    <div
-      className="@container relative w-full bg-[#f8f7f2] [--u:calc(100cqw/390)] md:hidden"
-      style={{ height: u(7808) }}
-    >
-      <div
-        className="absolute inset-x-0 top-0 bg-[linear-gradient(to_bottom,#a8a49f,#ddd9d6)]"
-        style={{ height: u(712) }}
-      >
-        <div className="absolute inset-x-0 overflow-hidden" style={{ top: u(119), height: u(593) }}>
+    <div className="@container relative w-full bg-[#f8f7f2] [--u:calc(100cqw/390)] md:hidden">
+      {/* Top slice: frame y 0..1290 (tops unchanged) */}
+      <div className="relative w-full" style={{ height: u(1290) }}>
+        <div
+          className="absolute inset-x-0 top-0 bg-[linear-gradient(to_bottom,#a8a49f,#ddd9d6)]"
+          style={{ top: u(119), height: u(593) }}
+        >
+          <div className="absolute inset-0 overflow-hidden">
+            <OptimizedImage
+              src={`${IMG}/1.png`}
+              alt="Himalayan pine forest in soft mist"
+              width={1920}
+              height={1080}
+              priority
+              sizes="100vw"
+              className="h-full w-full object-cover object-[37%_50%]"
+            />
+          </div>
+        </div>
+        <p
+          className="font-cormorant absolute inset-x-0 text-center tracking-[-0.01em] text-[#8b7f73]"
+          style={{ top: u(784), fontSize: u(16), lineHeight: u(20) }}
+        >
+          AJC is a creative consultancy
+          <br />
+          shaped by stories, spaces, cultures,
+          <br />
+          and the subtle art of observation.
+        </p>
+        <div
+          className="absolute overflow-hidden"
+          style={{ left: u(66), top: u(918), width: u(116), height: u(117) }}
+        >
           <OptimizedImage
-            src={`${IMG}/1.png`}
-            alt="Himalayan pine forest in soft mist"
-            width={1920}
-            height={1080}
-            priority
-            sizes="100vw"
-            className="h-full w-full object-cover object-[37%_50%]"
+            src={`${IMG}/2.png`}
+            alt="Mountain ridge framed by evergreens"
+            width={310}
+            height={322}
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <p
+          className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
+          style={{
+            left: u(200),
+            top: u(917),
+            width: u(140),
+            fontSize: u(10.5),
+            lineHeight: u(13),
+            letterSpacing: "0.005em",
+          }}
+        >
+          It is where the past and
+          <br />
+          the present cross over in
+          <br />
+          a modern-day India-Asia,
+          <br />
+          where our lens turns
+          <br />
+          toward the overlooked..
+          <br />
+          the quiet details, the
+          <br />
+          folklore of regions, the
+          <br />
+          threads where history
+          <br />
+          and heritage meet.
+        </p>
+        <p
+          className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
+          style={{
+            left: u(66),
+            top: u(1072),
+            width: u(262),
+            fontSize: u(10.5),
+            lineHeight: u(13),
+            letterSpacing: "0.005em",
+          }}
+        >
+          &ldquo;In each project, we linger on the silhouettes that
+          <br />
+          define a brand, the stories etched in its people,
+          <br />
+          and the alchemy that happens when creativity
+          <br />
+          meets cultural depth.&rdquo;
+        </p>
+        <p
+          className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
+          style={{
+            left: u(66),
+            top: u(1146),
+            width: u(262),
+            fontSize: u(10.5),
+            lineHeight: u(13),
+            letterSpacing: "0.005em",
+          }}
+        >
+          The result is more than design…it is an invitation
+          <br />
+          into a world where strategy is steeped in story, and
+          <br />
+          every identity is shaped by our eye.
+        </p>
+      </div>
+      {/* Band track: the stage pins while scrolling drives the dots into a row, then
+          the carousel autoplays (BandDots). Same model as desktop; the frame only
+          defines the first state. */}
+      <section
+        data-band-track
+        className="relative w-full"
+        style={{ height: "calc(100svh + 120vh)" }}
+      >
+        <div className="sticky top-0 flex h-[100svh] w-full items-center justify-center overflow-hidden">
+          <div className="relative w-full" style={{ height: u(650) }}>
+            <BandDots
+              variant="mobile"
+              imgBase={IMG}
+              bandClass="overflow-hidden [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:object-[34.7%_50%] left-0 top-0 w-full h-full"
+              headlineClass="inset-x-0 top-[calc(293*var(--u))] text-center font-cormorant font-semibold text-[#f8f7f2] text-[length:calc(20*var(--u))] leading-[calc(24*var(--u))] tracking-[calc(0.4*var(--u))]"
+            />
+          </div>
+        </div>
+      </section>
+      {/* Bottom slice: frame y 1940..7808. Tops stay the frame's; the inner box is
+          pulled up by 1940 and clipped so only this slice shows (and blocks nothing). */}
+      <div className="relative w-full" style={{ height: u(7808 - 1940) }}>
+        <div
+          className="absolute inset-x-0"
+          style={{
+            top: u(-1940),
+            height: u(7808),
+            clipPath: `inset(${u(1940)} 0 0 0)`,
+          }}
+        >
+          <p
+            className="font-cormorant absolute inset-x-0 text-center tracking-[-0.01em] text-[#8b7f73]"
+            style={{ top: u(1995), fontSize: u(14), lineHeight: u(16) }}
+          >
+            Our work is the crossover of the past
+            <br />
+            into the present. When done right, it
+            <br />
+            belongs back to the place where we started.
+          </p>
+          <p
+            className="font-helvetica-regular absolute inset-x-0 text-center text-[#887a6c] uppercase"
+            style={{ top: u(2050), fontSize: u(8), lineHeight: u(10), letterSpacing: u(0.16) }}
+          >
+            ajc
+          </p>
+          <p
+            className="font-cormorant absolute tracking-[-0.06em] text-[#8b7f73]"
+            style={{ left: u(49), top: u(2137), fontSize: u(40), lineHeight: u(48) }}
+          >
+            What We Do
+          </p>
+          <div
+            className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase opacity-[0.59]"
+            style={{ left: u(56), top: u(2222), fontSize: u(12.3), lineHeight: u(19) }}
+          >
+            <p>Brand Strategy &amp; Narrative</p>
+            <p>Identity &amp; Design</p>
+            <p>Creative Direction</p>
+            <p>Experience Design</p>
+            <p>Hospitality Consulting</p>
+          </div>
+          <div
+            className="absolute overflow-hidden"
+            style={{ left: u(115), top: u(2361), width: u(161), height: u(167) }}
+          >
+            <OptimizedImage
+              src={`${IMG}/4.png`}
+              alt="Boat crossing still water at dusk"
+              width={310}
+              height={322}
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <p
+            className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
+            style={{ left: u(49), top: u(2596), width: u(245), fontSize: u(12), lineHeight: u(14) }}
+          >
+            We step into the critical window after physical construction ends and before operational
+            launch begins – defining the core narrative, digital and design identity, global
+            perception, and guest experience journey to ensure memorable guest delight while
+            maximizing long-term asset valuation.
+          </p>
+          <Link
+            href="/work"
+            className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase"
+            style={{ left: u(49), top: u(2714), fontSize: u(13.4), lineHeight: u(18) }}
+          >
+            Discover More
+          </Link>
+          <div
+            className="absolute bg-[#7d7062]"
+            style={{ left: u(49), top: u(2736), width: u(113), height: u(2) }}
+          />
+          <p
+            className="font-cormorant absolute tracking-[-0.06em] text-[#8b7f73]"
+            style={{ left: u(50), top: u(2798), fontSize: u(40), lineHeight: u(48) }}
+          >
+            Our Work
+          </p>
+          {/* Region rail: one line down the left with a dot at each region's photo */}
+          <div
+            className="absolute bg-[#978c7f] opacity-[0.52]"
+            style={{ left: u(49), top: u(2904), width: u(1), height: u(4829) }}
+          />
+          <AboutRegion
+            top={2903}
+            dotTop={2899}
+            image="5"
+            alt="Bhutan — prayer flags over the valley"
+            title="In Bhutan"
+            linkTop={3494}
+            links={
+              <>
+                <p>raé by zhiwaling</p>
+                <p>Ascent by ZHIWALING</p>
+              </>
+            }
+          >
+            There are journeys that transform human
+            <br />
+            perspective; As you descend into the land
+            <br />
+            of the Thunder Dragon, whose belly has the
+            <br />
+            slow-moving towns of Bhutan, you enter
+            <br />
+            the world’s last Shangri-La—protected by
+            <br />
+            Himalayan mountains and dense forests.
+            <br />
+            Here, the 21st century comes to a hold and
+            <br />
+            Buddhist prophecies still live in the air.
+            <br />
+            Here, a life of balance is their spirituality.
+          </AboutRegion>
+          <AboutRegion
+            top={3598}
+            image="6"
+            alt="Ladakh — K2 under cloud"
+            title="In Ladakh"
+            linkTop={4201}
+            links={
+              <div className="flex" style={{ gap: u(37) }}>
+                <div>
+                  <p>VIRSA BALTISTAN</p>
+                  <p>farmers’ house</p>
+                  <p>HILL TRIBE</p>
+                </div>
+                <div>
+                  <p>silk route</p>
+                  <p>balti kitchen</p>
+                  <p>ALCHI KITCHEN</p>
+                </div>
+              </div>
+            }
+          >
+            Our home for all of two years, Ladakh is
+            <br />
+            an ancient land in the shadows of the
+            <br />
+            Himalayas and the Karakoram. It is where
+            <br />
+            one feels small in front of the mountains,
+            <br />
+            and giant in the realm of possibilities.
+            <br />
+            Some say, it is the last wilderness left
+            <br />
+            wild, each relic still breathing, from the
+            <br />
+            generations that traversed these
+            <br />
+            mountains long before us. As keepers of
+            <br />
+            history, and tellers of story, we entered
+            <br />
+            Ladakh to never leave.
+          </AboutRegion>
+          <AboutRegion
+            top={4321}
+            image="7"
+            alt="Punjab — the Golden Temple"
+            title="In Punjab"
+            linkTop={4920}
+            links={<p>ranjit’s svaasa</p>}
+          >
+            Punjab is soul—it is Khatirdari, a spirit
+            <br />
+            that loosely translates to absolute
+            <br />
+            hospitality and warmth for guests. As you
+            <br />
+            walk through, you find what we call &apos;alive
+            <br />
+            archives&apos;— in local people, some old
+            <br />
+            stories, folk music, and purani Havelis
+            <br />
+            where history is as present as shared
+            <br />
+            laughter and a lot of food. That feeling of
+            <br />
+            coming home is native to here, and it is
+            <br />
+            one place where we truly felt ‘taken care
+            <br />
+            of’.
+          </AboutRegion>
+          <AboutRegion
+            top={5017}
+            image="8"
+            alt="Assam — river temple on the Brahmaputra"
+            title="In Assam"
+            linkTop={5621}
+            links={
+              <>
+                <p>laheké cafe</p>
+                <p>lahé life</p>
+              </>
+            }
+          >
+            Assam is the wild heart of eastern India,
+            <br />
+            that can be entered through land, through
+            <br />
+            water, through loom and through the wild.
+            <br />
+            Under its dense green canopy and along
+            <br />
+            the Brahmaputra&apos;s sweeping banks, time
+            <br />
+            softens. Tea is sipped slowly, always out
+            <br />
+            of a kettle. Life is lived patiently, often in
+            <br />
+            coexistence, where birds and a gentle
+            <br />
+            breeze carry the forests across the land.
+          </AboutRegion>
+          <AboutRegion
+            top={5728}
+            image="9"
+            alt="Bengal — the Howrah Bridge"
+            title="In Bengal"
+            linkTop={6317}
+            links={<p>assam bengal navigation</p>}
+          >
+            Most people look at Bengal and see soil;
+            <br />
+            we looked at the Hooghly and saw a living,
+            <br />
+            breathing artery. On those river banks, life
+            <br />
+            unfolds without a stage—raw, rooted, and
+            <br />
+            completely indifferent to modern speed.
+            <br />
+            We had never seen how differently
+            <br />
+            waterways move before, carrying daily
+            <br />
+            rituals, old trade routes, and silent dignity,
+            <br />
+            that now reflects in our visuals of them.
+          </AboutRegion>
+          <AboutRegion
+            top={6415}
+            image="10"
+            alt="Delhi — the Red Fort"
+            title="In Delhi"
+            linkTop={7031}
+            links={<p>haveli dharampura</p>}
+          >
+            Delhi is our cultural chaos, our curiosity.
+            <br />
+            Home to many communities and India’s
+            <br />
+            greatest historic events, it is a city that
+            <br />
+            reciprocates love in its own kind ways.
+            <br />
+            Walking the soul of Purani Dilli’s
+            <br />
+            labyrinthine lanes, the said chaos led us
+            <br />
+            to Dharampura, where Mughal history
+            <br />
+            resides in a 200-year-old Haveli.
+            <br />
+            Century-old locals still tell its story,
+            <br />
+            opening a world of living history within
+            <br />
+            their own.
+          </AboutRegion>
+          <AboutRegion
+            top={7123}
+            dotTop={7124}
+            image="11"
+            alt="Rajasthan — the Lake Palace"
+            title="In Rajasthan"
+            linkTop={7713}
+            links={<p>NEEMRANA HOTELs</p>}
+          >
+            In Rajasthan, royalty was once a rule of
+            <br />
+            India, written into fort walls, golden sands,
+            <br />
+            and generations of lineage. Standing
+            <br />
+            within architecture that has witnessed
+            <br />
+            centuries turn, we felt the monumental
+            <br />
+            weight of living history that refuses to
+            <br />
+            become a memory. Here, heritage
+            <br />
+            survives, as does the hospitality, now
+            <br />
+            shaped regally, for the modern traveler.
+          </AboutRegion>
+          <span
+            className="absolute rounded-full bg-[#978c7f]"
+            style={{ left: u(45), top: u(7728), width: u(10), height: u(10) }}
           />
         </div>
       </div>
-      <p
-        className="font-cormorant absolute inset-x-0 text-center tracking-[-0.01em] text-[#8b7f73]"
-        style={{ top: u(784), fontSize: u(16), lineHeight: u(20) }}
-      >
-        AJC is a creative consultancy
-        <br />
-        shaped by stories, spaces, cultures,
-        <br />
-        and the subtle art of observation.
-      </p>
-      <div
-        className="absolute overflow-hidden"
-        style={{ left: u(66), top: u(918), width: u(116), height: u(117) }}
-      >
-        <OptimizedImage
-          src={`${IMG}/2.png`}
-          alt="Mountain ridge framed by evergreens"
-          width={310}
-          height={322}
-          className="h-full w-full object-cover"
-        />
-      </div>
-      <p
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
-        style={{
-          left: u(200),
-          top: u(917),
-          width: u(140),
-          fontSize: u(10.5),
-          lineHeight: u(13),
-          letterSpacing: "0.005em",
-        }}
-      >
-        It is where the past and
-        <br />
-        the present cross over in
-        <br />
-        a modern-day India-Asia,
-        <br />
-        where our lens turns
-        <br />
-        toward the overlooked..
-        <br />
-        the quiet details, the
-        <br />
-        folklore of regions, the
-        <br />
-        threads where history
-        <br />
-        and heritage meet.
-      </p>
-      <p
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
-        style={{
-          left: u(66),
-          top: u(1072),
-          width: u(262),
-          fontSize: u(10.5),
-          lineHeight: u(13),
-          letterSpacing: "0.005em",
-        }}
-      >
-        &ldquo;In each project, we linger on the silhouettes that
-        <br />
-        define a brand, the stories etched in its people,
-        <br />
-        and the alchemy that happens when creativity
-        <br />
-        meets cultural depth.&rdquo;
-      </p>
-      <p
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
-        style={{
-          left: u(66),
-          top: u(1146),
-          width: u(262),
-          fontSize: u(10.5),
-          lineHeight: u(13),
-          letterSpacing: "0.005em",
-        }}
-      >
-        The result is more than design…it is an invitation
-        <br />
-        into a world where strategy is steeped in story, and
-        <br />
-        every identity is shaped by our eye.
-      </p>
-      {/* River band, first state: dots scattered over the intro image */}
-      <div className="absolute inset-x-0 overflow-hidden" style={{ top: u(1290), height: u(650) }}>
-        <OptimizedImage
-          src={`${IMG}/3.png`}
-          alt=""
-          width={1920}
-          height={1080}
-          sizes="100vw"
-          className="h-full w-full object-cover object-[34.7%_50%]"
-        />
-        <p
-          className="font-cormorant absolute inset-x-0 text-center font-semibold text-[#f8f7f2]"
-          style={{ top: u(293), fontSize: u(20), lineHeight: u(24), letterSpacing: u(0.4) }}
-        >
-          worlds within worlds
-        </p>
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(193), top: u(117), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(322), top: u(167), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(115), top: u(185), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(294), top: u(334), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(45), top: u(405), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(299), top: u(478), width: u(8), height: u(8) }}
-        />
-        <span
-          className="absolute rounded-full bg-white"
-          style={{ left: u(181), top: u(499), width: u(8), height: u(8) }}
-        />
-      </div>
-      <p
-        className="font-cormorant absolute inset-x-0 text-center tracking-[-0.01em] text-[#8b7f73]"
-        style={{ top: u(1995), fontSize: u(14), lineHeight: u(16) }}
-      >
-        Our work is the crossover of the past
-        <br />
-        into the present. When done right, it
-        <br />
-        belongs back to the place where we started.
-      </p>
-      <p
-        className="font-helvetica-regular absolute inset-x-0 text-center text-[#887a6c] uppercase"
-        style={{ top: u(2050), fontSize: u(8), lineHeight: u(10), letterSpacing: u(0.16) }}
-      >
-        ajc
-      </p>
-      <p
-        className="font-cormorant absolute tracking-[-0.06em] text-[#8b7f73]"
-        style={{ left: u(49), top: u(2137), fontSize: u(40), lineHeight: u(48) }}
-      >
-        What We Do
-      </p>
-      <div
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase opacity-[0.59]"
-        style={{ left: u(56), top: u(2222), fontSize: u(12.3), lineHeight: u(19) }}
-      >
-        <p>Brand Strategy &amp; Narrative</p>
-        <p>Identity &amp; Design</p>
-        <p>Creative Direction</p>
-        <p>Experience Design</p>
-        <p>Hospitality Consulting</p>
-      </div>
-      <div
-        className="absolute overflow-hidden"
-        style={{ left: u(115), top: u(2361), width: u(161), height: u(167) }}
-      >
-        <OptimizedImage
-          src={`${IMG}/4.png`}
-          alt="Boat crossing still water at dusk"
-          width={310}
-          height={322}
-          className="h-full w-full object-cover"
-        />
-      </div>
-      <p
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#8b7f73] opacity-[0.79]"
-        style={{ left: u(49), top: u(2596), width: u(245), fontSize: u(12), lineHeight: u(14) }}
-      >
-        We step into the critical window after physical construction ends and before operational
-        launch begins – defining the core narrative, digital and design identity, global perception,
-        and guest experience journey to ensure memorable guest delight while maximizing long-term
-        asset valuation.
-      </p>
-      <Link
-        href="/work"
-        className="font-helvetica-regular absolute tracking-[0.02em] text-[#7d7062] uppercase"
-        style={{ left: u(49), top: u(2714), fontSize: u(13.4), lineHeight: u(18) }}
-      >
-        Discover More
-      </Link>
-      <div
-        className="absolute bg-[#7d7062]"
-        style={{ left: u(49), top: u(2736), width: u(113), height: u(2) }}
-      />
-      <p
-        className="font-cormorant absolute tracking-[-0.06em] text-[#8b7f73]"
-        style={{ left: u(50), top: u(2798), fontSize: u(40), lineHeight: u(48) }}
-      >
-        Our Work
-      </p>
-      {/* Region rail: one line down the left with a dot at each region's photo */}
-      <div
-        className="absolute bg-[#978c7f] opacity-[0.52]"
-        style={{ left: u(49), top: u(2904), width: u(1), height: u(4829) }}
-      />
-      <AboutRegion
-        top={2903}
-        dotTop={2899}
-        image="5"
-        alt="Bhutan — prayer flags over the valley"
-        title="In Bhutan"
-        linkTop={3494}
-        links={
-          <>
-            <p>raé by zhiwaling</p>
-            <p>Ascent by ZHIWALING</p>
-          </>
-        }
-      >
-        There are journeys that transform human
-        <br />
-        perspective; As you descend into the land
-        <br />
-        of the Thunder Dragon, whose belly has the
-        <br />
-        slow-moving towns of Bhutan, you enter
-        <br />
-        the world’s last Shangri-La—protected by
-        <br />
-        Himalayan mountains and dense forests.
-        <br />
-        Here, the 21st century comes to a hold and
-        <br />
-        Buddhist prophecies still live in the air.
-        <br />
-        Here, a life of balance is their spirituality.
-      </AboutRegion>
-      <AboutRegion
-        top={3598}
-        image="6"
-        alt="Ladakh — K2 under cloud"
-        title="In Ladakh"
-        linkTop={4201}
-        links={
-          <div className="flex" style={{ gap: u(37) }}>
-            <div>
-              <p>VIRSA BALTISTAN</p>
-              <p>farmers’ house</p>
-              <p>HILL TRIBE</p>
-            </div>
-            <div>
-              <p>silk route</p>
-              <p>balti kitchen</p>
-              <p>ALCHI KITCHEN</p>
-            </div>
-          </div>
-        }
-      >
-        Our home for all of two years, Ladakh is
-        <br />
-        an ancient land in the shadows of the
-        <br />
-        Himalayas and the Karakoram. It is where
-        <br />
-        one feels small in front of the mountains,
-        <br />
-        and giant in the realm of possibilities.
-        <br />
-        Some say, it is the last wilderness left
-        <br />
-        wild, each relic still breathing, from the
-        <br />
-        generations that traversed these
-        <br />
-        mountains long before us. As keepers of
-        <br />
-        history, and tellers of story, we entered
-        <br />
-        Ladakh to never leave.
-      </AboutRegion>
-      <AboutRegion
-        top={4321}
-        image="7"
-        alt="Punjab — the Golden Temple"
-        title="In Punjab"
-        linkTop={4920}
-        links={<p>ranjit’s svaasa</p>}
-      >
-        Punjab is soul—it is Khatirdari, a spirit
-        <br />
-        that loosely translates to absolute
-        <br />
-        hospitality and warmth for guests. As you
-        <br />
-        walk through, you find what we call &apos;alive
-        <br />
-        archives&apos;— in local people, some old
-        <br />
-        stories, folk music, and purani Havelis
-        <br />
-        where history is as present as shared
-        <br />
-        laughter and a lot of food. That feeling of
-        <br />
-        coming home is native to here, and it is
-        <br />
-        one place where we truly felt ‘taken care
-        <br />
-        of’.
-      </AboutRegion>
-      <AboutRegion
-        top={5017}
-        image="8"
-        alt="Assam — river temple on the Brahmaputra"
-        title="In Assam"
-        linkTop={5621}
-        links={
-          <>
-            <p>laheké cafe</p>
-            <p>lahé life</p>
-          </>
-        }
-      >
-        Assam is the wild heart of eastern India,
-        <br />
-        that can be entered through land, through
-        <br />
-        water, through loom and through the wild.
-        <br />
-        Under its dense green canopy and along
-        <br />
-        the Brahmaputra&apos;s sweeping banks, time
-        <br />
-        softens. Tea is sipped slowly, always out
-        <br />
-        of a kettle. Life is lived patiently, often in
-        <br />
-        coexistence, where birds and a gentle
-        <br />
-        breeze carry the forests across the land.
-      </AboutRegion>
-      <AboutRegion
-        top={5728}
-        image="9"
-        alt="Bengal — the Howrah Bridge"
-        title="In Bengal"
-        linkTop={6317}
-        links={<p>assam bengal navigation</p>}
-      >
-        Most people look at Bengal and see soil;
-        <br />
-        we looked at the Hooghly and saw a living,
-        <br />
-        breathing artery. On those river banks, life
-        <br />
-        unfolds without a stage—raw, rooted, and
-        <br />
-        completely indifferent to modern speed.
-        <br />
-        We had never seen how differently
-        <br />
-        waterways move before, carrying daily
-        <br />
-        rituals, old trade routes, and silent dignity,
-        <br />
-        that now reflects in our visuals of them.
-      </AboutRegion>
-      <AboutRegion
-        top={6415}
-        image="10"
-        alt="Delhi — the Red Fort"
-        title="In Delhi"
-        linkTop={7031}
-        links={<p>haveli dharampura</p>}
-      >
-        Delhi is our cultural chaos, our curiosity.
-        <br />
-        Home to many communities and India’s
-        <br />
-        greatest historic events, it is a city that
-        <br />
-        reciprocates love in its own kind ways.
-        <br />
-        Walking the soul of Purani Dilli’s
-        <br />
-        labyrinthine lanes, the said chaos led us
-        <br />
-        to Dharampura, where Mughal history
-        <br />
-        resides in a 200-year-old Haveli.
-        <br />
-        Century-old locals still tell its story,
-        <br />
-        opening a world of living history within
-        <br />
-        their own.
-      </AboutRegion>
-      <AboutRegion
-        top={7123}
-        dotTop={7124}
-        image="11"
-        alt="Rajasthan — the Lake Palace"
-        title="In Rajasthan"
-        linkTop={7713}
-        links={<p>NEEMRANA HOTELs</p>}
-      >
-        In Rajasthan, royalty was once a rule of
-        <br />
-        India, written into fort walls, golden sands,
-        <br />
-        and generations of lineage. Standing
-        <br />
-        within architecture that has witnessed
-        <br />
-        centuries turn, we felt the monumental
-        <br />
-        weight of living history that refuses to
-        <br />
-        become a memory. Here, heritage
-        <br />
-        survives, as does the hospitality, now
-        <br />
-        shaped regally, for the modern traveler.
-      </AboutRegion>
-      <span
-        className="absolute rounded-full bg-[#978c7f]"
-        style={{ left: u(45), top: u(7728), width: u(10), height: u(10) }}
-      />
     </div>
   );
 }

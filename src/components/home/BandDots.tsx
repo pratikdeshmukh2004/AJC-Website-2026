@@ -2,7 +2,7 @@
 
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useEffect, useRef, useState } from "react";
-import { u } from "@/lib/utils";
+import { cn, u } from "@/lib/utils";
 
 /**
  * River-band stage interaction ("worlds within worlds") driven by scroll
@@ -95,6 +95,19 @@ const SCATTERED: [number, number, number][] = [
   [890.0, 360.0, 26.31], // 8th dot — upper-centre scatter gap
 ];
 
+// Mobile frame (390 x 650 band, About us mobile): same 8 dots, scattered over the
+// first state; the first 7 are the frame's, the 8th sits clear of the headline.
+const SCATTERED_MOBILE: [number, number, number][] = [
+  [193, 117, 8],
+  [322, 167, 8],
+  [115, 185, 8],
+  [294, 334, 8],
+  [45, 405, 8],
+  [299, 478, 8],
+  [181, 499, 8],
+  [250, 245, 8],
+];
+
 // Number of tiles / dots in the carousel.
 const SLIDE_COUNT = SCATTERED.length; // 8
 
@@ -121,7 +134,27 @@ const AUTOPLAY_MS = 3000;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 
+// Per-variant geometry in stage px: stage width, lined-up row position and size.
+const LAYOUTS = {
+  desktop: {
+    scattered: SCATTERED,
+    stageWidth: 1920,
+    rowTop: ROW_TOP,
+    rowGap: ROW_GAP,
+    rowDiameter: ROW_DIAMETER,
+  },
+  mobile: {
+    scattered: SCATTERED_MOBILE,
+    stageWidth: 390,
+    rowTop: 345,
+    rowGap: 20,
+    rowDiameter: 8,
+  },
+};
+
 type BandDotsProps = {
+  /** "mobile" uses the 390px About frame's geometry; defaults to the 1920px stage. */
+  variant?: "desktop" | "mobile";
   /** Public base path for the about images, e.g. "/images/about". */
   imgBase: string;
   /** Tailwind classes for the band image box (base intro + tile layers). */
@@ -130,7 +163,15 @@ type BandDotsProps = {
   headlineClass: string;
 };
 
-export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
+export function BandDots({
+  imgBase,
+  bandClass,
+  headlineClass,
+  variant = "desktop",
+}: BandDotsProps) {
+  const layout = LAYOUTS[variant];
+  const mobile = variant === "mobile";
+  const rootRef = useRef<HTMLDivElement>(null);
   // Scroll progress 0 (scattered) → 1 (lined up in a row).
   const [progress, setProgress] = useState(0);
   // Active carousel slide (0-based). Single source of truth.
@@ -176,12 +217,15 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
       };
     }
 
-    const track = document.querySelector<HTMLElement>("[data-band-track]");
+    // The page renders a mobile and a desktop band; use the track this stage is in.
+    const track = rootRef.current?.closest<HTMLElement>("[data-band-track]");
     if (!track) return;
 
     const compute = () => {
       rafRef.current = null;
       const rect = track.getBoundingClientRect();
+      // The other breakpoint's band is display:none; leave it idle.
+      if (rect.height === 0) return;
       const pinnable = rect.height - window.innerHeight;
       let p: number;
       if (pinnable <= 0) {
@@ -242,7 +286,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
 
   // Centre the row horizontally: N dots, (N-1) gaps, stage is 1920 wide.
   const n = SLIDE_COUNT;
-  const rowStart = (1920 - (n - 1) * ROW_GAP) / 2;
+  const rowStart = (layout.stageWidth - (n - 1) * layout.rowGap) / 2;
 
   return (
     // Single wrapper over the whole 1920x1080 stage. Carrying the hover/focus
@@ -251,6 +295,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
     // never spuriously resumes autoplay. pointer-events toggles with `active`
     // so the dots/images below behave exactly as before while inactive.
     <div
+      ref={rootRef}
       className="absolute inset-0"
       onMouseEnter={active ? () => setPaused(true) : undefined}
       onMouseLeave={active ? () => setPaused(false) : undefined}
@@ -274,7 +319,13 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
           visitor scrolls into the band (see tilesRequested). */}
       {tilesRequested && (
         <>
-          <BandSlide n={1} shown={active && index === 0} imgBase={imgBase} bandClass={bandClass} />
+          <BandSlide
+            n={1}
+            shown={active && index === 0}
+            imgBase={imgBase}
+            bandClass={bandClass}
+            mobile={mobile}
+          />
           <BandSlide
             n={2}
             title="Bhutan"
@@ -282,6 +333,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 1}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={3}
@@ -290,6 +342,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 2}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={4}
@@ -298,6 +351,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 3}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={5}
@@ -306,6 +360,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 4}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={6}
@@ -314,6 +369,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 5}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={7}
@@ -322,6 +378,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 6}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
           <BandSlide
             n={8}
@@ -330,6 +387,7 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
             shown={active && index === 7}
             imgBase={imgBase}
             bandClass={bandClass}
+            mobile={mobile}
           />
         </>
       )}
@@ -348,11 +406,11 @@ export function BandDots({ imgBase, bandClass, headlineClass }: BandDotsProps) {
 
       {/* Marker dots / carousel indicators. The band stage below wraps the
           hover/focus pause handlers around the whole stage via the parent. */}
-      {SCATTERED.map(([sx, sy, sSize], i) => {
-        const rowLeft = rowStart + i * ROW_GAP - ROW_DIAMETER / 2;
+      {layout.scattered.map(([sx, sy, sSize], i) => {
+        const rowLeft = rowStart + i * layout.rowGap - layout.rowDiameter / 2;
         const left = lerp(sx, rowLeft, progress);
-        const top = lerp(sy, ROW_TOP, progress);
-        const size = lerp(sSize, ROW_DIAMETER, progress);
+        const top = lerp(sy, layout.rowTop, progress);
+        const size = lerp(sSize, layout.rowDiameter, progress);
         const isActiveDot = active && index === i;
 
         if (active) {
@@ -406,7 +464,9 @@ function BandSlide({
   shown,
   imgBase,
   bandClass,
+  mobile,
 }: {
+  mobile: boolean;
   /** 1-based tile number, matching `3-{n}.png`. */
   n: number;
   title?: string;
@@ -437,14 +497,34 @@ function BandSlide({
         // row (y 583). Soft dark halo keeps the cream text readable on light paintings.
         <div
           aria-hidden={!shown}
-          className={`pointer-events-none absolute top-[calc(583*var(--u))] left-[calc(200*var(--u))] -translate-y-1/2 text-left transition-opacity [text-shadow:0_calc(1*var(--u))_calc(3*var(--u))_rgba(0,0,0,0.35),0_0_calc(22*var(--u))_rgba(0,0,0,0.5)] ${
-            shown ? "opacity-100 duration-500 delay-300 motion-reduce:delay-0" : "opacity-0 duration-200"
-          }`}
+          className={cn(
+            "pointer-events-none absolute transition-opacity [text-shadow:0_calc(1*var(--u))_calc(3*var(--u))_rgba(0,0,0,0.35),0_0_calc(22*var(--u))_rgba(0,0,0,0.5)]",
+            mobile
+              ? "inset-x-0 top-[calc(250*var(--u))] text-center"
+              : "top-[calc(583*var(--u))] left-[calc(200*var(--u))] -translate-y-1/2 text-left",
+            shown
+              ? "opacity-100 delay-300 duration-500 motion-reduce:delay-0"
+              : "opacity-0 duration-200",
+          )}
         >
-          <p className="font-cormorant text-[length:calc(55*var(--u))] leading-[calc(60*var(--u))] font-semibold tracking-[calc(1.1*var(--u))] text-[#f8f7f2]">
+          <p
+            className={cn(
+              "font-cormorant font-semibold text-[#f8f7f2]",
+              mobile
+                ? "text-[length:calc(28*var(--u))] leading-[calc(32*var(--u))] tracking-[calc(0.56*var(--u))]"
+                : "text-[length:calc(55*var(--u))] leading-[calc(60*var(--u))] tracking-[calc(1.1*var(--u))]",
+            )}
+          >
             {title}
           </p>
-          <p className="font-helvetica-regular mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))] tracking-[0.02em] text-[#f8f7f2]">
+          <p
+            className={cn(
+              "font-helvetica-regular tracking-[0.02em] text-[#f8f7f2]",
+              mobile
+                ? "mt-[calc(3*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))]"
+                : "mt-[calc(6*var(--u))] text-[length:calc(22*var(--u))] leading-[calc(24*var(--u))]",
+            )}
+          >
             {description}
           </p>
         </div>

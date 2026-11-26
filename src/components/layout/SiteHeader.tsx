@@ -44,15 +44,26 @@ export function SiteHeader() {
     pathname.startsWith(route),
   );
 
+  // Mobile frames "About us (Mob)" and "Alchi Kitchen (Mob)" draw the header as a
+  // solid white bar with taupe marks over the hero photo. About's frame also
+  // leaves a 60px paper strip above the bar. md and up is unchanged.
+  const isAbout = pathname.startsWith("/about");
+  const whiteBar = isAbout || pathname.startsWith("/work/alchi-kitchen");
+
   return (
     <>
       <header
         className={cn(
-          "pointer-events-none absolute inset-x-0 top-0 z-30 [--u:clamp(0.9px,calc(100vw/390),1.5px)] md:[--u:initial]",
-          onPaper ? "text-taupe" : "text-white",
+          "pointer-events-none absolute inset-x-0 z-30 [--u:clamp(0.9px,calc(100vw/390),1.5px)] md:top-0 md:[--u:initial]",
+          isAbout ? "top-[calc(60*var(--u))]" : "top-0",
+          whiteBar
+            ? "text-taupe bg-white md:bg-transparent md:text-white"
+            : onPaper
+              ? "text-taupe"
+              : "text-white",
         )}
       >
-        <div className="mx-auto grid h-[calc(62*var(--u))] max-w-[1920px] grid-cols-[1fr_auto_1fr] items-center pr-[calc(35*var(--u))] pl-[calc(24*var(--u))] md:h-[clamp(5.5rem,7.344vw,141px)] md:pr-[clamp(1.5rem,5.677vw,109px)] md:pl-[clamp(1.5rem,5.26vw,101px)]">
+        <div className="mx-auto grid h-[calc(62*var(--u))] max-w-[1920px] grid-cols-[1fr_auto_1fr] items-center pr-[calc(24*var(--u))] pl-[calc(14*var(--u))] md:h-[clamp(5.5rem,7.344vw,141px)] md:pr-[clamp(1.5rem,5.677vw,109px)] md:pl-[clamp(1.5rem,5.26vw,101px)]">
           <ApekshaJainWordmark
             title="Apeksha Jain"
             className="h-[calc(9*var(--u))] justify-self-start md:h-[clamp(0.9375rem,1.979vw,38px)]"
@@ -61,9 +72,9 @@ export function SiteHeader() {
           <Link
             href="/"
             aria-label={`${siteConfig.name} — home`}
-            className="pointer-events-auto flex translate-x-[calc(9*var(--u))] justify-self-center md:translate-x-0"
+            className="pointer-events-auto flex translate-x-[calc(6*var(--u))] justify-self-center md:translate-x-0"
           >
-            <AjcLogo className="h-[calc(10*var(--u))] md:h-[clamp(1.375rem,1.979vw,38px)]" />
+            <AjcLogo className="h-[calc(18*var(--u))] md:h-[clamp(1.375rem,1.979vw,38px)]" />
           </Link>
           <button
             type="button"
@@ -71,15 +82,15 @@ export function SiteHeader() {
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-label="Open menu"
-            className="pointer-events-auto flex cursor-pointer items-center gap-[calc(1*var(--u))] justify-self-end transition-opacity hover:opacity-80 md:gap-[clamp(0.45rem,0.469vw,9px)]"
+            className="pointer-events-auto flex cursor-pointer items-center gap-[calc(3*var(--u))] justify-self-end transition-opacity hover:opacity-80 md:gap-[clamp(0.45rem,0.469vw,9px)]"
           >
             <span
               aria-hidden
-              className="size-[calc(10*var(--u))] rounded-full border-[length:calc(1*var(--u))] border-solid border-current md:size-[clamp(0.8125rem,2.344vw,45px)] md:border-[length:clamp(1px,0.143vw,2.75px)]"
+              className="size-[calc(16*var(--u))] rounded-full border-[length:calc(1.5*var(--u))] border-solid border-current md:size-[clamp(0.8125rem,2.344vw,45px)] md:border-[length:clamp(1px,0.143vw,2.75px)]"
             />
             <span
               aria-hidden
-              className="size-[calc(10*var(--u))] rounded-full bg-current md:size-[clamp(0.8125rem,2.344vw,45px)]"
+              className="size-[calc(16*var(--u))] rounded-full bg-current md:size-[clamp(0.8125rem,2.344vw,45px)]"
             />
           </button>
         </div>
