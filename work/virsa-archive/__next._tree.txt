@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/_next/static/chunks/01en4yi5hvnee.css","style"]
+:HL["/AJC-Website-2026/_next/static/chunks/09j_01fa97ckp.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"virsa-archive","s":[]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"jx4a1_tCEoiu9yYHqAcd8","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"lKGUkNKwJhhuXMfeRYlwO","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
