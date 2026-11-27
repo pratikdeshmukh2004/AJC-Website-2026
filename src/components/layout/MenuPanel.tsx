@@ -129,13 +129,15 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
               const isActive =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               const hasSubmenu = "hasSubmenu" in item && item.hasSubmenu;
-              // "Our Work" stays emphasised while its submenu is open.
+              // "Our Work" stays darker while its submenu is open, but only the page
+              // you are on is bold.
               const emphasised = isActive || (hasSubmenu && showWork);
               const itemClass = cn(
                 "font-cormorant flex w-fit items-center gap-2 text-[length:calc(20*var(--u))] leading-[calc(17*var(--u))] tracking-[-0.03em] transition-colors md:inline-flex md:text-[1.75rem] md:leading-8 md:tracking-normal",
                 emphasised
                   ? "text-taupe md:text-brown-dark"
                   : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
+                isActive && "font-bold",
               );
 
               return (
@@ -199,7 +201,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                                   className={cn(
                                     "font-cormorant block text-[length:calc(15*var(--u))] leading-[calc(26*var(--u))] tracking-[-0.03em] whitespace-nowrap transition-colors md:text-2xl md:leading-8 md:tracking-normal",
                                     isCurrent
-                                      ? "text-taupe md:text-brown-dark [-webkit-text-stroke:0.5px_currentColor]"
+                                      ? "text-taupe md:text-brown-dark font-bold"
                                       : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
                                   )}
                                 >

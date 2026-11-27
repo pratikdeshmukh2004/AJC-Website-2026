@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { BandDots } from "@/components/home/BandDots";
 import { AboutWhatWeDo } from "@/components/about/AboutWhatWeDo";
+import { ScrollLine } from "@/components/about/ScrollLine";
 import { assetPath, u } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -215,12 +216,14 @@ function AboutDesktop() {
         <p className="font-cormorant absolute top-[calc((5620-3477)*var(--u))] left-[calc(209*var(--u))] w-[calc(610*var(--u))] text-[length:calc(104*var(--u))] leading-[calc(152*var(--u))] font-normal tracking-[-0.06em] text-[#8b7f73]">
           Our Work
         </p>
-        {/* Our Work divider + dots (#978c7f); 5892 − 3477 = 2415 */}
-        <div className="absolute top-[calc((5892-3477)*var(--u))] left-[calc(50%_-_74.5*var(--u))] h-[calc(7464*var(--u))] w-[calc(1*var(--u))] bg-[#978c7f] opacity-[0.52]" />
+        {/* Our Work divider + dots (#978c7f); 5892 − 3477 = 2415. The line fills in
+            as you scroll down it. */}
+        <ScrollLine className="top-[calc((5892-3477)*var(--u))] left-[calc(50%_-_74.5*var(--u))] h-[calc(7464*var(--u))] w-[calc(1*var(--u))]" />
         {DOT_TOPS.map((top) => (
           <div
             key={top}
-            className="absolute left-[calc(50%_-_82.5*var(--u))] h-[calc(16*var(--u))] w-[calc(16*var(--u))] rounded-full bg-[#978c7f]"
+            data-rail-dot
+            className="absolute left-[calc(50%_-_82.5*var(--u))] h-[calc(16*var(--u))] w-[calc(16*var(--u))] rounded-full bg-[#978c7f] transition-colors duration-300 data-[reached]:bg-[#7d7062]"
             style={{ top: u(top) }}
           />
         ))}
@@ -699,11 +702,9 @@ function AboutMobile() {
           >
             Our Work
           </p>
-          {/* Region rail: one line down the left with a dot at each region's photo */}
-          <div
-            className="absolute bg-[#978c7f] opacity-[0.52]"
-            style={{ left: u(49), top: u(2904), width: u(1), height: u(4829) }}
-          />
+          {/* Region rail: one line down the left with a dot at each region's photo.
+              The line fills in as you scroll down it. */}
+          <ScrollLine style={{ left: u(50), top: u(2904), width: u(1), height: u(4829) }} />
           <AboutRegion
             top={2903}
             dotTop={2899}
@@ -924,7 +925,8 @@ function AboutMobile() {
             shaped regally, for the modern traveler.
           </AboutRegion>
           <span
-            className="absolute rounded-full bg-[#978c7f]"
+            data-rail-dot
+            className="absolute rounded-full bg-[#978c7f] transition-colors duration-300 data-[reached]:bg-[#7d7062]"
             style={{ left: u(45), top: u(7728), width: u(10), height: u(10) }}
           />
         </div>
@@ -959,7 +961,8 @@ function AboutRegion({
   return (
     <>
       <span
-        className="absolute rounded-full bg-[#978c7f]"
+        data-rail-dot
+        className="absolute rounded-full bg-[#978c7f] transition-colors duration-300 data-[reached]:bg-[#7d7062]"
         style={{ left: u(45), top: u(dotTop), width: u(10), height: u(10) }}
       />
       <div
