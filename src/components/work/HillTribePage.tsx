@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Expandable } from "@/components/ui/Expandable";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy, useExpandReflow } from "@/components/work/ReadMoreCopy";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
@@ -403,28 +404,32 @@ function HillTribeMobile({
           <p>Creative Direction</p>
         </div>
         <div className="font-helvetica-regular ml-[calc(81*var(--u))] w-[calc(263*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] text-[#a69576]">
-          <p>
-            “Bohot bhadiya.” – said he, with the gentle rhyme of Urdu-Farsi; a man who traversed the
-            Karakoram mountains long before his store ever existed.
-          </p>
-          <p className="mt-[calc(13*var(--u))]">
-            Hill Tribe is an organic store in Turtuk, but more accurately, it is the living archive
-            of Mr. Abdul Rashid Khan. A man of quiet resilience and the most charming stories, Mr.
-            Khan’s life spans the memory of the Kargil war to simpler times spent climbing the vast
-            mountains of Baltistan in search{" "}
-            <span className={cn("transition-opacity duration-300", !introExpanded && "opacity-33")}>
-              of Shilajit. Today, if you follow him up a mountain, you will still find us panting
-              like the donkey who accompanied him back in the day.
-            </span>
-          </p>
-          {introExpanded && (
-            <p className="mt-[calc(13*var(--u))]">
-              Where our city eye sees a rugged landscape, Mr. Khan sees a blooming garden. His store
-              holds over 150 mountain secrets – rare herbs, sun-dried fruits, and wild botanicals
-              that only a lifetime of walking these peaks could unearth. It was our privilege, to
-              bring his life, into this small slice he calls his store.
-            </p>
-          )}
+          <Expandable expanded={introExpanded}>
+            {(preview) => (
+              <>
+                <p>
+                  “Bohot bhadiya.” – said he, with the gentle rhyme of Urdu-Farsi; a man who
+                  traversed the Karakoram mountains long before his store ever existed.
+                </p>
+                <p className="mt-[calc(13*var(--u))]">
+                  Hill Tribe is an organic store in Turtuk, but more accurately, it is the living
+                  archive of Mr. Abdul Rashid Khan. A man of quiet resilience and the most charming
+                  stories, Mr. Khan’s life spans the memory of the Kargil war to simpler times spent
+                  climbing the vast mountains of Baltistan in search of Shilajit. Today, if you
+                  follow him up a mountain, you will still find us panting like the donkey who
+                  accompanied him back in the day.
+                </p>
+                {!preview && (
+                  <p className="mt-[calc(13*var(--u))]">
+                    Where our city eye sees a rugged landscape, Mr. Khan sees a blooming garden. His
+                    store holds over 150 mountain secrets – rare herbs, sun-dried fruits, and wild
+                    botanicals that only a lifetime of walking these peaks could unearth. It was our
+                    privilege, to bring his life, into this small slice he calls his store.
+                  </p>
+                )}
+              </>
+            )}
+          </Expandable>
           <button
             type="button"
             onClick={onToggleIntro}
@@ -477,32 +482,35 @@ function HillTribeMobile({
           className="top-[calc(464*var(--u))] left-[calc(104*var(--u))] h-[calc(114*var(--u))] w-[calc(180*var(--u))]"
         />
         <div className="font-helvetica-regular ml-[calc(81*var(--u))] w-[calc(263*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] text-[#a69576]">
-          <p>
-            The branding brief for Hill Tribe, hence, was not manufactured; it was observed. It was
-            formed from his personal narrative: a man, a mountain, and his donkey in search of
-            Shilajit.
-          </p>
-          <p className="mt-[calc(13*var(--u))]">
-            When we first showed him the concept, he let out a small, amused chuckle – thinking us
-            kids make anything these days. Yet, it was that exact humility we sought to capture. To
-            honor the depth of his{" "}
-            <span
-              className={cn("transition-opacity duration-300", !identityExpanded && "opacity-33")}
-            >
-              roots, we infused the typography with a subtle nod to the Urdu-Farsi script, anchoring
-              the brand in his voice before the world ever saw it.
-            </span>
-          </p>
-          {identityExpanded && (
-            <p className="mt-[calc(13*var(--u))]">
-              Nearly a hundred meters from the store lies Mr. Khan’s farm, an endless expanse where
-              the finest apples and grapes grow beneath the Himalayan sky. When we first stepped
-              foot there, unable to differentiate coriander from dragon head, he chuckled at our
-              city innocence. That farm, with its trees stretching to the edge of sight, became the
-              literal blueprint for our visual identity. The illustrations were humble, and rooted,
-              translating the untamed lines of his orchards into the packaging itself.
-            </p>
-          )}
+          <Expandable expanded={identityExpanded}>
+            {(preview) => (
+              <>
+                <p>
+                  The branding brief for Hill Tribe, hence, was not manufactured; it was observed.
+                  It was formed from his personal narrative: a man, a mountain, and his donkey in
+                  search of Shilajit.
+                </p>
+                <p className="mt-[calc(13*var(--u))]">
+                  When we first showed him the concept, he let out a small, amused chuckle –
+                  thinking us kids make anything these days. Yet, it was that exact humility we
+                  sought to capture. To honor the depth of his roots, we infused the typography with
+                  a subtle nod to the Urdu-Farsi script, anchoring the brand in his voice before the
+                  world ever saw it.
+                </p>
+                {!preview && (
+                  <p className="mt-[calc(13*var(--u))]">
+                    Nearly a hundred meters from the store lies Mr. Khan’s farm, an endless expanse
+                    where the finest apples and grapes grow beneath the Himalayan sky. When we first
+                    stepped foot there, unable to differentiate coriander from dragon head, he
+                    chuckled at our city innocence. That farm, with its trees stretching to the edge
+                    of sight, became the literal blueprint for our visual identity. The
+                    illustrations were humble, and rooted, translating the untamed lines of his
+                    orchards into the packaging itself.
+                  </p>
+                )}
+              </>
+            )}
+          </Expandable>
           <button
             type="button"
             onClick={onToggleIdentity}

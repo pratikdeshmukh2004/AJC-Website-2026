@@ -11,7 +11,8 @@ import {
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { AudioToggle } from "@/components/work/AudioToggle";
-import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
+import { Expandable } from "@/components/ui/Expandable";
+import { ReadMoreCopy, useFollowsSlide } from "@/components/work/ReadMoreCopy";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, at, cn, u } from "@/lib/utils";
 
@@ -56,6 +57,8 @@ export function RanjitsSvaasaPage() {
   const strategyRef = useRef<HTMLDivElement>(null);
   const [shiftA, setShiftA] = useState(0);
   const [shiftB, setShiftB] = useState(0);
+  const introOpen = useFollowsSlide(introExpanded);
+  const strategyOpen = useFollowsSlide(strategyExpanded);
 
   useLayoutEffect(() => {
     const intro = introRef.current;
@@ -69,8 +72,8 @@ export function RanjitsSvaasaPage() {
     const measure = () => {
       const unit = canvas.clientWidth / 1920;
       const bottom = (el: HTMLElement) => (el.offsetTop + el.offsetHeight) / unit;
-      setShiftA(introExpanded ? Math.max(0, bottom(intro) + GAP - FILM_TOP) : 0);
-      setShiftB(strategyExpanded ? Math.max(0, bottom(strategy) + GAP - POSTS_TOP) : 0);
+      setShiftA(introOpen ? Math.max(0, bottom(intro) + GAP - FILM_TOP) : 0);
+      setShiftB(strategyOpen ? Math.max(0, bottom(strategy) + GAP - POSTS_TOP) : 0);
     };
 
     measure();
@@ -79,7 +82,7 @@ export function RanjitsSvaasaPage() {
     ro.observe(strategy);
     ro.observe(canvas);
     return () => ro.disconnect();
-  }, [introExpanded, strategyExpanded]);
+  }, [introOpen, strategyOpen]);
 
   return (
     <>
@@ -1089,17 +1092,14 @@ function MobilePost({
   );
 }
 
-/** Phone Read more block: the frame shows `lead` under a translucent plate that fades its last lines; `more` joins it when expanded. */
+/** Phone Read more block: `lead` with its last lines faded; `more` slides in below it when expanded. */
 function MobileReadMore({
   className,
-  fadeFrom,
   gap,
   lead,
   more,
 }: {
   className: string;
-  /** Where the fade plate starts, in phone px from the top of the copy. */
-  fadeFrom: number;
   /** Space between the copy and the Read more label, in phone px. */
   gap: number;
   lead: ReactNode;
@@ -1109,21 +1109,20 @@ function MobileReadMore({
   const copyId = useId();
   return (
     <div className={className}>
-      <div
+      <Expandable
         id={copyId}
-        className="font-helvetica-regular text-sage relative text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] [&_p+p]:mt-[calc(13*var(--u))]"
+        expanded={expanded}
+        className="font-helvetica-regular text-sage text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] [&_p+p]:mt-[calc(13*var(--u))]"
       >
-        {lead}
-        {expanded ? (
-          <div className="mt-[calc(13*var(--u))] [&_p+p]:mt-[calc(13*var(--u))]">{more}</div>
-        ) : (
-          <div
-            aria-hidden
-            className="bg-cream/66 pointer-events-none absolute inset-x-0 top-(--fade) bottom-0"
-            style={{ "--fade": u(fadeFrom) } as CSSProperties}
-          />
+        {(preview) => (
+          <>
+            {lead}
+            {preview ? null : (
+              <div className="mt-[calc(13*var(--u))] [&_p+p]:mt-[calc(13*var(--u))]">{more}</div>
+            )}
+          </>
         )}
-      </div>
+      </Expandable>
       <button
         type="button"
         aria-expanded={expanded}
@@ -1204,7 +1203,6 @@ function RanjitsSvaasaMobile() {
       {/* ============ INTRO (Read more) ============ */}
       <MobileReadMore
         className="mt-[calc(8*var(--u))] ml-[calc(81*var(--u))] w-[calc(256*var(--u))]"
-        fadeFrom={135}
         gap={28}
         lead={
           <>
@@ -1253,7 +1251,6 @@ function RanjitsSvaasaMobile() {
       {/* ============ STRATEGY (Read more) ============ */}
       <MobileReadMore
         className="mt-[calc(74*var(--u))] ml-[calc(55*var(--u))] w-[calc(250*var(--u))]"
-        fadeFrom={133}
         gap={39}
         lead={
           <>

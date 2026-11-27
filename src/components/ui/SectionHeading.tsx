@@ -14,7 +14,7 @@ export function SectionHeading({
     <Container className="max-w-3xl">
       {eyebrow ? <p className="eyebrow mb-4">{eyebrow}</p> : null}
       <h2 className="text-headline text-ink">{title}</h2>
-      {description ? <p className="mt-4 text-lg text-ink-soft">{description}</p> : null}
+      {description ? <p className="text-ink-soft mt-4 text-lg">{description}</p> : null}
     </Container>
   );
 }

@@ -330,14 +330,6 @@ export function VirsaBaltistanPage() {
             x={989}
             y={1437}
             width={677}
-            preview={INTRO.slice(0, 2).map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 24)}
-                className="max-md:mb-[13px] max-md:whitespace-pre-line"
-              >
-                {paragraph}
-              </p>
-            ))}
             full={INTRO.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
@@ -346,8 +338,6 @@ export function VirsaBaltistanPage() {
                 {paragraph}
               </p>
             ))}
-            // Figma: plate at x957 y1617 (747x80), "Read more" at x992 y1710.
-            fade={{ x: -32, y: 180, width: 747, height: 80 }}
             toggle={{ x: 3, y: 273 }}
             gapBelow={233}
           />

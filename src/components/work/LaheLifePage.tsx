@@ -2,6 +2,7 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
+import { Expandable } from "@/components/ui/Expandable";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, at, cn } from "@/lib/utils";
@@ -267,45 +268,46 @@ function LaheLifeMobile() {
             Brand Identity Narrative
           </p>
           <div className="relative ml-[calc(81*var(--u))] w-[calc(252*var(--u))]">
-            <div className="font-helvetica-regular text-sage relative text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.01em] [&_p+p]:mt-[calc(13*var(--u))]">
-              <p>
-                Lahé Life is a conscious collection defined by the philosophy of the slow and the
-                stewardship of the land. Born from the Assamese way of life where time moves gently,
-                it is a crossover of heritage hospitality with the modern sensibility of the present
-                day.
-              </p>
-              <p>
-                With roots in a forty-year legacy of exploration, the brand pairs a deep-seated
-                regional soul with a collection of ventures that feel familiar and
-                <br />
-                easy to return to. From the unhurried journeys of Assam Bengal Navigation along the
-                Ganges and Brahmaputra rivers to the immersive sanctuary on land of Diphlu River
-                Lodge, every experience is shaped by a quiet intimacy with the surroundings.
-              </p>
-              {expanded && (
+            <Expandable
+              expanded={expanded}
+              className="font-helvetica-regular text-sage text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.01em] [&_p+p]:mt-[calc(13*var(--u))]"
+            >
+              {(preview) => (
                 <>
                   <p>
-                    This culture of presence is carried forward by Jungle Travels India through
-                    decades of regional knowledge, and preserved by Lahé Looms through a
-                    contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
-                    rhythm is brought into an urban setting, bridging the local supply chain with a
-                    refined, considered aesthetic.
+                    Lahé Life is a conscious collection defined by the philosophy of the slow and
+                    the stewardship of the land. Born from the Assamese way of life where time moves
+                    gently, it is a crossover of heritage hospitality with the modern sensibility of
+                    the present day.
                   </p>
                   <p>
-                    The best experiences of Lahé are the ones that are rooted; they offer a way of
-                    experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
-                    place.
+                    With roots in a forty-year legacy of exploration, the brand pairs a deep-seated
+                    regional soul with a collection of ventures that feel familiar and
+                    <br />
+                    easy to return to. From the unhurried journeys of Assam Bengal Navigation along
+                    the Ganges and Brahmaputra rivers to the immersive sanctuary on land of Diphlu
+                    River Lodge, every experience is shaped by a quiet intimacy with the
+                    surroundings.
                   </p>
+                  {!preview && (
+                    <>
+                      <p>
+                        This culture of presence is carried forward by Jungle Travels India through
+                        decades of regional knowledge, and preserved by Lahé Looms through a
+                        contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
+                        rhythm is brought into an urban setting, bridging the local supply chain
+                        with a refined, considered aesthetic.
+                      </p>
+                      <p>
+                        The best experiences of Lahé are the ones that are rooted; they offer a way
+                        of experiencing Eastern India – thoughtfully, slowly, and with a profound
+                        sense of place.
+                      </p>
+                    </>
+                  )}
                 </>
               )}
-              {/* Same cream veil as desktop: fades the last three collapsed lines */}
-              {!expanded && (
-                <div
-                  aria-hidden
-                  className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[calc(39*var(--u))]"
-                />
-              )}
-            </div>
+            </Expandable>
             <button
               type="button"
               onClick={() => setExpanded((prev) => !prev)}
@@ -481,44 +483,41 @@ export function LaheLifePage() {
           Brand Identity Narrative
         </p>
         <Copy x={981} y={1440} w={677} className="px-6 xl:px-0">
-          <div className="relative">
-            <p>
-              Lahé Life is a conscious collection defined by the philosophy of the slow and the
-              stewardship of the land. Born from the Assamese way of life where time moves gently,
-              it is a crossover of heritage hospitality with the modern sensibility of the present
-              day.
-            </p>
-            <p>
-              With roots in a forty-year legacy of exploration, the brand pairs a deep-seated
-              regional soul with a collection of ventures that feel familiar and easy to return to.
-              From the unhurried journeys of Assam Bengal Navigation along the Ganges and
-              Brahmaputra rivers to the immersive sanctuary on land of Diphlu River Lodge, every
-              experience is shaped by a quiet intimacy with the surroundings.
-            </p>
-            {introExpanded && (
+          <Expandable expanded={introExpanded}>
+            {(preview) => (
               <>
                 <p>
-                  This culture of presence is carried forward by Jungle Travels India through
-                  decades of regional knowledge, and preserved by Lahé Looms through a contemporary
-                  approach to sustainable craft. In spaces like Laheké Cafe, this rhythm is brought
-                  into an urban setting, bridging the local supply chain with a refined, considered
-                  aesthetic.
+                  Lahé Life is a conscious collection defined by the philosophy of the slow and the
+                  stewardship of the land. Born from the Assamese way of life where time moves
+                  gently, it is a crossover of heritage hospitality with the modern sensibility of
+                  the present day.
                 </p>
                 <p>
-                  The best experiences of Lahé are the ones that are rooted; they offer a way of
-                  experiencing Eastern India – thoughtfully, slowly, and with a profound sense of
-                  place.
+                  With roots in a forty-year legacy of exploration, the brand pairs a deep-seated
+                  regional soul with a collection of ventures that feel familiar and easy to return
+                  to. From the unhurried journeys of Assam Bengal Navigation along the Ganges and
+                  Brahmaputra rivers to the immersive sanctuary on land of Diphlu River Lodge, every
+                  experience is shaped by a quiet intimacy with the surroundings.
                 </p>
+                {!preview && (
+                  <>
+                    <p>
+                      This culture of presence is carried forward by Jungle Travels India through
+                      decades of regional knowledge, and preserved by Lahé Looms through a
+                      contemporary approach to sustainable craft. In spaces like Laheké Cafe, this
+                      rhythm is brought into an urban setting, bridging the local supply chain with
+                      a refined, considered aesthetic.
+                    </p>
+                    <p>
+                      The best experiences of Lahé are the ones that are rooted; they offer a way of
+                      experiencing Eastern India – thoughtfully, slowly, and with a profound sense
+                      of place.
+                    </p>
+                  </>
+                )}
               </>
             )}
-            {/* Figma "Rectangle 22": cream veil that fades the last lines while collapsed */}
-            {!introExpanded && (
-              <div
-                aria-hidden
-                className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[3.5em]"
-              />
-            )}
-          </div>
+          </Expandable>
           <button
             type="button"
             onClick={() => setIntroExpanded((prev) => !prev)}

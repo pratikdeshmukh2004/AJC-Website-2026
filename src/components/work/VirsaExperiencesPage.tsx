@@ -329,25 +329,6 @@ export function VirsaExperiencesPage() {
             x={981}
             y={1438}
             width={677}
-            preview={
-              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(12*var(--u))]">
-                <p>
-                  Virsa Baltistan rises as a modern-day fortress reviving the forgotten culture and
-                  royal legacy of Baltistan.
-                </p>
-                <p>
-                  To build the world within these walls, we explored every raw, unvarnished thread
-                  of the land, restoring lost traditions and borrowing directly from the untamed
-                  nature around us. We consciously moved past the boundaries of conventional
-                  hospitality, treating the stark, beautiful geography of India’s last village as a
-                  living theater of history, culture, and lineage.
-                </p>
-                <p>
-                  Our strategy was to architect an unexpected epitome of luxury and culinary
-                  excellence, set precisely where you’d least expect it.
-                </p>
-              </div>
-            }
             full={
               <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(20*var(--u))]">
                 <p>
@@ -370,8 +351,6 @@ export function VirsaExperiencesPage() {
                 </p>
               </div>
             }
-            // Figma: plate at x946 y1617 (747x80), "Read more" at x981 y1710.
-            fade={{ x: -35, y: 179, width: 747, height: 80 }}
             toggle={{ x: 0, y: 272 }}
             gapBelow={187}
           />
@@ -407,20 +386,6 @@ export function VirsaExperiencesPage() {
             x={189}
             y={57}
             width={677}
-            preview={
-              <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(12*var(--u))]">
-                <p>
-                  Our time in Turtuk, Ladakh was not ear-marked for a corporate wavelength. It was
-                  where we discovered, day in, and day out, the rhythms of a mountain village.
-                </p>
-                <p>
-                  We heard stories, countless of them, from the kindest people you could meet. The
-                  Baltis. ‘Bal’ means soft as cotton, and ‘Ti’ means those who live on the bank of a
-                  river.
-                </p>
-                <p>We came not to remake this land of the Baltis, but to listen to its stream.</p>
-              </div>
-            }
             full={
               <div className="flex flex-col gap-4 max-md:gap-[13px] xl:gap-[calc(20*var(--u))]">
                 <p>
@@ -440,8 +405,6 @@ export function VirsaExperiencesPage() {
                 </p>
               </div>
             }
-            // Figma: plate at x154 y3379 (747x80), "Read more" at x189 y3472.
-            fade={{ x: -35, y: 133, width: 747, height: 80 }}
             toggle={{ x: 0, y: 226 }}
             gapBelow={84}
           />

@@ -25,9 +25,7 @@ export function HomeExperience() {
   const playerRef = useRef<VideoPlayerHandle>(null);
   // On the first (prerendered/hydrated) load the choice is always null, so the
   // server and client agree and the gate renders.
-  const [stage, setStage] = useState<Stage>(() =>
-    getEntryChoice() === null ? "gate" : "entered",
-  );
+  const [stage, setStage] = useState<Stage>(() => (getEntryChoice() === null ? "gate" : "entered"));
 
   // Returning visitor in the same session: start the film with their choice.
   // The page already has user activation from the earlier click, so audio is allowed.
@@ -126,7 +124,7 @@ export function HomeExperience() {
     <>
       <div
         className={cn(
-          "transition-opacity duration-[1200ms] ease-editorial",
+          "ease-editorial transition-opacity duration-[1200ms]",
           stage === "gate" ? "opacity-0" : "opacity-100",
         )}
         aria-hidden={stage === "gate"}

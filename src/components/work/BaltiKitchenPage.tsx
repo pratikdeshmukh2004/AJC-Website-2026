@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
+import { Expandable } from "@/components/ui/Expandable";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { assetPath, at, cn, u } from "@/lib/utils";
@@ -225,30 +226,30 @@ function BaltiKitchenMobile() {
             Menu Design
           </p>
           <div className="relative ml-[calc(81*var(--u))] w-[calc(262*var(--u))]">
-            <div className="font-helvetica-regular text-sage relative text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] [&_p+p]:mt-[calc(13*var(--u))]">
-              <p>
-                Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
-                land of greens cradled between the stark, colossal mountains of Ladakh. There, you
-                see buckwheat fields swaying at the slightest breeze and local farmer-women at work,
-                beautifully unbothered by the summer sun.
-              </p>
-              <p className={cn(!expanded && "max-h-[calc(52*var(--u))] overflow-hidden")}>
-                In a parallel vision, there was I, who would often be tempted to take a walk up the
-                mountain paths to reach the village. Knowing me, my walks invariably led me to Balti
-                Kitchen, where the finest local cuisine in town was to be found. Run by Hajira Khan,
-                the first female entrepreneur from the village, Balti Kitchen is a space where the
-                ancient recipes of Baltistan live on through the day. Cooked to this day in
-                traditional stone pots, her herbed, mellow, yet deeply flavorful food became the
-                very birthplace of Balti Kitchen’s new identity.
-              </p>
-              {/* Same cream veil as desktop, over the four preview lines of paragraph 2 */}
-              {!expanded && (
-                <div
-                  aria-hidden
-                  className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[calc(52*var(--u))]"
-                />
+            <Expandable
+              expanded={expanded}
+              className="font-helvetica-regular text-sage text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em] [&_p+p]:mt-[calc(13*var(--u))]"
+            >
+              {(preview) => (
+                <>
+                  <p>
+                    Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a
+                    lush land of greens cradled between the stark, colossal mountains of Ladakh.
+                    There, you see buckwheat fields swaying at the slightest breeze and local
+                    farmer-women at work, beautifully unbothered by the summer sun.
+                  </p>
+                  <p className={cn(preview && "max-h-[calc(52*var(--u))] overflow-hidden")}>
+                    In a parallel vision, there was I, who would often be tempted to take a walk up
+                    the mountain paths to reach the village. Knowing me, my walks invariably led me
+                    to Balti Kitchen, where the finest local cuisine in town was to be found. Run by
+                    Hajira Khan, the first female entrepreneur from the village, Balti Kitchen is a
+                    space where the ancient recipes of Baltistan live on through the day. Cooked to
+                    this day in traditional stone pots, her herbed, mellow, yet deeply flavorful
+                    food became the very birthplace of Balti Kitchen’s new identity.
+                  </p>
+                </>
               )}
-            </div>
+            </Expandable>
             <button
               type="button"
               onClick={() => setExpanded((prev) => !prev)}
@@ -506,32 +507,27 @@ export function BaltiKitchenPage() {
           Menu Design
         </p>
         <Copy x={960} y={1357} w={570}>
-          <div className="relative">
-            <p
-              className={cn(
-                !introExpanded && "xl:max-h-[calc(230*var(--u))] xl:overflow-hidden",
-                !introExpanded && "max-h-[9.5em] overflow-hidden",
-              )}
-            >
-              Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
-              land of greens cradled between the stark, colossal mountains of Ladakh. There, you see
-              buckwheat fields swaying at the slightest breeze and local farmer-women at work,
-              beautifully unbothered by the summer sun. In a parallel vision, there was I, who would
-              often be tempted to take a walk up the mountain paths to reach the village. Knowing
-              me, my walks invariably led me to Balti Kitchen, where the finest local cuisine in
-              town was to be found. Run by Hajira Khan, the first female entrepreneur from the
-              village, Balti Kitchen is a space where the ancient recipes of Baltistan live on
-              through the day. Cooked to this day in traditional stone pots, her herbed, mellow, yet
-              deeply flavorful food became the very birthplace of Balti Kitchen’s new identity.
-            </p>
-            {/* Figma veil: cream fade over the last lines while collapsed */}
-            {!introExpanded && (
-              <div
-                aria-hidden
-                className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[3.5em]"
-              />
+          <Expandable expanded={introExpanded}>
+            {(preview) => (
+              <p
+                className={cn(
+                  preview && "max-h-[9.5em] overflow-hidden xl:max-h-[calc(230*var(--u))]",
+                )}
+              >
+                Ladakh’s Turtuk village was our home for the latter half of 2024. Turtuk is a lush
+                land of greens cradled between the stark, colossal mountains of Ladakh. There, you
+                see buckwheat fields swaying at the slightest breeze and local farmer-women at work,
+                beautifully unbothered by the summer sun. In a parallel vision, there was I, who
+                would often be tempted to take a walk up the mountain paths to reach the village.
+                Knowing me, my walks invariably led me to Balti Kitchen, where the finest local
+                cuisine in town was to be found. Run by Hajira Khan, the first female entrepreneur
+                from the village, Balti Kitchen is a space where the ancient recipes of Baltistan
+                live on through the day. Cooked to this day in traditional stone pots, her herbed,
+                mellow, yet deeply flavorful food became the very birthplace of Balti Kitchen’s new
+                identity.
+              </p>
             )}
-          </div>
+          </Expandable>
           <button
             type="button"
             onClick={() => setIntroExpanded((prev) => !prev)}

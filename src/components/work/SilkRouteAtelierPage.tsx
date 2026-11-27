@@ -195,24 +195,6 @@ export function SilkRouteAtelierPage() {
             x={971}
             y={0}
             width={677}
-            preview={
-              <>
-                <p>
-                  Centuries ago, Ladakh served as a sanctuary for travelers, monks, and merchants
-                  moving along trade routes. Among the treasures exchanged were the pigments of the
-                  earth – colors extracted directly from the rugged landscape and preserved
-                  eternally in Buddhist Thangka paintings.
-                </p>
-                <p>
-                  AJC mapped out a proprietary color strategy based entirely on this ancient
-                  alchemy: Rather than using modern, synthetic luxury tones, the palette is a
-                  revival of historical natural dyes crafted by artisans through immense patience.
-                  These specific, mineral-driven hues embody the soul of the high-altitude desert:
-                  bold, resilient, and deeply spiritual. It ensures that every touchpoint of the
-                  brand tells a story of the mountains before a single garment is ever touched.
-                </p>
-              </>
-            }
             full={
               <>
                 <p>
@@ -231,7 +213,6 @@ export function SilkRouteAtelierPage() {
                 </p>
               </>
             }
-            fade={{ x: -35, y: 140, width: 747, height: 60 }}
             toggle={{ x: 0, y: 210 }}
             gapBelow={107}
           />
@@ -367,20 +348,6 @@ export function SilkRouteAtelierPage() {
             x={960}
             y={0}
             width={677}
-            preview={
-              <>
-                <p>
-                  The packaging design is inspired by a 17th-century Buddhist Thangka painting
-                  housed at The Metropolitan Museum of Art, New York. This historic artwork, adorned
-                  with a phoenix soaring above swirling clouds, radiant sun motifs, cresting waves,
-                  and delicate floral patterns, became a visual and symbolic reference for the
-                  design. These elements – representing rebirth, continuity, and harmony with nature
-                  – mirror the brand’s own philosophy rooted in revival, heritage, and elegance. We
-                  translated this centuries-old visual language into a packaging system that feels
-                  bold, intricate, and timeless, just like the garments it houses.
-                </p>
-              </>
-            }
             full={
               <>
                 <p>
@@ -406,7 +373,6 @@ export function SilkRouteAtelierPage() {
                 </p>
               </>
             }
-            fade={{ x: -35, y: 165, width: 747, height: 82 }}
             toggle={{ x: 0, y: 245 }}
             gapBelow={100}
           />

@@ -266,17 +266,11 @@ function VirsaArchiveMobile() {
           x={981}
           y={1389}
           width={677}
-          preview={INTRO[0].split(/(?<=see it\.) |(?<=perfection\.) /).map((paragraph, i) => (
-            <p key={paragraph.slice(0, 24)} className={i === 1 ? "mb-[3px]" : "mb-[13px]"}>
-              {paragraph}
-            </p>
-          ))}
           full={INTRO.map((paragraph) => (
             <p key={paragraph.slice(0, 24)} className="mb-[13px]">
               {paragraph}
             </p>
           ))}
-          fade={{ x: -35, y: 184, width: 747, height: 80 }}
           toggle={{ x: 0, y: 280 }}
           gapBelow={299}
         />
@@ -551,20 +545,10 @@ export function VirsaArchivePage() {
             x={981}
             y={1389}
             width={677}
-            // The frame shows 10 lines: paragraph 1, then the start of paragraph 2
-            // under the fade plate.
-            preview={
-              <div className="max-h-[10lh] overflow-hidden">
-                {INTRO.slice(0, 2).map((paragraph) => (
-                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-                ))}
-              </div>
-            }
+            // The frame shows the first 10 lines (clipped by `toggle.y`), under the veil.
             full={INTRO.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
-            // Figma: plate at x946 y1573 (747x80), "Read more" at x981 y1669.
-            fade={{ x: -35, y: 184, width: 747, height: 80 }}
             toggle={{ x: 0, y: 280 }}
             gapBelow={299}
           />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Expandable } from "@/components/ui/Expandable";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
@@ -70,7 +71,10 @@ export function LahekeCafePage() {
     <>
       <LahekeMobile expanded={introExpanded} onToggle={() => setIntroExpanded((prev) => !prev)} />
       <div className="bg-cream @container relative mx-auto hidden w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)] md:block">
-        <div className="relative h-[calc(14284*var(--u))] w-full">
+        {/* The Figma frame is 14284 tall, but nothing is drawn below the "Hill Tribe"
+            label (y13284); end 216 below it, as Lahé Life does, so no blank band
+            sits above the footer. */}
+        <div className="relative h-[calc(13500*var(--u))] w-full">
           {/* ============ HERO ============ */}
           <Pic
             src="hero.png"
@@ -373,20 +377,20 @@ function LahekeMobile({ expanded, onToggle }: { expanded: boolean; onToggle: () 
           <p>Packaging design</p>
         </div>
         <div className="font-helvetica-regular text-sage absolute top-[calc(978*var(--u))] left-[calc(81*var(--u))] w-[calc(257*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em]">
-          <p>
-            Defined by the ritual of the kettle and the patient rhythm of the land, Laheké is a
-            specialty café born from a native way of life where time moves gently.. mirroring the
-            Assamese philosophy of Lahe, or slowness. The space represents a deliberate crossover:
-            where deep cultural heritage meets a refined, modern urban sensibility.
-          </p>
-          <p className="mt-[calc(13*var(--u))]">
-            With roots planted firmly in a tea-growing legacy spanning generations, Laheké pairs a
-            deep-seated artisanal tea and coffee culture with a thoughtful{" "}
-            <span className={cn("transition-opacity duration-300", !expanded && "opacity-33")}>
-              menu of global comfort food that feels instantly familiar. Set against a largely
-              untouched landscape, the café introduces a profound sense of place.
-            </span>
-          </p>
+          <Expandable expanded={expanded}>
+            <p>
+              Defined by the ritual of the kettle and the patient rhythm of the land, Laheké is a
+              specialty café born from a native way of life where time moves gently.. mirroring the
+              Assamese philosophy of Lahe, or slowness. The space represents a deliberate crossover:
+              where deep cultural heritage meets a refined, modern urban sensibility.
+            </p>
+            <p className="mt-[calc(13*var(--u))]">
+              With roots planted firmly in a tea-growing legacy spanning generations, Laheké pairs a
+              deep-seated artisanal tea and coffee culture with a thoughtful menu of global comfort
+              food that feels instantly familiar. Set against a largely untouched landscape, the
+              café introduces a profound sense of place.
+            </p>
+          </Expandable>
           <button
             type="button"
             onClick={onToggle}

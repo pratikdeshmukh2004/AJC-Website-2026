@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Expandable } from "@/components/ui/Expandable";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { CanvasCopy, CanvasCredit, CanvasHeading } from "@/components/work/CanvasText";
 import { farmersHousePlaylist } from "@/config/projects";
@@ -163,7 +164,7 @@ export function FarmersHouseCafePage() {
             style={at(653, 3257, 619)}
           />
           <CanvasCopy x={958} y={4081} w={600} warm>
-            <div className="relative">
+            <Expandable expanded={identityExpanded}>
               <p>
                 The farmers themselves form the identity and the core of the branding brief. The
                 silhouette of the logo draws inspiration
@@ -175,14 +176,7 @@ export function FarmersHouseCafePage() {
                 stone-and-mud houses of Turtuk; shelters that nurtured the roots of this café and
                 the generations behind it.
               </p>
-              {/* Figma veil: cream fade over the last three lines while collapsed */}
-              {!identityExpanded && (
-                <div
-                  aria-hidden
-                  className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[3.45em]"
-                />
-              )}
-            </div>
+            </Expandable>
             <button
               type="button"
               onClick={() => setIdentityExpanded((prev) => !prev)}
@@ -832,7 +826,7 @@ function FarmersHouseMobile({
           className="absolute top-[calc(1735*var(--u))] left-[calc(95*var(--u))] h-[calc(168*var(--u))] w-[calc(200*var(--u))] object-contain object-cover"
         />
         <div className="font-helvetica-regular text-sage absolute top-[calc(2005*var(--u))] left-[calc(81*var(--u))] w-[calc(257*var(--u))] text-[length:calc(11*var(--u))] leading-[calc(13*var(--u))] tracking-[0.02em]">
-          <div className="relative">
+          <Expandable expanded={identityExpanded}>
             <p>
               The farmers themselves form the identity and the core of the branding brief. The
               silhouette of the logo draws inspiration from the rugged village homes of Turtuk,
@@ -843,14 +837,7 @@ function FarmersHouseMobile({
               stone-and-mud houses of Turtuk; shelters that nurtured the roots of this café and the
               generations behind it.
             </p>
-            {/* Figma veil: cream fade over the last three lines while collapsed */}
-            {!identityExpanded && (
-              <div
-                aria-hidden
-                className="bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[calc(39*var(--u))]"
-              />
-            )}
-          </div>
+          </Expandable>
           <button
             type="button"
             onClick={onToggleIdentity}

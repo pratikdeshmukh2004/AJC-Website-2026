@@ -1,6 +1,7 @@
 "use client";
 
-import { forwardRef, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { Expandable } from "@/components/ui/Expandable";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +10,33 @@ const DESKTOP_FRAME = 1920;
 const MOBILE_FRAME = 390;
 /** Tailwind's `xl` breakpoint (80rem), where the desktop canvas takes over. */
 const XL_QUERY = "(min-width: 80rem)";
+/** How long `Expandable` takes to slide (its duration-700), plus a little. */
+const SLIDE_MS = 800;
+
+/**
+ * True while `expanded`, and for the time the copy takes to slide shut after it
+ * turns false. A page that moves content below a Read more block by its overflow
+ * gates that shift on this, so the content below follows the text up instead of
+ * jumping ahead of it.
+ */
+export function useFollowsSlide(expanded: boolean) {
+  const [previous, setPrevious] = useState(expanded);
+  const [sliding, setSliding] = useState(false);
+
+  // Closing starts the slide-shut window (adjusted during render, not in an effect).
+  if (previous !== expanded) {
+    setPrevious(expanded);
+    setSliding(!expanded);
+  }
+
+  useEffect(() => {
+    if (!sliding) return undefined;
+    const timer = setTimeout(() => setSliding(false), SLIDE_MS);
+    return () => clearTimeout(timer);
+  }, [sliding]);
+
+  return expanded || sliding;
+}
 
 /**
  * Reflow helper for a <ReadMoreCopy> that sits above other canvas content.
@@ -29,6 +57,7 @@ export function useExpandReflow(
 ) {
   const ref = useRef<HTMLDivElement>(null);
   const [shift, setShift] = useState(0);
+  const open = useFollowsSlide(expanded);
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -42,7 +71,7 @@ export function useExpandReflow(
       const unit = canvas.clientWidth / frame;
       const bottom = (el.offsetTop + el.offsetHeight) / unit;
       const overflow = bottom + (gap * frame) / DESKTOP_FRAME - (mobile ? mobileNextTop : nextTop);
-      setShift(expanded && overflow > 0 ? overflow : 0);
+      setShift(open && overflow > 0 ? overflow : 0);
     };
 
     measure();
@@ -55,7 +84,7 @@ export function useExpandReflow(
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [expanded, nextTop, gap, mobileNextTop]);
+  }, [open, nextTop, gap, mobileNextTop]);
 
   return [ref, shift] as const;
 }
@@ -94,8 +123,8 @@ type Props = {
   onToggle: () => void;
   /**
    * Mobile-frame copy style below xl (Haveli Dharampura, Figma 4036:2016):
-   * normal line height, no gap between paragraphs, the truncated tail faded to
-   * 33%, and a tighter pill.
+   * normal line height, no gap between paragraphs, and
+   * a tighter pill.
    */
   compactBelowXl?: boolean;
 };
@@ -114,12 +143,9 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
   },
   ref,
 ) {
-  const fadedTail = !expanded && collapsedTail !== undefined;
-  const paragraphs = expanded
-    ? [...lead, ...expandedTail]
-    : collapsedTail
-      ? [...lead, collapsedTail]
-      : lead;
+  const paragraphClass = (i: number) => cn(i > 0 && "mt-[1em]", compactBelowXl && "max-xl:mt-0");
+  const preview = collapsedTail ? [...lead, collapsedTail] : lead;
+  const bodyId = useId();
 
   return (
     <div
@@ -132,36 +158,27 @@ export const ReadMoreCopy = forwardRef<HTMLDivElement, Props>(function ReadMoreC
         className,
       )}
     >
-      <div className="relative">
-        {paragraphs.map((text, i) => (
-          <p
-            key={i}
-            className={cn(
-              i > 0 && "mt-[1em]",
-              compactBelowXl && "max-xl:mt-0",
-              compactBelowXl && fadedTail && i === paragraphs.length - 1 && "max-xl:opacity-33",
-            )}
-          >
+      {/* The copy slides open; collapsed, its last lines fade out. */}
+      <Expandable
+        id={bodyId}
+        expanded={expanded}
+        collapsed={preview.map((text, i) => (
+          <p key={i} className={paragraphClass(i)}>
             {text}
           </p>
         ))}
-        {/* Collapsed: the same translucent cream plate as the Virsa intros fades the
-            last two lines (2.5em at leading 1.25). Below xl, compact pages fade the
-            tail with opacity instead, so the plate is desktop-only there. */}
-        {expanded ? null : (
-          <div
-            aria-hidden
-            className={cn(
-              "bg-cream/66 pointer-events-none absolute inset-x-0 bottom-0 h-[2.5em]",
-              compactBelowXl && "max-xl:hidden",
-            )}
-          />
-        )}
-      </div>
+      >
+        {[...lead, ...expandedTail].map((text, i) => (
+          <p key={i} className={paragraphClass(i)}>
+            {text}
+          </p>
+        ))}
+      </Expandable>
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
+        aria-controls={bodyId}
         className={cn(
           "group/readmore font-helvetica text-sage bg-cream/66 relative mt-[0.8em] ml-[-1.75em] block w-[37.35em] cursor-pointer py-[1.4em] pl-[1.75em] text-left leading-[normal] font-bold tracking-[0.02em] max-xl:max-w-[calc(100%+1.75em)]",
           compactBelowXl && "max-xl:mt-[0.6em] max-xl:py-[0.3em]",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import { Expandable } from "@/components/ui/Expandable";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { at, cn, u } from "@/lib/utils";
 
@@ -19,24 +20,22 @@ export type ProcessStageProps = {
     body: { dx: number; gap: number; width: number };
     /** READ MORE: left offset from the heading, gap below the body. */
     more: { dx: number; gap: number };
-    /** The cream wash over lines 2+, relative to the body's top-left. */
-    wash: { dx: number; dy: number };
   };
   /**
    * Mobile frame (needs `--u` from the page; the stage is in flow so READ MORE
    * pushes the rest of the page down). All in design px: left edge of the
    * heading, space above it, the body's indent, and the gaps heading -> body
-   * -> READ MORE. `fade` is how many of the last collapsed lines are washed.
+   * -> READ MORE.
    */
-  mobile?: { x: number; mt: number; dx: number; bodyGap: number; moreGap: number; fade: number };
+  mobile?: { x: number; mt: number; dx: number; bodyGap: number; moreGap: number };
 };
 
 const vars = (v: Record<string, string>) => v as CSSProperties;
 
 /**
  * One "Our Process" stage. Collapsed, it shows the first lines of its copy with
- * the lines after the first washed out (the design's 68% cream overlay); READ
- * MORE reveals the rest and turns into READ LESS.
+ * the last lines fading out; READ MORE slides the rest open and turns
+ * into READ LESS.
  *
  * Body widths are chosen so the full copy wraps exactly where the design breaks
  * its lines, so the collapsed state matches Figma at 1920px.
@@ -59,26 +58,23 @@ export function ProcessStage({
         >
           {title}
         </h3>
-        <p
+        <Expandable
           id={bodyId}
-          className="font-helvetica-ui text-sage overflow-hidden tracking-[0.02em] opacity-[0.79]"
-          style={{
-            marginTop: u(m.bodyGap),
-            marginLeft: u(m.dx),
-            width: u(210),
-            fontSize: u(12),
-            lineHeight: u(14),
-            ...(open
-              ? null
-              : {
-                  maxHeight: u(14 * lines),
-                  // Washed-out last lines, as the design's cream overlay.
-                  maskImage: `linear-gradient(#000 ${u(14 * (lines - m.fade))}, rgb(0 0 0 / 0.32) ${u(14 * (lines - m.fade))})`,
-                }),
-          }}
+          expanded={open}
+          collapsedHeight={u(14 * lines)}
+          className="font-helvetica-ui text-sage tracking-[0.02em] opacity-[0.79]"
+          style={
+            {
+              marginTop: u(m.bodyGap),
+              marginLeft: u(m.dx),
+              width: u(210),
+              fontSize: u(12),
+              lineHeight: u(14),
+            } as CSSProperties
+          }
         >
-          {children}
-        </p>
+          <p>{children}</p>
+        </Expandable>
         <button
           type="button"
           aria-expanded={open}
@@ -104,31 +100,19 @@ export function ProcessStage({
         {title}
       </h3>
 
-      <div
-        className="relative mt-3 xl:mt-(--gap) xl:ml-(--dx)"
-        style={vars({ "--gap": u(g.body.gap), "--dx": u(g.body.dx), "--bw": u(g.body.width) })}
+      <Expandable
+        id={bodyId}
+        expanded={open}
+        collapsedHeight={`${lines}lh`}
+        className="font-helvetica-ui text-sage mt-3 text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:mt-(--gap) xl:ml-(--dx) xl:w-(--bw) xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]"
+        style={vars({
+          "--gap": u(g.body.gap),
+          "--dx": u(g.body.dx),
+          "--bw": u(g.body.width),
+        })}
       >
-        <p
-          id={bodyId}
-          className={cn(
-            "font-helvetica-ui text-sage text-[0.9375rem] leading-[1.6] tracking-[0.02em] opacity-[0.79] xl:text-[length:calc(22*var(--u))] xl:leading-[calc(25*var(--u))]",
-            "xl:w-(--bw)",
-            !open &&
-              "overflow-hidden [mask-image:linear-gradient(#000_1lh,rgb(0_0_0/0.32)_1lh)] xl:[mask-image:none]",
-          )}
-          style={open ? undefined : { maxHeight: `${lines}lh` }}
-        >
-          {children}
-        </p>
-        {open ? null : (
-          // Canvas only: the design's wash is a 523 x 62 cream rectangle at 68%.
-          <div
-            aria-hidden
-            className="pointer-events-none absolute hidden bg-[#fdfbf4]/[0.68] xl:top-(--wy) xl:left-(--wx) xl:block xl:h-[calc(62*var(--u))] xl:w-[calc(523*var(--u))]"
-            style={vars({ "--wx": u(g.wash.dx), "--wy": u(g.wash.dy) })}
-          />
-        )}
-      </div>
+        <p>{children}</p>
+      </Expandable>
 
       <button
         type="button"

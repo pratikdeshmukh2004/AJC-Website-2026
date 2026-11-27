@@ -163,11 +163,6 @@ function Swatches({
   );
 }
 
-/** Collapsed intro: paragraph 1, then paragraph 2 faded after its first line. */
-const ABOUT_PREVIEW = [
-  "In Ladakh’s culinary landscape, restaurants are formed by the land, as is the cuisine itself. Within this space, a few names resound deeply – the pioneers, the preservationists, the legacy holders. Locally speaking, these culture-keepers have witnessed a revival of century-old recipes passed down carefully through families, from grandmothers to mothers, and down to daughters and sons.",
-  "This purview of the land is exactly where Alchi Kitchen was born. As one of the earliest restaurants in Ladakh dedicated to reviving the region’s rich culinary heritage, it was started in 2016 by Nilza Wangmo, a Nari Shakti Awardee.",
-];
 /** Expanded intro (first "Read more"): the story, then Identity, Iconography and The Menu. */
 const ABOUT_SECTIONS: { heading?: string; paragraphs: string[] }[] = [
   {
@@ -221,8 +216,6 @@ const aboutFull = (
   </div>
 );
 
-const MENU_PREVIEW =
-  "The Menu for Alchi Kitchen draws inspiration from a modern storybook, each page telling the story of Ladakhi cuisine through hand-painted illustrations, evocative descriptions, and dishes that carry the legacy of the mountains. The design journey began with a single, black-and-white photograph of an archival Ladakhi kitchen, setting a historic visual baseline to mirror the heirloom recipes. To build the narrative text, we immersed ourselves in the cultural rituals behind the food, the warmth of sharing gur-gur cha (butter tea) cup after cup, and the";
 const MENU_PARAGRAPHS = [
   "The Menu for Alchi Kitchen draws inspiration from a modern storybook, each page telling the story of Ladakhi cuisine through hand-painted illustrations, evocative descriptions, and dishes that carry the legacy of the mountains.",
   "The design journey began with a single, black-and-white photograph of an archival Ladakhi kitchen, setting a historic visual baseline to mirror the heirloom recipes.",
@@ -474,16 +467,7 @@ function AlchiKitchenMobile() {
               x={981}
               y={1350}
               width={677}
-              preview={
-                <div className="flex flex-col gap-[calc(13*var(--u))]">
-                  {/* The mobile frame previews more of paragraph 2 than desktop does. */}
-                  {ABOUT_SECTIONS[0].paragraphs.slice(0, 2).map((text) => (
-                    <p key={text.slice(0, 24)}>{text}</p>
-                  ))}
-                </div>
-              }
               full={aboutFull}
-              fade={{ x: -35, y: 195, width: 747, height: 82 }}
               toggle={{ x: 0, y: 310 }}
               gapBelow={279}
             />
@@ -647,13 +631,6 @@ function AlchiKitchenMobile() {
             x={981}
             y={0}
             width={748}
-            preview={
-              <div className="flex flex-col gap-[calc(9.5*var(--u))]">
-                {MENU_PARAGRAPHS.slice(0, 3).map((text) => (
-                  <p key={text.slice(0, 24)}>{text}</p>
-                ))}
-              </div>
-            }
             full={
               <div className="flex flex-col gap-[calc(9.5*var(--u))]">
                 {MENU_PARAGRAPHS.map((text) => (
@@ -661,7 +638,6 @@ function AlchiKitchenMobile() {
                 ))}
               </div>
             }
-            fade={{ x: -35, y: 167, width: 780, height: 80 }}
             toggle={{ x: 0, y: 260 }}
             gapBelow={302}
           />
@@ -916,16 +892,7 @@ export function AlchiKitchenPage() {
             x={981}
             y={1350}
             width={677}
-            preview={
-              <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
-                {ABOUT_PREVIEW.map((text) => (
-                  <p key={text.slice(0, 24)}>{text}</p>
-                ))}
-              </div>
-            }
             full={aboutFull}
-            // Figma: plate at x946 y1536 (747x80), "Read more" at x981 y1629.
-            fade={{ x: -35, y: 195, width: 747, height: 82 }}
             toggle={{ x: 0, y: 310 }}
             gapBelow={279}
           />
@@ -1070,7 +1037,6 @@ export function AlchiKitchenPage() {
           x={981}
           y={0}
           width={748}
-          preview={<p>{MENU_PREVIEW}</p>}
           full={
             <div className="flex flex-col gap-4 xl:gap-[calc(20*var(--u))]">
               {MENU_PARAGRAPHS.map((text) => (
@@ -1078,8 +1044,6 @@ export function AlchiKitchenPage() {
               ))}
             </div>
           }
-          // Figma: plate at x946 y9778 (780x80), "Read more" at x981 y9871.
-          fade={{ x: -35, y: 167, width: 780, height: 80 }}
           toggle={{ x: 0, y: 260 }}
           gapBelow={302}
         />

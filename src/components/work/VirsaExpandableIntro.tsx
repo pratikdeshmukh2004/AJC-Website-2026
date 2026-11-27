@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import { Expandable } from "@/components/ui/Expandable";
 import { ReadMoreLabel } from "@/components/ui/ReadMoreLabel";
 import { cn, u } from "@/lib/utils";
 
@@ -8,7 +9,7 @@ import { cn, u } from "@/lib/utils";
   Intro copy with "Read more" (AJC-16).
 
   Collapsed, it matches the Figma frame: the copy the frame shows, a
-  translucent cream plate fading its last lines, and "Read more" beneath.
+  last lines fading out, and "Read more" beneath.
   Expanded, it shows the full copy from the Figma comments and "Read less".
 
   It sits in normal flow (placed with margin/padding in Figma px) inside the
@@ -17,15 +18,11 @@ import { cn, u } from "@/lib/utils";
   toggle to the next section in the design.
 */
 
-type Box = { x: number; y: number; width: number; height: number };
-
 export function VirsaExpandableIntro({
   x,
   y,
   width,
-  preview,
   full,
-  fade,
   toggle,
   gapBelow,
   responsive = false,
@@ -36,12 +33,8 @@ export function VirsaExpandableIntro({
   x: number;
   y: number;
   width: number;
-  /** The copy as the Figma frame shows it (collapsed). */
-  preview: ReactNode;
-  /** The full copy (expanded), as paragraphs. */
+  /** The copy, as paragraphs. Collapsed, it is clipped to the Figma frame's height. */
   full: ReactNode;
-  /** The fade plate, relative to the copy's top-left. */
-  fade: Box;
   /** "Read more" position, relative to the copy's top-left. */
   toggle: { x: number; y: number };
   gapBelow: number;
@@ -72,10 +65,6 @@ export function VirsaExpandableIntro({
       "--ib": u(gapBelow),
       "--ty": u(toggle.y),
       "--tx": u(toggle.x),
-      "--fx": u(fade.x),
-      "--fy": u(fade.y),
-      "--fw": u(fade.width),
-      "--fh": u(fade.height),
     } as CSSProperties;
 
     return (
@@ -86,24 +75,24 @@ export function VirsaExpandableIntro({
         )}
         style={vars}
       >
-        <div
+        <Expandable
           id={copyId}
+          expanded={expanded}
           className={cn(
             compact ? "text-[11px] leading-[1.18]" : "text-base leading-[1.45]",
-            "font-helvetica-regular relative tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
-            expanded
-              ? "xl:pb-[calc(32*var(--u))]"
-              : cn(clamp, "overflow-hidden xl:h-(--ty) xl:max-h-none"),
+            "font-helvetica-regular tracking-[0.02em] text-[#9b9484] xl:text-[length:calc(20*var(--u))] xl:leading-[1.25] xl:tracking-[calc(0.4*var(--u))]",
           )}
+          innerClassName="xl:pb-[calc(32*var(--u))]"
         >
-          {expanded ? full : preview}
-          {expanded ? null : (
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-[3.5em] bg-[rgba(253,251,244,0.66)] xl:inset-x-auto xl:top-(--fy) xl:bottom-auto xl:left-(--fx) xl:h-(--fh) xl:w-(--fw)"
-            />
-          )}
-        </div>
+          {/* The preview is the same copy clipped: the clamp below xl, the design's box from xl up. */}
+          {(isPreview) =>
+            isPreview ? (
+              <div className={cn(clamp, "overflow-hidden xl:h-(--ty) xl:max-h-none")}>{full}</div>
+            ) : (
+              full
+            )
+          }
+        </Expandable>
         <button
           type="button"
           aria-expanded={expanded}
@@ -124,29 +113,18 @@ export function VirsaExpandableIntro({
     <div
       style={{ marginLeft: u(x), paddingTop: u(y), paddingBottom: u(gapBelow), width: u(width) }}
     >
-      <div
+      <Expandable
         id={copyId}
+        expanded={expanded}
         // Paragraphs follow on the next line with no extra space, as in Figma.
-        className={cn(
-          "font-helvetica-regular relative text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]",
-        )}
+        className="font-helvetica-regular text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+        innerClassName="pb-[calc(32*var(--u))]"
         // Collapsed: the copy box ends where the design puts "Read more".
-        style={expanded ? { paddingBottom: u(32) } : { height: u(toggle.y) }}
+        collapsedHeight={u(toggle.y)}
+        style={{} as CSSProperties}
       >
-        {expanded ? full : preview}
-        {expanded ? null : (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute bg-[rgba(253,251,244,0.66)]"
-            style={{
-              left: u(fade.x),
-              top: u(fade.y),
-              width: u(fade.width),
-              height: u(fade.height),
-            }}
-          />
-        )}
-      </div>
+        {full}
+      </Expandable>
       <button
         type="button"
         aria-expanded={expanded}

@@ -129,15 +129,14 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
               const isActive =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               const hasSubmenu = "hasSubmenu" in item && item.hasSubmenu;
-              // "Our Work" stays darker while its submenu is open, but only the page
-              // you are on is bold.
+              // Figma 3318:635: the current page, or "Our Work" while its submenu is
+              // open, is the darker taupe. Only the ">" is bold.
               const emphasised = isActive || (hasSubmenu && showWork);
               const itemClass = cn(
                 "font-cormorant flex w-fit items-center gap-2 text-[length:calc(20*var(--u))] leading-[calc(17*var(--u))] tracking-[-0.03em] transition-colors md:inline-flex md:text-[1.75rem] md:leading-8 md:tracking-normal",
                 emphasised
                   ? "text-taupe md:text-brown-dark"
                   : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
-                isActive && "font-bold",
               );
 
               return (
@@ -151,7 +150,10 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                       className={cn(itemClass, "cursor-pointer")}
                     >
                       {item.label}
-                      <span aria-hidden className="font-helvetica hidden text-lg md:inline">
+                      <span
+                        aria-hidden
+                        className="font-cormorant hidden text-[1.75rem] font-bold md:inline"
+                      >
                         &gt;
                       </span>
                     </button>
@@ -201,7 +203,7 @@ export function MenuPanel({ open, onClose }: { open: boolean; onClose: () => voi
                                   className={cn(
                                     "font-cormorant block text-[length:calc(15*var(--u))] leading-[calc(26*var(--u))] tracking-[-0.03em] whitespace-nowrap transition-colors md:text-2xl md:leading-8 md:tracking-normal",
                                     isCurrent
-                                      ? "text-taupe md:text-brown-dark font-bold"
+                                      ? "text-taupe md:text-brown-dark"
                                       : "text-sage hover:text-taupe md:text-brown md:hover:text-brown-dark",
                                   )}
                                 >

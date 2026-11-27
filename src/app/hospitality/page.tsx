@@ -310,7 +310,6 @@ function HospitalityDesktop() {
                 y: 4627,
                 body: { dx: 5, gap: 15, width: 531 },
                 more: { dx: 7, gap: 19 },
-                wash: { dx: -5, dy: 20 },
               }}
             >
               Before any visual or experiential work begins, we unlock the foundational narrative of
@@ -327,7 +326,6 @@ function HospitalityDesktop() {
                 y: 4631,
                 body: { dx: 0, gap: 11, width: 484 },
                 more: { dx: 7, gap: 44 },
-                wash: { dx: 0, dy: 20 },
               }}
             >
               We do not believe in designing luxury from a distance; to build something meaningful
@@ -343,7 +341,6 @@ function HospitalityDesktop() {
                 y: 4942,
                 body: { dx: 0, gap: 15, width: 518 },
                 more: { dx: 2, gap: 49 },
-                wash: { dx: -5, dy: 25 },
               }}
             >
               With the residency insights established, we craft the core brand identity, narrative,
@@ -360,7 +357,6 @@ function HospitalityDesktop() {
                 y: 4940,
                 body: { dx: 0, gap: 16, width: 465 },
                 more: { dx: 7, gap: 25 },
-                wash: { dx: 0, dy: 26 },
               }}
             >
               We translate the physical atmosphere of the hotel into its flagship digital platform
@@ -733,9 +729,8 @@ function HospitalityMobile() {
           y: 4627,
           body: { dx: 5, gap: 15, width: 531 },
           more: { dx: 7, gap: 19 },
-          wash: { dx: -5, dy: 20 },
         }}
-        mobile={{ x: 128, mt: 44, dx: 7, bodyGap: 7, moreGap: 2, fade: 2 }}
+        mobile={{ x: 128, mt: 44, dx: 7, bodyGap: 7, moreGap: 2 }}
       >
         Before any visual or experiential work begins, we unlock the foundational narrative of the
         property.
@@ -752,9 +747,8 @@ function HospitalityMobile() {
           y: 4942,
           body: { dx: 0, gap: 15, width: 518 },
           more: { dx: 2, gap: 49 },
-          wash: { dx: -5, dy: 25 },
         }}
-        mobile={{ x: 50, mt: 37, dx: 7, bodyGap: 7, moreGap: 8, fade: 1 }}
+        mobile={{ x: 50, mt: 37, dx: 7, bodyGap: 7, moreGap: 8 }}
       >
         With the residency insights established, we craft the core brand identity, narrative, visual
         language, culinary framework, and guest journey rituals. We bring together the creative
@@ -769,9 +763,8 @@ function HospitalityMobile() {
           y: 4631,
           body: { dx: 0, gap: 11, width: 484 },
           more: { dx: 7, gap: 44 },
-          wash: { dx: 0, dy: 20 },
         }}
-        mobile={{ x: 128, mt: 45, dx: 7, bodyGap: 7, moreGap: 4, fade: 1 }}
+        mobile={{ x: 128, mt: 45, dx: 7, bodyGap: 7, moreGap: 4 }}
       >
         We do not believe in designing luxury from a distance; to build something meaningful in a
         place, we live on shared land alongside your team and community. We audit the world through
@@ -785,9 +778,8 @@ function HospitalityMobile() {
           y: 4940,
           body: { dx: 0, gap: 16, width: 465 },
           more: { dx: 7, gap: 25 },
-          wash: { dx: 0, dy: 26 },
         }}
-        mobile={{ x: 50, mt: 63, dx: 7, bodyGap: 7, moreGap: 7, fade: 1 }}
+        mobile={{ x: 50, mt: 63, dx: 7, bodyGap: 7, moreGap: 7 }}
       >
         We translate the physical atmosphere of the hotel into its flagship digital platform and
         communication assets. Finally, we establish the PR guidelines, social media setup, and

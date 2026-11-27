@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { ReadMoreCopy } from "@/components/work/ReadMoreCopy";
+import { ReadMoreCopy, useFollowsSlide } from "@/components/work/ReadMoreCopy";
 import { assetPath, cn, u } from "@/lib/utils";
 
 /*
@@ -173,6 +173,7 @@ export function AssamBengalNavigationPage() {
   // nothing collides.
   const introRef = useRef<HTMLDivElement>(null);
   const [portraitShift, setPortraitShift] = useState(0);
+  const introOpen = useFollowsSlide(introExpanded);
 
   useLayoutEffect(() => {
     const el = introRef.current;
@@ -184,7 +185,7 @@ export function AssamBengalNavigationPage() {
       const unit = canvas.clientWidth / 1920;
       const bottomFigma = (el.offsetTop + el.offsetHeight) / unit;
       const overflow = bottomFigma + PORTRAIT_GAP - PORTRAIT_TOP;
-      setPortraitShift(introExpanded && overflow > 0 ? overflow : 0);
+      setPortraitShift(introOpen && overflow > 0 ? overflow : 0);
     };
 
     measure();
@@ -197,7 +198,7 @@ export function AssamBengalNavigationPage() {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [introExpanded]);
+  }, [introOpen]);
 
   return (
     <div className="bg-cream @container relative mx-auto w-full max-w-[1920px] overflow-hidden [--u:calc(100cqw/1920)]">

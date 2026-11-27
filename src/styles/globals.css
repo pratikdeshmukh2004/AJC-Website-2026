@@ -267,6 +267,14 @@ html[data-page-transition="slide-up"]::view-transition-new(root) {
   animation-name: ajc-slide-in-up;
 }
 
+/* The fade length of the "Read more" mask (ui/Expandable). Registered as a length
+   so it animates with the box height instead of switching off at once. */
+@property --fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 @keyframes ajc-slide-out-up {
   from {
     transform: translateY(0);
