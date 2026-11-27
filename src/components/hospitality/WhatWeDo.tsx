@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
-import { at, cn } from "@/lib/utils";
+import { at, cn, tabKeyTarget, u } from "@/lib/utils";
 
 type Stage = {
   label: string;
@@ -10,6 +10,8 @@ type Stage = {
   /** Optional second paragraph under the description (Overview). */
   detail?: string;
   services: string[];
+  /** Shorter list on the mobile frame, when it differs. */
+  mobileServices?: string[];
 };
 
 /*
@@ -37,6 +39,7 @@ const STAGES: Stage[] = [
       "Hotel Visual Identity",
       "Storytelling & Narrative",
     ],
+    mobileServices: ["Naming", "Hotel Visual Identity", "Storytelling & Narrative"],
   },
   {
     label: "Guest Journey Foundation",
@@ -69,7 +72,7 @@ const DEFAULT_STAGE = 1;
  * Canvas coordinates (xl and up): list at (209, 2254), description at
  * (1159, 2254), services 120px below the description's top.
  */
-export function WhatWeDo() {
+export function WhatWeDo({ mobile = false }: { mobile?: boolean }) {
   const [active, setActive] = useState(DEFAULT_STAGE);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const id = useId();
@@ -78,23 +81,78 @@ export function WhatWeDo() {
   const stage = STAGES[active];
 
   function onKeyDown(e: KeyboardEvent<HTMLButtonElement>, i: number) {
-    const last = STAGES.length - 1;
-    const next =
-      e.key === "ArrowDown"
-        ? (i + 1) % STAGES.length
-        : e.key === "ArrowUp"
-          ? (i - 1 + STAGES.length) % STAGES.length
-          : e.key === "Home"
-            ? 0
-            : e.key === "End"
-              ? last
-              : null;
+    const next = tabKeyTarget(e.key, i, STAGES.length);
     if (next === null) return;
     e.preventDefault();
     setActive(next);
     tabs.current[next]?.focus();
   }
 
+  if (mobile) {
+    // Mobile frame (needs `--u` from the page): list, then the right-aligned
+    // description and the services, all in flow so the page below follows
+    // whichever stage is open.
+    return (
+      <div className="pr-[calc(48*var(--u))] pl-[calc(61*var(--u))]">
+        <div
+          role="tablist"
+          aria-orientation="vertical"
+          aria-label="What we do"
+          style={{ marginTop: u(30) }}
+        >
+          {STAGES.map((s, i) => (
+            <button
+              key={s.label}
+              ref={(el) => {
+                tabs.current[i] = el;
+              }}
+              type="button"
+              role="tab"
+              id={tabId(i)}
+              aria-selected={i === active}
+              aria-controls={panelId}
+              tabIndex={i === active ? 0 : -1}
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => onKeyDown(e, i)}
+              className="font-helvetica-ui text-taupe block w-full cursor-pointer border-0 bg-transparent p-0 text-left tracking-[0.04em] uppercase opacity-[0.59]"
+              style={{ fontSize: u(12), lineHeight: u(19) }}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+        <div role="tabpanel" id={panelId} aria-labelledby={tabId(active)} tabIndex={0}>
+          <p
+            className="font-helvetica-ui text-sage ml-auto text-right tracking-[0.02em] opacity-[0.79]"
+            style={{ marginTop: u(44), width: u(170), fontSize: u(12), lineHeight: u(14) }}
+          >
+            {typeof stage.description === "string"
+              ? stage.description
+              : stage.description?.join(" ")}
+          </p>
+          {stage.detail && (
+            <p
+              className="font-helvetica-ui text-sage ml-auto text-right tracking-[0.02em] opacity-[0.79]"
+              style={{ marginTop: u(14), width: u(170), fontSize: u(12), lineHeight: u(14) }}
+            >
+              {stage.detail}
+            </p>
+          )}
+          <ul className="list-none p-0" style={{ marginTop: u(26) }}>
+            {(stage.mobileServices ?? stage.services).map((service) => (
+              <li
+                key={service}
+                className="font-helvetica-ui text-taupe tracking-[0.04em] uppercase opacity-[0.59]"
+                style={{ fontSize: u(12), lineHeight: u(19) }}
+              >
+                {service}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div

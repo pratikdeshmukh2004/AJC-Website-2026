@@ -104,3 +104,46 @@ export async function submitEnquiry(values: Record<string, string>): Promise<voi
     body: JSON.stringify({ ...values, page: window.location.href }),
   });
 }
+
+/** A box in Figma frame px: position, plus width / height when the element has one. */
+export type FrameBox = { x: number; y: number; w?: number; h?: number };
+
+/**
+ * Placement on a page that has both a desktop (1920) and a mobile (390) Figma
+ * frame. The page sets `--u` to 1 px of whichever frame is showing
+ * (`[--u:calc(100cqw/390)] xl:[--u:calc(100cqw/1920)]`), so each value here
+ * resolves against the right frame.
+ *
+ * Sets `--x/--y/--w/--h` (desktop, read by `xl:left-(--x)` …) and
+ * `--mx/--my/--mw/--mh` (mobile, read by `left-(--mx)` …). A width or height
+ * left out on one side is set to `auto`, so it never inherits an ancestor's.
+ *
+ * @example style={place({ x: 302, y: 4641, w: 858, h: 686 }, { x: 0, y: 2094, w: 251, h: 198 })}
+ */
+export function place(desktop: FrameBox, mobile: FrameBox): CSSProperties {
+  const len = (px?: number) => (px === undefined ? "auto" : u(px));
+  return {
+    "--x": u(desktop.x),
+    "--y": u(desktop.y),
+    "--w": len(desktop.w),
+    "--h": len(desktop.h),
+    "--mx": u(mobile.x),
+    "--my": u(mobile.y),
+    "--mw": len(mobile.w),
+    "--mh": len(mobile.h),
+  } as CSSProperties;
+}
+
+/**
+ * Keyboard navigation for a vertical ARIA tab list: the tab index a key moves
+ * to (arrows wrap; Home / End jump to the ends), or null for any other key.
+ *
+ * @example const next = tabKeyTarget(e.key, i, tabs.length)
+ */
+export function tabKeyTarget(key: string, index: number, count: number): number | null {
+  if (key === "ArrowDown") return (index + 1) % count;
+  if (key === "ArrowUp") return (index - 1 + count) % count;
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  return null;
+}

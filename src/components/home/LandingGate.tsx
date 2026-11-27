@@ -33,7 +33,7 @@ export function LandingGate({
   }, [leaving, onExited]);
 
   const buttonClass =
-    "w-full cursor-pointer bg-white px-6 py-4 text-sm tracking-[0.04em] text-taupe uppercase transition-colors duration-300 hover:bg-taupe hover:text-white focus-visible:outline-white md:py-5 md:text-lg";
+    "h-9 w-full cursor-pointer bg-cream text-xs tracking-[0.02em] text-taupe uppercase transition-colors duration-300 hover:bg-taupe hover:text-white focus-visible:outline-white md:h-auto md:bg-white md:px-6 md:py-5 md:text-lg md:tracking-[0.04em]";
 
   return (
     <div
@@ -59,11 +59,14 @@ export function LandingGate({
         aria-hidden
       />
 
-      <div className="relative flex h-full flex-col items-center justify-between px-6 pt-[14vh] pb-[14vh]">
+      <div className="relative flex h-full flex-col items-center justify-between px-6 pt-[74px] pb-[70px] md:pt-[14vh] md:pb-[14vh]">
         {/* Takes the text colour — change `text-white` to recolour. */}
-        <ApekshaJainWordmark title="Apeksha Jain" className="w-[min(60vw,445px)] text-white" />
+        <ApekshaJainWordmark
+          title="Apeksha Jain"
+          className="w-[151px] text-white md:w-[min(60vw,445px)]"
+        />
 
-        <div className="font-helvetica flex w-full max-w-[38rem] flex-col gap-5 md:gap-7">
+        <div className="font-helvetica flex w-full max-w-[206px] flex-col gap-4 md:max-w-[38rem] md:gap-7">
           <button
             type="button"
             onClick={() => onEnter(true)}

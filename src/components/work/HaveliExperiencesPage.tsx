@@ -1,9 +1,7 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
-import { HaveliIntro } from "@/components/work/HaveliIntro";
 import { assetPath, u } from "@/lib/utils";
 
 /*
@@ -96,49 +94,8 @@ function Pic({
  * case-study layout (AJC-22).
  */
 export function HaveliExperiencesPage() {
-  // Expand/collapse state for the hero intro's "Read more".
-  const [introExpanded, setIntroExpanded] = useState(false);
-  // Measured ref of the intro block, and how far (in canvas px) the portrait
-  // group below must shift down so the expanded copy never overlaps it.
-  const introRef = useRef<HTMLDivElement>(null);
-  const [portraitShift, setPortraitShift] = useState(0);
-
-  // After layout, measure the intro's rendered bottom. If the expanded copy
-  // runs past where the portrait begins (Figma y1937), push the portrait +
-  // play triangle down by the overflow (plus a small gap) so nothing collides.
-  useLayoutEffect(() => {
-    const el = introRef.current;
-    if (!el) return;
-
-    const measure = () => {
-      const canvas = el.offsetParent as HTMLElement | null;
-      if (!canvas) return;
-      // Per-canvas-px unit in real px: canvas is 1920 Figma px wide.
-      const unit = canvas.clientWidth / 1920;
-      const introBottomPx = el.offsetTop + el.offsetHeight; // real px from canvas top
-      const introBottomFigma = introBottomPx / unit; // back to Figma px
-      const portraitTopFigma = 1937;
-      const gapFigma = 64; // breathing room before the portrait
-      const overflow = introBottomFigma + gapFigma - portraitTopFigma;
-      setPortraitShift(introExpanded && overflow > 0 ? overflow : 0);
-    };
-
-    measure();
-    // Re-measure on resize (text rewraps → height changes).
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    const parent = el.offsetParent as HTMLElement | null;
-    if (parent) ro.observe(parent);
-    window.addEventListener("resize", measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, [introExpanded]);
-
   return (
     <div className="@container relative mx-auto w-full max-w-[1920px] overflow-hidden bg-[#fdfbf4] [--u:calc(100cqw/1920)]">
-
       {/* Canvas height trimmed to the last element (Haveli Experiences label at
           y18074) plus breathing room. */}
       <div className="relative h-[calc(18320*var(--u))] w-full">
@@ -177,7 +134,7 @@ export function HaveliExperiencesPage() {
           className="font-cormorant absolute text-[length:calc(97*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-5.82*var(--u))] text-[#7d7062]"
           style={{ left: u(100), top: u(1217), width: u(868) }}
         >
-          Haveli Dharampura
+          Haveli Experiences
         </h1>
         <div
           className="font-helvetica-regular absolute text-[length:calc(28*var(--u))] leading-[0.9976] tracking-[calc(0.56*var(--u))] text-[#7d7062] uppercase opacity-80"
@@ -187,20 +144,17 @@ export function HaveliExperiencesPage() {
           <p>Photography</p>
           <p>Videography</p>
         </div>
-        {/* Intro body + expandable "Read more" (client-interactive) */}
-        <HaveliIntro
-          ref={introRef}
-          expanded={introExpanded}
-          onToggle={() => setIntroExpanded((prev) => !prev)}
-        />
-
-        {/* Centered portrait + play triangle. Grouped so they shift down
-            together when the intro is expanded, keeping clear of the copy.
-            The transform is animated for a smooth reflow. */}
-        <div
-          className="pointer-events-none absolute inset-0 transition-transform duration-500 ease-out"
-          style={{ transform: `translateY(${u(portraitShift)})` }}
+        {/* Intro: the project description from config/projects.ts. */}
+        <p
+          className="font-helvetica-regular absolute text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484]"
+          style={{ left: u(1000), top: u(1217), width: u(668) }}
         >
+          To experience Mughal&rsquo;s Old Delhi, the journey goes through labyrinthine lanes, that
+          open to a 200-year-old heritage experience, narrated by AJC for the modern traveler.
+        </p>
+
+        {/* Centered portrait + play triangle */}
+        <div className="pointer-events-none absolute inset-0">
           <Pic
             src="imgScreenshot20260618At61204Pm1.png"
             alt="Haveli interior portrait"
@@ -641,7 +595,7 @@ export function HaveliExperiencesPage() {
 
         {/* ============ NEXT PROJECT ============ */}
         <Link
-          href="/work/haveli-experiences"
+          href="/work/neemrana-hotels"
           className="font-cormorant absolute block text-center text-[length:calc(80*var(--u))] leading-[calc(76*var(--u))] tracking-[calc(-4.8*var(--u))] text-[#7d7062]"
           style={{ left: u(654), top: u(17944), width: u(612) }}
         >
@@ -657,7 +611,7 @@ export function HaveliExperiencesPage() {
           className="font-helvetica-regular absolute text-center text-[length:calc(20*var(--u))] leading-[1.25] tracking-[calc(0.4*var(--u))] text-[#9b9484] uppercase"
           style={{ left: u(848), top: u(18051), width: u(225) }}
         >
-          Haveli Experiences
+          Neemrana Hotels
         </p>
       </div>
     </div>

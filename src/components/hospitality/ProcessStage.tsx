@@ -22,6 +22,13 @@ export type ProcessStageProps = {
     /** The cream wash over lines 2+, relative to the body's top-left. */
     wash: { dx: number; dy: number };
   };
+  /**
+   * Mobile frame (needs `--u` from the page; the stage is in flow so READ MORE
+   * pushes the rest of the page down). All in design px: left edge of the
+   * heading, space above it, the body's indent, and the gaps heading -> body
+   * -> READ MORE. `fade` is how many of the last collapsed lines are washed.
+   */
+  mobile?: { x: number; mt: number; dx: number; bodyGap: number; moreGap: number; fade: number };
 };
 
 const vars = (v: Record<string, string>) => v as CSSProperties;
@@ -34,9 +41,62 @@ const vars = (v: Record<string, string>) => v as CSSProperties;
  * Body widths are chosen so the full copy wraps exactly where the design breaks
  * its lines, so the collapsed state matches Figma at 1920px.
  */
-export function ProcessStage({ title, children, lines, geometry: g }: ProcessStageProps) {
+export function ProcessStage({
+  title,
+  children,
+  lines,
+  geometry: g,
+  mobile: m,
+}: ProcessStageProps) {
   const [open, setOpen] = useState(false);
   const bodyId = useId();
+  if (m) {
+    return (
+      <div style={{ marginTop: u(m.mt), marginLeft: u(m.x) }}>
+        <h3
+          className="font-cormorant text-taupe font-normal tracking-[-0.06em]"
+          style={{ fontSize: u(20.2), lineHeight: u(26) }}
+        >
+          {title}
+        </h3>
+        <p
+          id={bodyId}
+          className="font-helvetica-ui text-sage overflow-hidden tracking-[0.02em] opacity-[0.79]"
+          style={{
+            marginTop: u(m.bodyGap),
+            marginLeft: u(m.dx),
+            width: u(210),
+            fontSize: u(12),
+            lineHeight: u(14),
+            ...(open
+              ? null
+              : {
+                  maxHeight: u(14 * lines),
+                  // Washed-out last lines, as the design's cream overlay.
+                  maskImage: `linear-gradient(#000 ${u(14 * (lines - m.fade))}, rgb(0 0 0 / 0.32) ${u(14 * (lines - m.fade))})`,
+                }),
+          }}
+        >
+          {children}
+        </p>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={bodyId}
+          onClick={() => setOpen((o) => !o)}
+          className="font-helvetica-ui group/readmore block cursor-pointer border-0 bg-transparent p-0 text-left tracking-[0.01em] text-[#8b7f73] uppercase opacity-[0.79]"
+          style={{
+            marginTop: u(m.moreGap),
+            marginLeft: u(m.dx),
+            fontSize: u(9.5),
+            lineHeight: u(14),
+          }}
+        >
+          <ReadMoreLabel expanded={open} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="xl:absolute xl:top-(--y) xl:left-(--x) xl:m-0" style={at(g.x, g.y)}>
