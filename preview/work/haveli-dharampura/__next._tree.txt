@@ -1,6 +1,6 @@
-:HL["/AJC-Website-2026/preview/_next/static/chunks/09j_01fa97ckp.css","style"]
+:HL["/AJC-Website-2026/preview/_next/static/chunks/19yp48l4p0_cx.css","style"]
 :HC["/",""]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"haveli-dharampura","s":[]},"h":96,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":96,"c":"$Q2"}]]
-0:{"b":"cJP5a-MXPHvH3ZGs5v6Xp","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"Z_jC_7MVe71AW7wMHgsys","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
